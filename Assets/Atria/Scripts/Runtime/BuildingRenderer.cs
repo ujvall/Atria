@@ -28,8 +28,9 @@ namespace Atria.App
         public Color32 SignTextColor = new Color32(255, 255, 255, 255);
         public Color32 EntranceColor = new Color32(70, 150, 90, 255);
         public Color32 GroundColor = new Color32(150, 165, 135, 255);
-        public Color32 VoidSideColor = new Color32(40, 42, 48, 255);
-        public Color32 VoidBottomColor = new Color32(14, 15, 18, 255);
+        // A few shades darker than WallColor, so the recessed centre reads as calm, not as a black hole.
+        public Color32 VoidFillColor = new Color32(196, 189, 176, 255);
+        public Color32 VoidEdgeColor = new Color32(172, 166, 154, 255);
     }
 
     /// <summary>A door's placement in Unity world space, used to highlight the destination.</summary>
@@ -164,14 +165,14 @@ namespace Atria.App
                 centre += World(p, y0);
             }
             centre /= v.Polygon.Count;
-            mb.AddPolygon(bottom, Vector3.up, s.VoidBottomColor);
+            mb.AddPolygon(bottom, Vector3.up, s.VoidFillColor);
             for (int i = 0; i < v.Polygon.Count; i++)
             {
                 Vector3 a = World(v.Polygon[i], y0), b = World(v.Polygon[(i + 1) % v.Polygon.Count], y0);
                 Vector3 down = Vector3.down * s.VoidRecessDepth;
                 Vector3 towardCentre = centre - (a + b) * 0.5f;
                 towardCentre.y = 0f;
-                mb.AddFacing(a, b, b + down, a + down, towardCentre, s.VoidSideColor);
+                mb.AddFacing(a, b, b + down, a + down, towardCentre, s.VoidEdgeColor);
             }
         }
 

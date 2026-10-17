@@ -33,7 +33,7 @@ building.json ──► BuildingDataLoader ──► BuildingData ──┬─�
   navigation graph.
 * **Floor voids.** A hex ring's centre is a `VoidData` cutout: no floor or ceiling is
   generated over it, wall edges that border it (`WallSegment.BordersVoid`) get no wall at all, and the area is a
-  dark, solid fill recessed 0.15 m below the floor (`VoidRecessDepth`). It is all in the same single floor mesh, with no extra materials,
+  solid fill a few shades darker than the walls, recessed 0.15 m below the floor (`VoidRecessDepth`). It is all in the same single floor mesh, with no extra materials,
   lights or transparency.
 * **No route through a wall.** The validator samples every navigable same-floor edge at its
   centreline and at ±45% of its clear width. Any sample outside walkable space is a data error.

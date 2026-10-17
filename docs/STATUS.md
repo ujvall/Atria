@@ -95,7 +95,8 @@ available here, and all three exist in Unity 6.
   * Hex rings record their centre as a floor void (configurable with `innerEdge`).
   * No wall is drawn along the inner edges. A 1 m rail was tried first; the user rejected it
     because it still looked like a pillar.
-  * The centre is a dark, solid-filled area 0.15 m below the floor.
+  * The centre is a solid-filled area 0.15 m below the floor. It is a few shades darker than
+    the walls; near-black was tried first and the user found it too harsh.
 * **Still to check in Unity:** the visual result (recess depth and contrast, how the open
   shaft above the void looks under the ring ceiling).
 
