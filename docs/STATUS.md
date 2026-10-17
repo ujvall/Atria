@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **47/47 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **53/53 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -73,7 +73,11 @@ available here, and all three exist in Unity 6.
 * See [MAPPING_GUIDE.md](MAPPING_GUIDE.md), and
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md) for what the
   sketches show.
-* No real PRP JSON exists yet: the sketches carry no scale or measurements.
+* **First provisional PRP section:** `Assets/Atria/MappingData/prp_g_left_draft.json` covers
+  the hall, L1 and L2, with all geometry estimated. Load it with **Building Data Override** on
+  the `Atria` object. The demo stays the default.
+* Details of what is estimated and what is unknown are in
+  [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
 ## Known limitations
 * Rooms are drawn as closed doors in the corridor wall; there are no room interiors yet.

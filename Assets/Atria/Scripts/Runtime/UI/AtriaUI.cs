@@ -46,7 +46,7 @@ namespace Atria.App.UI
 
         public bool IsWalkthroughVisible => _walkScreen != null && _walkScreen.activeSelf;
 
-        public void Build(Transform parent, Font font, string warningBanner, IList<EntranceData> entrances)
+        public void Build(Transform parent, Font font, string warningBanner, string walkthroughTag, IList<EntranceData> entrances)
         {
             UiFactory.Font = font;
             var canvasGo = new GameObject("UI", typeof(RectTransform));
@@ -65,7 +65,7 @@ namespace Atria.App.UI
             ApplySafeArea();
 
             BuildSearchScreen(warningBanner, entrances);
-            BuildWalkthroughScreen(warningBanner);
+            BuildWalkthroughScreen(walkthroughTag);
             ShowSearch();
         }
 
@@ -174,7 +174,7 @@ namespace Atria.App.UI
 
         // ---------------------------------------------------------------- walkthrough screen
 
-        private void BuildWalkthroughScreen(string warningBanner)
+        private void BuildWalkthroughScreen(string walkthroughTag)
         {
             RectTransform screen = UiFactory.Stretch(UiFactory.Rect("WalkthroughScreen", _safeArea));
             _walkScreen = screen.gameObject;
@@ -184,7 +184,7 @@ namespace Atria.App.UI
             _walkTopBar.anchorMin = new Vector2(0, 1);
             _walkTopBar.anchorMax = new Vector2(1, 1);
             _walkTopBar.pivot = new Vector2(0.5f, 1);
-            _walkTopBar.sizeDelta = new Vector2(0, string.IsNullOrEmpty(warningBanner) ? 150 : 200);
+            _walkTopBar.sizeDelta = new Vector2(0, string.IsNullOrEmpty(walkthroughTag) ? 150 : 200);
             Button back = UiFactory.Button("Back", top.transform, "‹ Search", 34, UiFactory.Background, UiFactory.Accent, out _);
             RectTransform backRt = back.GetComponent<RectTransform>();
             backRt.anchorMin = new Vector2(0, 1);
@@ -200,9 +200,9 @@ namespace Atria.App.UI
             titleRt.pivot = new Vector2(0, 1);
             titleRt.offsetMin = new Vector2(278, -126);
             titleRt.offsetMax = new Vector2(-24, -24);
-            if (!string.IsNullOrEmpty(warningBanner))
+            if (!string.IsNullOrEmpty(walkthroughTag))
             {
-                Text tag = UiFactory.Label("SampleTag", top.transform, "SAMPLE LAYOUT – not the real building", 26, new Color32(150, 90, 0, 255), FontStyle.Bold, TextAnchor.MiddleCenter);
+                Text tag = UiFactory.Label("DataTag", top.transform, walkthroughTag, 26, new Color32(150, 90, 0, 255), FontStyle.Bold, TextAnchor.MiddleCenter);
                 tag.rectTransform.anchorMin = new Vector2(0, 0);
                 tag.rectTransform.anchorMax = new Vector2(1, 0);
                 tag.rectTransform.pivot = new Vector2(0.5f, 0);

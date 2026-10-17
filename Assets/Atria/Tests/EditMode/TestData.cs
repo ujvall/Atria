@@ -10,17 +10,18 @@ namespace Atria.Core.Tests
         public const string SampleRelativePath = "Assets/Atria/Resources/Atria/Data/building.json";
 
         /// <summary>Loads the sample building shipped with the app (works in Unity and in the dotnet harness).</summary>
-        public static BuildingData LoadShippedSample()
+        public static BuildingData LoadShippedSample() => BuildingDataLoader.FromJson(File.ReadAllText(FindRepoFile(SampleRelativePath)));
+
+        /// <summary>Resolves a repo-relative path from Unity's project root or the dotnet harness's bin folder.</summary>
+        public static string FindRepoFile(string relative)
         {
             foreach (string start in new[] { Directory.GetCurrentDirectory(), AppContext.BaseDirectory })
-            {
                 for (var dir = new DirectoryInfo(start); dir != null; dir = dir.Parent)
                 {
-                    string candidate = Path.Combine(dir.FullName, SampleRelativePath);
-                    if (File.Exists(candidate)) return BuildingDataLoader.FromJson(File.ReadAllText(candidate));
+                    string candidate = Path.Combine(dir.FullName, relative);
+                    if (File.Exists(candidate)) return candidate;
                 }
-            }
-            throw new FileNotFoundException("Could not locate " + SampleRelativePath);
+            throw new FileNotFoundException("Could not locate " + relative);
         }
 
         /// <summary>

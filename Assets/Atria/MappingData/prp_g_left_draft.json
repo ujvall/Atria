@@ -1,0 +1,838 @@
+{
+ "schemaVersion": 1,
+ "buildingId": "PRP-G-DRAFT-LEFT",
+ "displayName": "PRP ground floor, left section (PROVISIONAL DRAFT)",
+ "dataStatus": "partial",
+ "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Not included because unknown: entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance.",
+ "walkingSpeedMps": 1.2,
+ "defaultCorridorWidth": 2.4,
+ "defaultDoorWidth": 1.0,
+ "floors": [
+  {
+   "id": "G",
+   "name": "Ground floor? (unconfirmed)",
+   "elevation": 0,
+   "wallHeight": 3.0
+  }
+ ],
+ "spaces": [
+  {
+   "id": "HALL",
+   "floor": "G",
+   "kind": "hall",
+   "provenance": "estimated",
+   "polygon": [
+    [
+     4.401,
+     10.625
+    ],
+    [
+     10.625,
+     4.401
+    ],
+    [
+     10.625,
+     -4.401
+    ],
+    [
+     4.401,
+     -10.625
+    ],
+    [
+     -4.401,
+     -10.625
+    ],
+    [
+     -10.625,
+     -4.401
+    ],
+    [
+     -10.625,
+     4.401
+    ],
+    [
+     -4.401,
+     10.625
+    ]
+   ]
+  },
+  {
+   "id": "L1",
+   "floor": "G",
+   "shape": "hexRing",
+   "center": [
+    -24.0,
+    2.0
+   ],
+   "outerRadius": 5.0,
+   "innerRadius": 2.2,
+   "rotation": 0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2",
+   "floor": "G",
+   "shape": "hexRing",
+   "center": [
+    -34.6,
+    16.1
+   ],
+   "outerRadius": 5.0,
+   "innerRadius": 2.2,
+   "rotation": 0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "CORR_HALL_L1",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    -20.2,
+    2.0
+   ],
+   "to": [
+    -10.0,
+    2.0
+   ],
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "CORR_L1_BEND",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    -27.8,
+    2.0
+   ],
+   "to": [
+    -35.800000000000004,
+    2.0
+   ],
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "CORR_BEND_L2",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    -34.6,
+    0.8
+   ],
+   "to": [
+    -34.6,
+    11.8
+   ],
+   "width": 2.4,
+   "provenance": "estimated"
+  }
+ ],
+ "nodes": [
+  {
+   "id": "L1_C0",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -24.0,
+   "z": 5.6,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_C60",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -20.882,
+   "z": 3.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_C120",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -20.882,
+   "z": 0.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_C180",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -24.0,
+   "z": -1.6,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_C240",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -27.118,
+   "z": 0.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_C300",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -27.118,
+   "z": 3.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_S30",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -22.441,
+   "z": 4.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_G18_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -23.307,
+   "z": 5.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_G18_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -21.575,
+   "z": 4.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_S90",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -20.882,
+   "z": 2.0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_S150",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -22.441,
+   "z": -0.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_S210",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -25.559,
+   "z": -0.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_G21_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -24.693,
+   "z": -1.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_G21_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -26.425,
+   "z": -0.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_S270",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -27.118,
+   "z": 2.0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L1_S330",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -25.559,
+   "z": 4.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_C0",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -34.6,
+   "z": 19.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_C60",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -31.482,
+   "z": 17.9,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_C120",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -31.482,
+   "z": 14.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_C180",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -34.6,
+   "z": 12.5,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_C240",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -37.718,
+   "z": 14.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_C300",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -37.718,
+   "z": 17.9,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_S30",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -33.041,
+   "z": 18.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_S90",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -31.482,
+   "z": 16.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_G26_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -31.482,
+   "z": 17.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_G26_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -31.482,
+   "z": 15.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_S150",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -33.041,
+   "z": 13.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_G25_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -31.742,
+   "z": 14.15,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_G25_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -33.387,
+   "z": 13.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_S210",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -36.159,
+   "z": 13.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_S270",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -37.718,
+   "z": 16.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_G23_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -37.718,
+   "z": 15.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_G23_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -37.718,
+   "z": 17.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "L2_S330",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -36.159,
+   "z": 18.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "HALL_C",
+   "floor": "G",
+   "kind": "hall",
+   "x": 0.0,
+   "z": 0.0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "HALL_W",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -9.0,
+   "z": 2.0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "HALL_G16",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 6.452,
+   "z": -6.452,
+   "provenance": "estimated"
+  },
+  {
+   "id": "CORR_BEND",
+   "floor": "G",
+   "kind": "intersection",
+   "x": -34.6,
+   "z": 2.0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "CORR_G17",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -34.6,
+   "z": 9.0,
+   "provenance": "estimated",
+   "note": "G17 label seen on this corridor; which wall and how far along are unknown"
+  }
+ ],
+ "edges": [
+  {
+   "from": "L1_C0",
+   "to": "L1_G18_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_G18_a",
+   "to": "L1_S30",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S30",
+   "to": "L1_G18_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_G18_b",
+   "to": "L1_C60",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_C60",
+   "to": "L1_S90",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S90",
+   "to": "L1_C120",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_C120",
+   "to": "L1_S150",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S150",
+   "to": "L1_C180",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_C180",
+   "to": "L1_G21_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_G21_a",
+   "to": "L1_S210",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S210",
+   "to": "L1_G21_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_G21_b",
+   "to": "L1_C240",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_C240",
+   "to": "L1_S270",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S270",
+   "to": "L1_C300",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_C300",
+   "to": "L1_S330",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S330",
+   "to": "L1_C0",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_C0",
+   "to": "L2_S30",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_S30",
+   "to": "L2_C60",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_C60",
+   "to": "L2_G26_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_G26_a",
+   "to": "L2_S90",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_S90",
+   "to": "L2_G26_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_G26_b",
+   "to": "L2_C120",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_C120",
+   "to": "L2_G25_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_G25_a",
+   "to": "L2_S150",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_S150",
+   "to": "L2_G25_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_G25_b",
+   "to": "L2_C180",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_C180",
+   "to": "L2_S210",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_S210",
+   "to": "L2_C240",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_C240",
+   "to": "L2_G23_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_G23_a",
+   "to": "L2_S270",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_S270",
+   "to": "L2_G23_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_G23_b",
+   "to": "L2_C300",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_C300",
+   "to": "L2_S330",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L2_S330",
+   "to": "L2_C0",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "HALL_W",
+   "to": "HALL_C",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "HALL_C",
+   "to": "HALL_G16",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S90",
+   "to": "HALL_W",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "L1_S270",
+   "to": "CORR_BEND",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "CORR_BEND",
+   "to": "CORR_G17",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "CORR_G17",
+   "to": "L2_C180",
+   "width": 2.4,
+   "provenance": "estimated"
+  }
+ ],
+ "entrances": [
+  {
+   "id": "DRAFT_START_HALL",
+   "label": "DRAFT START: central hall (not an entrance)",
+   "node": "HALL_C",
+   "provenance": "placeholder"
+  }
+ ],
+ "rooms": [
+  {
+   "id": "G18",
+   "number": "G18",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "L1_G18_a",
+     "x": -22.701,
+     "z": 6.25,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "L1_G18_b",
+     "x": -20.969,
+     "z": 5.25,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G21",
+   "number": "G21",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "L1_G21_a",
+     "x": -25.299,
+     "z": -2.25,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "L1_G21_b",
+     "x": -27.031,
+     "z": -1.25,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G23",
+   "number": "G23",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "L2_G23_a",
+     "x": -38.93,
+     "z": 15.1,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "L2_G23_b",
+     "x": -38.93,
+     "z": 17.1,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G26",
+   "number": "G26",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "L2_G26_a",
+     "x": -30.27,
+     "z": 17.1,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "L2_G26_b",
+     "x": -30.27,
+     "z": 15.1,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G25",
+   "number": "G25",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "L2_G25_a",
+     "x": -31.136,
+     "z": 13.1,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "L2_G25_b",
+     "x": -32.781,
+     "z": 12.15,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G16",
+   "number": "G16",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "HALL_G16",
+     "x": 7.513,
+     "z": -7.513,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Label drawn on the hall's lower-right side; offset along the side unknown (placed at the middle)"
+  },
+  {
+   "id": "G17",
+   "number": "G17",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "CORR_G17"
+    }
+   ],
+   "note": "Door position unknown: not drawn, routes end at the corridor node"
+  },
+  {
+   "id": "PHYSICS-LAB-II",
+   "number": "Physics Research Lab -II",
+   "floor": "G",
+   "provenance": "placeholder",
+   "doors": [],
+   "note": "Label seen near L1 above G18; may be G18 itself. Location not mapped."
+  }
+ ]
+}

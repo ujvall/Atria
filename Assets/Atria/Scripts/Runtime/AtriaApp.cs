@@ -17,6 +17,8 @@ namespace Atria.App
         [Header("Data (packaged under a Resources folder)")]
         [Tooltip("Resources path of the building JSON, without extension.")]
         public string BuildingResourcePath = "Atria/Data/building";
+        [Tooltip("Development only: drag a building JSON here (e.g. Assets/Atria/MappingData/prp_g_left_draft.json) to load it instead of the Resources file. Leave empty for the default demo.")]
+        public TextAsset BuildingDataOverride;
 
         [Header("Navigation")]
         [Tooltip("Walking speed for ETAs in m/s. 0 = use the value in the building file.")]
@@ -65,7 +67,7 @@ namespace Atria.App
             string loadError = LoadBuilding();
             CreateCamera();
             _ui = new AtriaUI();
-            _ui.Build(transform, _font, BannerText(), _building != null ? _building.Entrances : new List<EntranceData>());
+            _ui.Build(transform, _font, BannerText(), WalkthroughTag(), _building != null ? _building.Entrances : new List<EntranceData>());
             WireUi();
 
             if (loadError != null)
@@ -85,7 +87,8 @@ namespace Atria.App
 
         private string LoadBuilding()
         {
-            var asset = Resources.Load<TextAsset>(BuildingResourcePath);
+            bool fromResources = BuildingDataOverride == null;
+            TextAsset asset = fromResources ? Resources.Load<TextAsset>(BuildingResourcePath) : BuildingDataOverride;
             if (asset == null) return $"Missing building data at Resources/{BuildingResourcePath}.json";
             try
             {
@@ -98,10 +101,11 @@ namespace Atria.App
             }
             finally
             {
-                Resources.UnloadAsset(asset);
+                if (fromResources) Resources.UnloadAsset(asset);
             }
 
             ValidationReport report = BuildingValidator.Validate(_building);
+            Debug.Log($"[Atria] Loaded {_building.DisplayName} (status: {_building.DataStatus}) from {(fromResources ? "Resources/" + BuildingResourcePath : asset.name)}");
             if (!report.IsValid) Debug.LogError("[Atria] Building data validation failed: " + report);
             else if (report.Warnings.Count > 0) Debug.LogWarning("[Atria] Building data warnings: " + report);
             _router = new RouteFinder(_building);
@@ -114,7 +118,14 @@ namespace Atria.App
             if (_building == null || _building.IsVerified) return null;
             return _building.DataStatus == "sample"
                 ? "SAMPLE DATA – this demo layout and its DEMO room numbers are NOT the real PRP building."
-                : "PARTIAL DATA – some corridors and rooms are estimates. Check signs on site.";
+                : $"PROVISIONAL RECONSTRUCTION – {_building.DisplayName}. Layout estimated from sketches, not surveyed. NOT for real navigation.";
+        }
+
+        /// <summary>Short reminder kept visible on the walkthrough screen.</summary>
+        private string WalkthroughTag()
+        {
+            if (_building == null || _building.IsVerified) return null;
+            return _building.DataStatus == "sample" ? "SAMPLE LAYOUT – not the real building" : "PROVISIONAL PRP DRAFT – not surveyed";
         }
 
         private void CreateMaterials()

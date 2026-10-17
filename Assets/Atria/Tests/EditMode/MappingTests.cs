@@ -200,26 +200,19 @@ namespace Atria.Core.Tests
             Assert.IsTrue(report.Errors.Any(e => e.Contains("NOWHERE")), report.ToString());
         }
 
-        /// <summary>Every packaged data file must load and validate without errors.</summary>
+        /// <summary>Every packaged data file and every mapping draft must load and validate without errors.</summary>
         [Test]
-        public void AllPackagedDataFiles_AreValid()
+        public void AllDataFilesAndDrafts_AreValid()
         {
-            string sample = Path.GetDirectoryName(FindRepoFile(TestData.SampleRelativePath));
-            string[] files = Directory.GetFiles(sample, "*.json");
-            Assert.IsNotEmpty(files);
+            string packaged = Path.GetDirectoryName(TestData.FindRepoFile(TestData.SampleRelativePath));
+            string drafts = Path.GetDirectoryName(TestData.FindRepoFile(PrpDraftTests.DraftRelativePath));
+            string[] files = Directory.GetFiles(packaged, "*.json").Concat(Directory.GetFiles(drafts, "*.json")).ToArray();
+            Assert.GreaterOrEqual(files.Length, 2);
             foreach (string f in files)
             {
                 ValidationReport report = BuildingValidator.Validate(BuildingDataLoader.FromJson(File.ReadAllText(f)));
                 Assert.IsTrue(report.IsValid, Path.GetFileName(f) + ": " + report);
             }
-        }
-
-        private static string FindRepoFile(string relative)
-        {
-            foreach (string start in new[] { Directory.GetCurrentDirectory(), AppContext.BaseDirectory })
-                for (var dir = new DirectoryInfo(start); dir != null; dir = dir.Parent)
-                    if (File.Exists(Path.Combine(dir.FullName, relative))) return Path.Combine(dir.FullName, relative);
-            throw new FileNotFoundException(relative);
         }
     }
 }

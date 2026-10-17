@@ -7,7 +7,7 @@ Read `docs/STATUS.md` first (current milestone, verified vs. unverified), then `
 - `Assets/Atria/Scripts/Runtime` (Atria.App): Unity presentation only, no routing logic.
 - Building data is SAMPLE/placeholder. Never invent PRP rooms, corridors or entrances. Label provenance.
 - Never claim a Unity compile, an APK build or device testing unless it actually ran. Cloud sessions have no Unity Editor.
-- Don't commit, push or switch branches without the user's explicit OK.
+- Commit and push to `claude/sleepy-davinci-jszjm6` after each task (see Git rules below). Don't switch branches without the user's OK.
 - Graphify and Ponytail are dev-only tools (`docs/DEV_TOOLS.md`) and must never become app dependencies.
 
 ## Workflow rules (standing user instructions)
@@ -42,7 +42,11 @@ means skipping reasoning, tests or verification.
 7. **Git.**
    * Check `git status` and diffs before editing, and preserve unrelated changes.
    * No reset, clean, force-push or history rewrite without authorization.
-   * **Commit or push only when the user explicitly asks**, and stage only task files.
+   * **Standing authorization (from the user):** after each task's changes, run the tests,
+     inspect the diff, commit only the intended files and push to the working branch
+     `claude/sleepy-davinci-jszjm6`. Then sync the user's local clone if you have access to it;
+     otherwise give the PowerShell pull commands. Never force-push, rewrite history or touch
+     `main`.
    * Author commits as the user (`ujvall`), with **no AI co-author trailers or attribution**.
    * The user is the sole owner and contributor. Never add collaborators, members, bots or
      co-authors, and never change repository access. If the environment demands an automated

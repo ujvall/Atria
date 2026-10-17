@@ -88,11 +88,13 @@ x' = x + L · sin θ        z' = z + L · cos θ        (θ in degrees, 0 = +z, 
   3. The Console lists errors, warnings, and "Still to survey" (the missing-measurement list).
   4. Fix every error before trying the file in the app.
 * **To try it in the app:**
-  1. Copy the file into `Assets/Atria/Resources/Atria/Data/` under a new name, for example
-     `prp_g_partial.json`.
-  2. Select the `Atria` object in the scene and set **Building Resource Path** to
-     `Atria/Data/prp_g_partial`.
-  3. Press Play.
+  1. Select the `Atria` object in the scene.
+  2. Drag the draft JSON from the Project window into **Building Data Override** in the
+     Inspector.
+  3. Press Play. The Console logs which dataset loaded. A non-verified dataset shows a
+     "PROVISIONAL RECONSTRUCTION" banner and a walkthrough tag.
+  4. Clear the field to go back to the demo. The default scene and builds are unchanged unless
+     you save the scene with the field set.
 * **Without Unity:** `dotnet test Tools/CoreTests` checks that every JSON file in
   `Resources/Atria/Data/` loads and has no validation errors.
 
