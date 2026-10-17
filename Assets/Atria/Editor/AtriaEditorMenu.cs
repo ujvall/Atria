@@ -14,6 +14,7 @@ namespace Atria.EditorTools
     {
         public const string ScenePath = "Assets/Atria/Scenes/Main.unity";
         public const string BuildingJsonPath = "Assets/Atria/Resources/Atria/Data/building.json";
+        public const string PrpDraftPath = "Assets/Atria/MappingData/prp_g_left_draft.json";
         public const string ApkPath = "Builds/Android/Atria.apk";
         public const string AndroidPackageName = "com.ujvall.atria";
 
@@ -127,6 +128,42 @@ namespace Atria.EditorTools
             {
                 Debug.LogError($"[Atria] {path}: {e.Message}");
             }
+        }
+
+        // Dataset selection is stored on the scene's Atria object and the scene is saved, so it survives restarts.
+        [MenuItem("Atria/Dataset: Use PRP Draft (left section)", priority = 40)]
+        public static void UsePrpDraft()
+        {
+            var draft = AssetDatabase.LoadAssetAtPath<TextAsset>(PrpDraftPath);
+            if (draft == null) { EditorUtility.DisplayDialog("Atria", "PRP draft not found at " + PrpDraftPath, "OK"); return; }
+            SetDataset(draft);
+        }
+
+        [MenuItem("Atria/Dataset: Use Demo (default)", priority = 41)]
+        public static void UseDemo() => SetDataset(null);
+
+        private static void SetDataset(TextAsset dataset)
+        {
+            if (EditorApplication.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Atria", "Stop Play mode first: changes made during Play are discarded.", "OK");
+                return;
+            }
+            var app = Object.FindFirstObjectByType<AtriaApp>();
+            if (app == null)
+            {
+                EditorUtility.DisplayDialog("Atria", "No Atria object in the open scene. Open " + ScenePath + " or run Atria > 1. Create Main Scene.", "OK");
+                return;
+            }
+            Undo.RecordObject(app, "Select Atria dataset");
+            app.BuildingDataOverride = dataset;
+            EditorUtility.SetDirty(app);
+            Scene scene = app.gameObject.scene;
+            EditorSceneManager.MarkSceneDirty(scene);
+            bool saved = !string.IsNullOrEmpty(scene.path) && EditorSceneManager.SaveScene(scene);
+            Selection.activeObject = app;
+            string which = dataset == null ? "default demo (Resources/Atria/Data/building.json)" : AssetDatabase.GetAssetPath(dataset);
+            Debug.Log($"[Atria] Dataset set to {which}. " + (saved ? $"Saved in {scene.path}. Press Play." : "Scene NOT saved: save it (Ctrl+S) to keep this selection."));
         }
     }
 }

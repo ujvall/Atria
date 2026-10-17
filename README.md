@@ -10,10 +10,10 @@ and no backend.
 > "Entrance A/B/C" are fictitious. The app shows a warning banner until the data file is
 > marked `"verified"`. See [docs/STATUS.md](docs/STATUS.md) for the information still needed.
 
-> **Not yet opened in Unity.** The code was checked in a cloud environment with no Unity Editor
-> and no Android SDK: the core tests pass, and a compile check against Unity reference assemblies
-> succeeded. See [docs/STATUS.md](docs/STATUS.md) for what still needs validating in
-> 6000.6.6f1.
+> **Unity status.** You have opened the project in Unity 6.6 and run the demo in Play mode. Claude's
+> checks run in a cloud environment with no Unity Editor or Android SDK: the core tests and a
+> compile check against older Unity reference assemblies. See [docs/STATUS.md](docs/STATUS.md)
+> for what is still unverified.
 
 ## Getting started (Windows, Unity 6000.6.6f1)
 
@@ -28,6 +28,18 @@ and no backend.
    `Assets/Atria/Scenes/Main.unity` and adds it to Build Settings.
 4. **Press Play.** Type `122`, tap **DEMO-122**, keep *Entrance A*, then tap
    **Start walkthrough** and drag the slider.
+
+   **Which dataset?** The fictional demo loads by default, and the Console shows
+   `override: no`. To load the provisional PRP draft instead:
+   1. Stop Play mode.
+   2. Choose **Atria > Dataset: Use PRP Draft (left section)**. This assigns the draft to the
+      `Atria` object and saves the scene, so the choice survives restarting Unity.
+   3. Press Play. The Console should show `Dataset 'PRP ground floor, left section (PROVISIONAL DRAFT)' …
+      source Assets/Atria/MappingData/prp_g_left_draft.json, override: yes`, and the app shows a
+      **PROVISIONAL PRP DRAFT** banner.
+   4. To switch back, choose **Atria > Dataset: Use Demo (default)**.
+   If a selected file can't be read, the app shows a **DATA ERROR** banner rather than falling
+   back to the demo.
 5. **Configure Android.** Choose **File > Build Profiles**, switch the platform to Android, then
    run **Atria > 2. Configure Android Player Settings**.
 6. **Build the APK.** Run **Atria > 3. Build Android APK**. The output goes to

@@ -37,6 +37,7 @@ namespace Atria.App
         public Color SkyColor = new Color32(196, 216, 236, 255);
         public BuildingVisualSettings Visuals = new BuildingVisualSettings();
 
+        private DatasetLoadResult _dataset;
         private BuildingData _building;
         private RouteFinder _router;
         private RoomSearch _search;
@@ -67,13 +68,13 @@ namespace Atria.App
             string loadError = LoadBuilding();
             CreateCamera();
             _ui = new AtriaUI();
-            _ui.Build(transform, _font, BannerText(), WalkthroughTag(), _building != null ? _building.Entrances : new List<EntranceData>());
+            _ui.Build(transform, _font, _dataset.Banner, _dataset.WalkthroughTag, _building != null ? _building.Entrances : new List<EntranceData>());
             WireUi();
 
             if (loadError != null)
             {
                 _ui.SetResults(new List<RoomMatch>(), loadError);
-                _ui.SetRouteSummary("Building data could not be loaded.", true, false);
+                _ui.SetRouteSummary("Building data could not be loaded. Nothing is shown rather than a different dataset.", true, false);
                 return;
             }
 
@@ -87,45 +88,44 @@ namespace Atria.App
 
         private string LoadBuilding()
         {
-            bool fromResources = BuildingDataOverride == null;
-            TextAsset asset = fromResources ? Resources.Load<TextAsset>(BuildingResourcePath) : BuildingDataOverride;
-            if (asset == null) return $"Missing building data at Resources/{BuildingResourcePath}.json";
-            try
-            {
-                _building = BuildingDataLoader.FromJson(asset.text);
-            }
-            catch (System.FormatException e)
-            {
-                Debug.LogError("[Atria] " + e.Message);
-                return "Building data is invalid: " + e.Message;
-            }
-            finally
-            {
-                if (fromResources) Resources.UnloadAsset(asset);
-            }
+            // shortcut: an override pointing at a deleted asset reads as "no override" (Unity fake-null), select it again via the Atria menu.
+            bool hasOverride = BuildingDataOverride != null;
+            _dataset = DatasetLoader.Load(
+                hasOverride ? BuildingDataOverride.text : null,
+                hasOverride ? OverridePath() : null,
+                () =>
+                {
+                    var asset = Resources.Load<TextAsset>(BuildingResourcePath);
+                    if (asset == null) return null;
+                    string text = asset.text;
+                    Resources.UnloadAsset(asset);
+                    return text;
+                },
+                $"Resources/{BuildingResourcePath}.json");
 
-            ValidationReport report = BuildingValidator.Validate(_building);
-            Debug.Log($"[Atria] Loaded {_building.DisplayName} (status: {_building.DataStatus}) from {(fromResources ? "Resources/" + BuildingResourcePath : asset.name)}");
-            if (!report.IsValid) Debug.LogError("[Atria] Building data validation failed: " + report);
-            else if (report.Warnings.Count > 0) Debug.LogWarning("[Atria] Building data warnings: " + report);
+            if (!_dataset.Success)
+            {
+                Debug.LogError(_dataset.Summary);
+                return _dataset.Error;
+            }
+            Debug.Log(_dataset.Summary);
+            if (!_dataset.Report.IsValid) Debug.LogError("[Atria] Building data validation failed: " + _dataset.Report);
+            else if (_dataset.Report.Warnings.Count > 0) Debug.LogWarning("[Atria] Building data warnings: " + _dataset.Report);
+
+            // Search, routing, geometry and the camera all use this one instance.
+            _building = _dataset.Building;
             _router = new RouteFinder(_building);
             _search = new RoomSearch(_building.Rooms);
             return null;
         }
 
-        private string BannerText()
+        private string OverridePath()
         {
-            if (_building == null || _building.IsVerified) return null;
-            return _building.DataStatus == "sample"
-                ? "SAMPLE DATA – this demo layout and its DEMO room numbers are NOT the real PRP building."
-                : $"PROVISIONAL RECONSTRUCTION – {_building.DisplayName}. Layout estimated from sketches, not surveyed. NOT for real navigation.";
-        }
-
-        /// <summary>Short reminder kept visible on the walkthrough screen.</summary>
-        private string WalkthroughTag()
-        {
-            if (_building == null || _building.IsVerified) return null;
-            return _building.DataStatus == "sample" ? "SAMPLE LAYOUT – not the real building" : "PROVISIONAL PRP DRAFT – not surveyed";
+#if UNITY_EDITOR
+            return UnityEditor.AssetDatabase.GetAssetPath(BuildingDataOverride);
+#else
+            return BuildingDataOverride.name;
+#endif
         }
 
         private void CreateMaterials()

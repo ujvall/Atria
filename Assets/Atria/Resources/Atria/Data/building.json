@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
-  "buildingId": "PRP-SAMPLE",
-  "displayName": "Pearl Research Park (SAMPLE layout)",
+  "buildingId": "DEMO-SAMPLE",
+  "displayName": "Fictional demo corridor (SAMPLE, not PRP)",
   "dataStatus": "sample",
   "notes": "PLACEHOLDER DATA. This is an invented T-shaped corridor used to exercise routing and the walkthrough camera. It is NOT the architecture of Pearl Research Park. Room numbers DEMO-xxx and entrances A/B/C are fictitious. Replace with surveyed data (see docs/DATA_FORMAT.md).",
   "walkingSpeedMps": 1.2,

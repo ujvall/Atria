@@ -88,13 +88,14 @@ x' = x + L · sin θ        z' = z + L · cos θ        (θ in degrees, 0 = +z, 
   3. The Console lists errors, warnings, and "Still to survey" (the missing-measurement list).
   4. Fix every error before trying the file in the app.
 * **To try it in the app:**
-  1. Select the `Atria` object in the scene.
-  2. Drag the draft JSON from the Project window into **Building Data Override** in the
-     Inspector.
-  3. Press Play. The Console logs which dataset loaded. A non-verified dataset shows a
-     "PROVISIONAL RECONSTRUCTION" banner and a walkthrough tag.
-  4. Clear the field to go back to the demo. The default scene and builds are unchanged unless
-     you save the scene with the field set.
+  * For the left-section draft, choose **Atria > Dataset: Use PRP Draft (left section)** (not in
+    Play mode). This sets **Building Data Override** on the `Atria` object and saves the scene.
+  * For any other draft, drag it into **Building Data Override** in the Inspector and save the
+    scene.
+  * Press Play. The Console logs the dataset name, source path, status and `override: yes/no`.
+    A non-verified draft shows a **PROVISIONAL PRP DRAFT** banner. An unreadable file shows a
+    **DATA ERROR** banner; the app never falls back to the demo silently.
+  * Use **Atria > Dataset: Use Demo (default)** to switch back.
 * **Without Unity:** `dotnet test Tools/CoreTests` checks that every JSON file in
   `Resources/Atria/Data/` loads and has no validation errors.
 

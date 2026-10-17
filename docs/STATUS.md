@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **53/53 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **59/59 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -74,8 +74,16 @@ available here, and all three exist in Unity 6.
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md) for what the
   sketches show.
 * **First provisional PRP section:** `Assets/Atria/MappingData/prp_g_left_draft.json` covers
-  the hall, L1 and L2, with all geometry estimated. Load it with **Building Data Override** on
-  the `Atria` object. The demo stays the default.
+  the hall, L1 and L2, with all geometry estimated. Select it with **Atria > Dataset: Use PRP
+  Draft (left section)**, which sets **Building Data Override** and saves the scene. The demo
+  stays the default.
+* **Dataset loading (fixed 2026-10-17):**
+  * The override field was read correctly but never assigned; it needed a manual drag in the
+    Inspector, so Play mode kept loading the demo.
+  * Selection now goes through `DatasetLoader` (tested) and the two menu commands.
+  * The Console logs the name, path, status and whether an override was used.
+  * Override failures show a **DATA ERROR** banner instead of falling back.
+  * The demo is now labelled "Fictional demo corridor (SAMPLE, not PRP)".
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
