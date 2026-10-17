@@ -177,5 +177,106 @@ namespace Atria.Core.Tests
             Assert.IsTrue(report.MissingMeasurements.Any(m => m.Contains("OBS_ENT1_TO_L1") && m.Contains("stride not calibrated")));
             Assert.IsFalse(report.Warnings.Any(w => w.Contains("OBS_ENT1_TO_L1")));
         }
+
+        // ------------------------------------------------------------------ right wing (R1, R2)
+
+        private static readonly string[] RightWingRooms = { "G03", "G04", "G05", "G06", "G07", "G08", "G10", "G11", "ELECTRICAL-ROOM", "LIFT" };
+
+        [Test]
+        public void RightWing_IsConnectedToTheHallAndEveryRoomIsReachable()
+        {
+            BuildingData b = Load();
+            var finder = new RouteFinder(b);
+            foreach (string start in new[] { "ENT_1", "DRAFT_START_HALL" })
+                foreach (string room in RightWingRooms)
+                {
+                    RouteResult r = finder.FindRoute(start, room);
+                    Assert.IsTrue(r.Success, $"{start} -> {room}: {r.Failure}");
+                    CollectionAssert.Contains(r.Nodes.Select(n => n.Id).ToList(), "HALL_E", $"{start} -> {room} must pass through the hall's right exit");
+                }
+            // The only link between the hall and the right wing is the new corridor.
+            Assert.AreEqual(1, b.Edges.Count(e => (e.From == "HALL_C" && e.To == "HALL_E") || (e.From == "HALL_E" && e.To == "HALL_C")));
+        }
+
+        [Test]
+        public void RightWing_DoorsAreOnTheIntendedJunctionSides()
+        {
+            BuildingData b = Load();
+            FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
+            var expected = new (string room, string ring, float sideYaw, int doors)[]
+            {
+                ("G08", "R1", 330, 2), ("G07", "R1", 30, 1), ("G10", "R1", 150, 2), ("G11", "R1", 210, 1),
+                ("G03", "R2", 330, 2), ("G04", "R2", 270, 2), ("G05", "R2", 90, 2), ("ELECTRICAL-ROOM", "R2", 90, 1), ("G06", "R2", 150, 2),
+            };
+            foreach (var (room, ring, sideYaw, doors) in expected)
+            {
+                Vector2 centre = b.Voids.Single(v => v.Id == ring + "#void").Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / b.Voids.Single(v => v.Id == ring + "#void").Polygon.Count;
+                RoomData r = b.FindRoom(room);
+                Assert.AreEqual(doors, r.Doors.Count, room);
+                for (int i = 0; i < r.Doors.Count; i++)
+                {
+                    Assert.IsTrue(layout.Doors[FloorLayout.DoorKey(room, i)].Placed, $"{room} door {i} not on a wall");
+                    Vector2 d = r.Doors[i].Opening.Center - centre;
+                    float yaw = (float)((Math.Atan2(d.X, d.Y) * 180 / Math.PI + 360) % 360);
+                    float diff = Math.Abs(((yaw - sideYaw) % 360 + 540) % 360 - 180);
+                    Assert.Less(diff, 30f, $"{room} door {i} at yaw {yaw:0} is not on the {sideYaw} side of {ring}");
+                }
+            }
+            // The lift is on the right-hand wall of the corridor above R2.
+            OpeningPlacement lift = layout.Doors[FloorLayout.DoorKey("LIFT", 0)];
+            Assert.IsTrue(lift.Placed);
+            Assert.AreEqual(-1f, lift.Inward.X, 1e-3f, "lift door faces west into the corridor, i.e. it is on the east wall");
+        }
+
+        [Test]
+        public void RightWing_JunctionCentresHaveTheDrawnShapesAndAreNotWalkable()
+        {
+            BuildingData b = Load();
+            FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
+            Assert.AreEqual(8, b.Voids.Single(v => v.Id == "R1#void").Polygon.Count); // lower: roughly octagonal centre
+            Assert.AreEqual(6, b.Voids.Single(v => v.Id == "R2#void").Polygon.Count); // upper: hexagonal centre
+            foreach (string ring in new[] { "R1", "R2" })
+            {
+                VoidData v = b.Voids.Single(x => x.Id == ring + "#void");
+                Vector2 c = v.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / v.Polygon.Count;
+                Assert.IsFalse(layout.IsWalkable(c), ring);
+                Assert.IsTrue(layout.IsInVoid(c), ring);
+                Assert.IsTrue(Polygon2D.IsConvex(v.Polygon), ring);
+            }
+        }
+
+        [Test]
+        public void RightWing_HasNoDanglingNodesAndTheLiftIsOnlyALandmark()
+        {
+            BuildingData b = Load();
+            ValidationReport report = BuildingValidator.Validate(b);
+            Assert.IsTrue(report.IsValid, report.ToString());
+            Assert.IsFalse(report.Warnings.Any(w => w.Contains("no navigable connections")), report.ToString());
+            Assert.AreEqual(1, b.Floors.Count, "no other floor is invented");
+            Assert.IsFalse(b.Edges.Any(e => e.Kind == "lift" || e.Kind == "stairs"), "no vertical route is invented");
+            Assert.AreEqual("lift", b.FindNode("R2_LIFT").Kind);
+
+            var search = new RoomSearch(b.Rooms);
+            Assert.AreEqual("LIFT", search.Search("lift")[0].Room.Id);
+            RoomData electrical = search.Search("electrical")[0].Room;
+            Assert.AreEqual("ELECTRICAL-ROOM", electrical.Id);
+            Assert.AreEqual("Electrical Room", electrical.Number, "no room number is invented");
+            Assert.AreEqual(b.Rooms.Count, b.Rooms.Select(r => r.Id).Distinct().Count());
+            Assert.AreEqual(b.Nodes.Count, b.Nodes.Select(n => n.Id).Distinct().Count());
+        }
+
+        [Test]
+        public void LeftWing_IsUnchangedByTheRightWing()
+        {
+            BuildingData b = Load();
+            Assert.AreEqual(new System.Numerics.Vector3(-34.6f, 0f, 2f), b.FindNode("CORR_BEND").Position);
+            Assert.AreEqual(new System.Numerics.Vector3(-9f, 0f, 2f), b.FindNode("HALL_W").Position);
+            CollectionAssert.AreEquivalent(new[] { "G16", "G17", "G18", "G21", "G23", "G25", "G26", "PHYSICS-LAB-II" },
+                b.Rooms.Select(r => r.Id).Except(RightWingRooms).ToArray());
+            var finder = new RouteFinder(b);
+            RouteResult g23 = finder.FindRoute("ENT_1", "G23");
+            Assert.IsTrue(g23.Success);
+            Assert.IsFalse(g23.Nodes.Any(n => n.Id.StartsWith("R1") || n.Id.StartsWith("R2") || n.Id == "HALL_E"), "left-wing routes do not detour through the right wing");
+        }
     }
 }

@@ -88,9 +88,9 @@ namespace Atria.Core.Tests
         public void PrpDraft_RingsHaveVoidsAndRoutesNeverCrossThem()
         {
             BuildingData b = BuildingDataLoader.FromJson(System.IO.File.ReadAllText(TestData.FindRepoFile(PrpDraftTests.DraftRelativePath)));
-            CollectionAssert.AreEquivalent(new[] { "L1#void", "L2#void" }, b.Voids.Select(v => v.Id).ToArray());
+            CollectionAssert.AreEquivalent(new[] { "L1#void", "L2#void", "R1#void", "R2#void" }, b.Voids.Select(v => v.Id).ToArray());
             FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
-            Assert.AreEqual(8 + 6, layout.Walls.Count(w => w.BordersVoid)); // L1 octagon + L2 hexagon
+            Assert.AreEqual(8 + 6 + 8 + 6, layout.Walls.Count(w => w.BordersVoid)); // L1, L2, R1, R2 centres
             Assert.IsFalse(b.Nodes.Any(n => layout.IsInVoid(new Vector2(n.Position.X, n.Position.Z))));
 
             var finder = new RouteFinder(b);

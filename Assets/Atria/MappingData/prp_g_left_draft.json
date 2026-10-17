@@ -1,9 +1,9 @@
 {
  "schemaVersion": 1,
  "buildingId": "PRP-G-DRAFT-LEFT",
- "displayName": "PRP ground floor, left section (PROVISIONAL DRAFT)",
+ "displayName": "PRP Block C ground floor, left + right wings (PROVISIONAL DRAFT)",
  "dataStatus": "partial",
- "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance.",
+ "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance. Right wing (R1 lower-right, R2 upper-right, lift) added from the first sketch set's right-hand close-ups; all positions estimated.",
  "walkingSpeedMps": 1.2,
  "defaultCorridorWidth": 2.4,
  "defaultDoorWidth": 1.0,
@@ -129,6 +129,113 @@
    ],
    "width": 2.4,
    "provenance": "estimated"
+  },
+  {
+   "id": "R1",
+   "floor": "G",
+   "shape": "hexRing",
+   "center": [
+    27.6,
+    0.3
+   ],
+   "outerRadius": 5.0,
+   "innerRadius": 1.85,
+   "rotation": 0,
+   "innerSides": 8,
+   "innerRotation": 0,
+   "provenance": "estimated",
+   "note": "Lower-right junction; centre drawn roughly octagonal; inner radius 1.85 m keeps a 2.4 m corridor all round (no side corridors widen it); sizes estimated"
+  },
+  {
+   "id": "R2",
+   "floor": "G",
+   "shape": "hexRing",
+   "center": [
+    34.53,
+    15.1
+   ],
+   "outerRadius": 5.0,
+   "innerRadius": 2.2,
+   "rotation": 0,
+   "provenance": "estimated",
+   "note": "Upper-right junction; hexagonal centre; sizes estimated"
+  },
+  {
+   "id": "RCORR_HALL_B1",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    8.513,
+    -0.887
+   ],
+   "to": [
+    21.182,
+    -3.818
+   ],
+   "width": 2.4,
+   "provenance": "estimated",
+   "note": "Leaves the hall's right side heading down-right, as drawn; a further branch continuing down-right is drawn but its destination is unknown (not modelled)"
+  },
+  {
+   "id": "RCORR_B1_R1",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    20.219,
+    -3.962
+   ],
+   "to": [
+    23.876,
+    -1.85
+   ],
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "RCORR_R1_B2",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    31.324,
+    2.45
+   ],
+   "to": [
+    35.174,
+    4.671
+   ],
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "RCORR_B2_R2",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    34.53,
+    3.557
+   ],
+   "to": [
+    34.53,
+    10.8
+   ],
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "RCORR_R2_UP",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    34.53,
+    19.4
+   ],
+   "to": [
+    34.53,
+    24.1
+   ],
+   "width": 2.4,
+   "provenance": "estimated",
+   "note": "Corridor above R2 with the lift; it continues beyond the drawing, so its end wall here is a placeholder"
   }
  ],
  "nodes": [
@@ -445,6 +552,351 @@
    "z": 9.0,
    "provenance": "estimated",
    "note": "G17 label seen on this corridor; which wall and how far along are unknown"
+  },
+  {
+   "id": "R1_C0",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 27.6,
+   "z": 3.725,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_C60",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 30.566,
+   "z": 2.013,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_C120",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 30.566,
+   "z": -1.412,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_C180",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 27.6,
+   "z": -3.125,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_C240",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 24.634,
+   "z": -1.413,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_C300",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 24.634,
+   "z": 2.013,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_S30",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 29.083,
+   "z": 2.869,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_G07_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 28.217,
+   "z": 3.369,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_S90",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 30.566,
+   "z": 0.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_S150",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 29.083,
+   "z": -2.269,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_G10_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 30.036,
+   "z": -1.719,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_G10_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 28.13,
+   "z": -2.819,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_S210",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 26.117,
+   "z": -2.269,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_G11_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 25.771,
+   "z": -2.069,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_S270",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 24.634,
+   "z": 0.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_S330",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 26.117,
+   "z": 2.869,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_G08_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 25.251,
+   "z": 2.369,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R1_G08_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 26.983,
+   "z": 3.369,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_C0",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 34.53,
+   "z": 18.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_C60",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 37.648,
+   "z": 16.9,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_C120",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 37.648,
+   "z": 13.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_C180",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 34.53,
+   "z": 11.5,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_C240",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 31.412,
+   "z": 13.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_C300",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 31.412,
+   "z": 16.9,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_S30",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 36.089,
+   "z": 17.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_S90",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 37.648,
+   "z": 15.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G05_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 37.648,
+   "z": 16.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_ELECTRICAL-ROOM_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 37.648,
+   "z": 15.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G05_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 37.648,
+   "z": 13.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_S150",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 36.089,
+   "z": 12.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G06_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 37.215,
+   "z": 13.05,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G06_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 35.829,
+   "z": 12.25,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_S210",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 32.971,
+   "z": 12.4,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_S270",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 31.412,
+   "z": 15.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G04_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 31.412,
+   "z": 14.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G04_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 31.412,
+   "z": 16.1,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_S330",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 32.971,
+   "z": 17.8,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G03_a",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 31.932,
+   "z": 17.2,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_G03_b",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 33.231,
+   "z": 17.95,
+   "provenance": "estimated"
+  },
+  {
+   "id": "HALL_E",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 9.0,
+   "z": -1.0,
+   "provenance": "estimated"
+  },
+  {
+   "id": "RCORR_B1",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 20.672,
+   "z": -3.7,
+   "provenance": "estimated"
+  },
+  {
+   "id": "RCORR_B2",
+   "floor": "G",
+   "kind": "intersection",
+   "x": 34.53,
+   "z": 4.3,
+   "provenance": "estimated"
+  },
+  {
+   "id": "R2_LIFT",
+   "floor": "G",
+   "kind": "lift",
+   "x": 34.53,
+   "z": 21.6,
+   "provenance": "estimated",
+   "note": "Lift landmark on the right wall of the corridor above R2; no vertical connection mapped"
   }
  ],
  "edges": [
@@ -687,6 +1139,276 @@
    "to": "L2_C180",
    "width": 2.4,
    "provenance": "estimated"
+  },
+  {
+   "from": "R1_C0",
+   "to": "R1_G07_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_G07_a",
+   "to": "R1_S30",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_S30",
+   "to": "R1_C60",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_C60",
+   "to": "R1_S90",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_S90",
+   "to": "R1_C120",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_C120",
+   "to": "R1_G10_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_G10_a",
+   "to": "R1_S150",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_S150",
+   "to": "R1_G10_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_G10_b",
+   "to": "R1_C180",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_C180",
+   "to": "R1_S210",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_S210",
+   "to": "R1_G11_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_G11_a",
+   "to": "R1_C240",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_C240",
+   "to": "R1_S270",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_S270",
+   "to": "R1_C300",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_C300",
+   "to": "R1_G08_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_G08_a",
+   "to": "R1_S330",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_S330",
+   "to": "R1_G08_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_G08_b",
+   "to": "R1_C0",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C0",
+   "to": "R2_S30",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_S30",
+   "to": "R2_C60",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C60",
+   "to": "R2_G05_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G05_a",
+   "to": "R2_ELECTRICAL-ROOM_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_ELECTRICAL-ROOM_a",
+   "to": "R2_S90",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_S90",
+   "to": "R2_G05_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G05_b",
+   "to": "R2_C120",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C120",
+   "to": "R2_G06_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G06_a",
+   "to": "R2_S150",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_S150",
+   "to": "R2_G06_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G06_b",
+   "to": "R2_C180",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C180",
+   "to": "R2_S210",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_S210",
+   "to": "R2_C240",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C240",
+   "to": "R2_G04_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G04_a",
+   "to": "R2_S270",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_S270",
+   "to": "R2_G04_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G04_b",
+   "to": "R2_C300",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C300",
+   "to": "R2_G03_a",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G03_a",
+   "to": "R2_S330",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_S330",
+   "to": "R2_G03_b",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_G03_b",
+   "to": "R2_C0",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "HALL_C",
+   "to": "HALL_E",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "HALL_E",
+   "to": "RCORR_B1",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "RCORR_B1",
+   "to": "R1_C240",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R1_C60",
+   "to": "RCORR_B2",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "RCORR_B2",
+   "to": "R2_C180",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
+   "from": "R2_C0",
+   "to": "R2_LIFT",
+   "width": 2.4,
+   "provenance": "estimated"
   }
  ],
  "entrances": [
@@ -849,6 +1571,194 @@
    "provenance": "placeholder",
    "doors": [],
    "note": "Label seen near L1 above G18; may be G18 itself. Location not mapped."
+  },
+  {
+   "id": "G08",
+   "number": "G08",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R1_G08_a",
+     "x": 24.569,
+     "z": 3.55,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "R1_G08_b",
+     "x": 26.301,
+     "z": 4.55,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates (earlier read G08/G09; confirmed G08)"
+  },
+  {
+   "id": "G07",
+   "number": "G07",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R1_G07_a",
+     "x": 28.899,
+     "z": 4.55,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "One label on R1's upper-right side; a similar label beside R2's lower-left side is not added (unconfirmed)"
+  },
+  {
+   "id": "G10",
+   "number": "G10",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R1_G10_a",
+     "x": 30.718,
+     "z": -2.9,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "R1_G10_b",
+     "x": 28.812,
+     "z": -4.0,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G11",
+   "number": "G11",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R1_G11_a",
+     "x": 25.089,
+     "z": -3.25,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "One label on R1's lower-left side; offset estimated"
+  },
+  {
+   "id": "G03",
+   "number": "G03",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R2_G03_a",
+     "x": 31.326,
+     "z": 18.25,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "R2_G03_b",
+     "x": 32.625,
+     "z": 19.0,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G04",
+   "number": "G04",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R2_G04_a",
+     "x": 30.2,
+     "z": 14.1,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "R2_G04_b",
+     "x": 30.2,
+     "z": 16.1,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates"
+  },
+  {
+   "id": "G05",
+   "number": "G05",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R2_G05_a",
+     "x": 38.86,
+     "z": 16.8,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "R2_G05_b",
+     "x": 38.86,
+     "z": 13.4,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates; G05/G06 placement read from an unclear sketch"
+  },
+  {
+   "id": "G06",
+   "number": "G06",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R2_G06_a",
+     "x": 37.821,
+     "z": 12.0,
+     "provenance": "estimated"
+    },
+    {
+     "accessNode": "R2_G06_b",
+     "x": 36.435,
+     "z": 11.2,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Two door labels in the sketch; positions along the side are estimates; G05/G06 placement read from an unclear sketch"
+  },
+  {
+   "id": "ELECTRICAL-ROOM",
+   "number": "Electrical Room",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R2_ELECTRICAL-ROOM_a",
+     "x": 38.86,
+     "z": 15.1,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Labelled between the two G05 doors; no room number known, so none is invented"
+  },
+  {
+   "id": "LIFT",
+   "number": "Lift",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "R2_LIFT",
+     "x": 35.73,
+     "z": 21.6,
+     "width": 1.2,
+     "provenance": "estimated"
+    }
+   ],
+   "note": "Landmark only: no other floor or vertical route is modelled",
+   "name": "Lift (landmark)"
   }
  ],
  "observations": [

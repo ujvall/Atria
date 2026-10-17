@@ -32,9 +32,9 @@ and no backend.
    **Which dataset?** The fictional demo loads by default, and the Console shows
    `override: no`. To load the provisional PRP draft instead:
    1. Stop Play mode.
-   2. Choose **Atria > Dataset: Use PRP Draft (left section)**. This assigns the draft to the
+   2. Choose **Atria > Dataset: Use PRP Draft (Block C ground floor)**. This assigns the draft to the
       `Atria` object and saves the scene, so the choice survives restarting Unity.
-   3. Press Play. The Console should show `Dataset 'PRP ground floor, left section (PROVISIONAL DRAFT)' …
+   3. Press Play. The Console should show `Dataset 'PRP Block C ground floor, left + right wings (PROVISIONAL DRAFT)' …
       source Assets/Atria/MappingData/prp_g_left_draft.json, override: yes`, and the app shows a
       **PROVISIONAL PRP DRAFT** banner.
    4. To switch back, choose **Atria > Dataset: Use Demo (default)**.

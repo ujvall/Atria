@@ -9,7 +9,7 @@ Use this sheet as the checklist for the on-site survey ([MAPPING_GUIDE.md](../MA
 **Second set of drawings (2026-10-17):** a hand overview sketch of the left side, and an
 expanded drawing of the G18/G21 junction (L1). See "Observations from the second drawings" below.
 
-**Drafted so far:** the left section (hall, L1, L2), in
+**Drafted so far:** the left section (hall, L1, L2) and the right wing (R1, R2, lift), in
 [`Assets/Atria/MappingData/prp_g_left_draft.json`](../../Assets/Atria/MappingData/prp_g_left_draft.json).
 All of its geometry is estimated; see "Left-section draft" below.
 
@@ -138,3 +138,47 @@ directions.
 * **Other features in the overview sketch:** the hatched element at the top of L2 (stairs?)
   and where L2's upper-left corridor leads.
 * **Door positions:** G17's door position, and the G18/G21 door offsets along their sides.
+
+## Right wing (R1, R2) in the draft
+**Source:** the first sketch set's right-hand close-ups, plus your label list (G07, G08, G03–G06,
+Electrical Room, Lift). The new annotated drawings mentioned in the request did not arrive in
+that session.
+
+### Observed
+* The corridor leaves the hall's right side heading down-right, then turns up-right into R1's
+  lower-left corner. A second branch continues down-right; it is **not modelled**, because its
+  destination is unknown.
+* **R1** (lower-right): a six-sided outline with a roughly **octagonal** centre.
+  * G08 ×2 on the upper-left side; your list resolves the earlier G08/G09 reading
+  * G07 on the upper-right side
+  * G11 on the lower-left side
+  * G10 ×2 on the lower-right side
+  * G10 and G11 are clearly labelled in the close-ups, although your list doesn't mention them
+* The corridor leaves R1's upper-right corner heading up-right, then runs straight up into
+  R2's bottom corner.
+* **R2** (upper-right): a six-sided outline with a **hexagonal** centre.
+  * G03 ×2 on the upper-left side
+  * G04 ×2 on the left side
+  * G05 ×2 on the right side, with the **Electrical room** labelled between them
+  * G06 ×2 on the lower-right side
+* A corridor runs up from R2's top corner. **LIFT** is on its right-hand wall.
+
+### Estimated (in the JSON, not measured)
+* **Centres:** R1 at (27.6, 0.3) and R2 at (34.53, 15.1), from the overview at about 0.1 m per
+  pixel. Both bends are 8 m from R1's centre.
+* **Sizes:** outer 5.0 m for both rings. Inner 1.85 m for R1's octagon, kept smaller than L1's
+  so the 2.4 m corridor stays clear on sides with no side corridor. Inner 2.2 m for R2's
+  hexagon.
+* **Doors:** offsets along each side are estimated and kept clear of where corridors attach.
+* **Electrical Room:** searchable as "Electrical Room", with no room number.
+* **Lift:** searchable landmark "Lift", with a 1.2 m door 1.5 m above R2. The corridor above R2
+  ends in a placeholder wall 4 m past the ring.
+
+### Still unknown
+* whether G05 and G06 are the right way round (the right-side labels were hard to read)
+* whether the label beside R2's lower-left side is a second G07 door; it is **not added**
+* where the down-right branch from the hall corridor leads, and where R2's upper corridor leads
+* whether the lift serves other floors (no vertical route is modelled), and where the stairs
+  are
+* all real dimensions, and the right wing's entrances (the "main entrance" in the overview is
+  not placed)

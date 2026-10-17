@@ -131,7 +131,7 @@ namespace Atria.EditorTools
         }
 
         // Dataset selection is stored on the scene's Atria object and the scene is saved, so it survives restarts.
-        [MenuItem("Atria/Dataset: Use PRP Draft (left section)", priority = 40)]
+        [MenuItem("Atria/Dataset: Use PRP Draft (Block C ground floor)", priority = 40)]
         public static void UsePrpDraft()
         {
             var draft = AssetDatabase.LoadAssetAtPath<TextAsset>(PrpDraftPath);

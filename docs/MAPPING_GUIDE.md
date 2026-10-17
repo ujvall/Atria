@@ -92,7 +92,7 @@ x' = x + L · sin θ        z' = z + L · cos θ        (θ in degrees, 0 = +z, 
   3. The Console lists errors, warnings, and "Still to survey" (the missing-measurement list).
   4. Fix every error before trying the file in the app.
 * **To try it in the app:**
-  * For the left-section draft, choose **Atria > Dataset: Use PRP Draft (left section)** (not in
+  * For the Block C draft (both wings), choose **Atria > Dataset: Use PRP Draft (Block C ground floor)** (not in
     Play mode). This sets **Building Data Override** on the `Atria` object and saves the scene.
   * For any other draft, drag it into **Building Data Override** in the Inspector and save the
     scene.
@@ -117,3 +117,27 @@ Repeat sections 2–4 for the next junction. When the three entrances are mapped
 set their `label`s and remove the demo file from the build: point **Building Resource Path**
 at your file. Only when everything is measured does the validator allow `"verified"`, which
 removes the warning banner.
+
+## 6. Checking the Block C draft in Unity
+1. Choose **Atria > Dataset: Use PRP Draft (Block C ground floor)**. You must not be in Play
+   mode. The Console prints `Dataset set to Assets/Atria/MappingData/prp_g_left_draft.json`.
+2. Press Play and check the Console line: `'PRP Block C ground floor, left + right wings
+   (PROVISIONAL DRAFT)' … override: yes`. The banner reads **PROVISIONAL PRP DRAFT**.
+3. **Left wing (unchanged):** start at *Entrance 1* and search `G23`, `G18` or `G21`. The route
+   goes from the bend into L1 and up to L2, and never through the hall's right side.
+4. **Right wing:** with either start point, search each of these and start the walkthrough:
+   * `G08`, `G07`, `G10`, `G11` (lower-right junction R1, octagonal recessed centre)
+   * `G03`, `G04`, `G05`, `G06`, `Electrical` (upper-right junction R2, hexagonal recessed
+     centre)
+   * `Lift` (on the right-hand wall of the corridor above R2)
+5. **Hall to wings:**
+   * From *DRAFT START: central hall*, a right-wing route leaves the hall's right side, follows
+     the dog-leg corridor into R1's lower-left corner, and continues to R2 through R1's
+     upper-right corner.
+   * From *Entrance 1*, a right-wing route crosses the whole building: L1, the hall, then the
+     right wing.
+6. **While scrubbing, check that:**
+   * the camera stays on corridor floor and never crosses a recessed centre
+   * door signs face into the corridor
+   * the corridors line up at the bends
+7. Choose **Atria > Dataset: Use Demo (default)** to switch back. The demo is unchanged.

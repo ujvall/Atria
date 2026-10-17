@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **72/72 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **77/77 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -75,7 +75,7 @@ available here, and all three exist in Unity 6.
   sketches show.
 * **First provisional PRP section:** `Assets/Atria/MappingData/prp_g_left_draft.json` covers
   the hall, L1 and L2, with all geometry estimated. Select it with **Atria > Dataset: Use PRP
-  Draft (left section)**, which sets **Building Data Override** and saves the scene. The demo
+  Draft (Block C ground floor)**, which sets **Building Data Override** and saves the scene. The demo
   stays the default.
 * **Dataset loading (fixed 2026-10-17):**
   * The override field was read correctly but never assigned; it needed a manual drag in the
@@ -86,6 +86,22 @@ available here, and all three exist in Unity 6.
   * The demo is now labelled "Fictional demo corridor (SAMPLE, not PRP)".
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
+
+## Right wing added to the PRP draft (2026-10-17)
+* **Added:**
+  * the corridor from the hall's right side (a dog-leg, as drawn)
+  * R1, the lower-right junction: octagonal centre, with G08 ×2, G07, G10 ×2 and G11
+  * the corridor from R1 to R2
+  * R2, the upper-right junction: hexagonal centre, with G03 ×2, G04 ×2, G05 ×2, the
+    Electrical Room and G06 ×2
+  * the corridor above R2, with the Lift as a landmark
+* **Status:** all positions are estimated. No other floor or vertical route is modelled.
+* **Unchanged:** the left wing.
+* **Menu renamed:** **Atria > Dataset: Use PRP Draft (Block C ground floor)**. The file name
+  and building id are unchanged.
+* **Source:** the first sketch set's right-hand close-ups. The new annotated drawings
+  mentioned in the request were not received in that session.
+* **Steps to check in Unity:** see [MAPPING_GUIDE.md §6](MAPPING_GUIDE.md).
 
 ## PRP draft refined from the second drawings (2026-10-17)
 * **Added:** Entrance 1 (position estimated), and an octagonal centre for L1.
