@@ -44,6 +44,10 @@ Bring a tape (5 m or more), your phone's compass, and the observation sheet.
   * which wall it is on
   * distance from the nearest corner to the middle of the door
   * door width
+* **Paced distances you can't convert yet:** record them as observations, for example
+  `{ "id": "OBS_…", "from": "<node>", "to": "<node>", "steps": 15, "approximate": true, "note": "…" }`.
+  Leave out `strideMetres` until you've calibrated your pace. Once it's set, the validator
+  warns if the map disagrees with the paced distance by more than 25%.
 * **Rooms with two doors:** record both. G23, G26, G25, G18, G21, G10 and others appear twice
   in the sketches.
 

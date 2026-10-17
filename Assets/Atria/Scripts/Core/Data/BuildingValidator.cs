@@ -117,9 +117,37 @@ namespace Atria.Core.Data
             }
 
             CheckIsolatedNodes(report, b);
+            CheckObservations(report, b);
             CheckVerificationStatus(report, b);
             if (report.Errors.Count == 0) CheckReachability(report, b);
             return report;
+        }
+
+        /// <summary>Paced distances may differ from the geometry by this fraction before a warning.</summary>
+        public const float ObservationTolerance = 0.25f;
+
+        private static void CheckObservations(ValidationReport report, BuildingData b)
+        {
+            var finder = new RouteFinder(b);
+            foreach (SurveyObservation o in b.Observations)
+            {
+                string name = $"Observation '{o.Id}'";
+                if (b.FindNode(o.FromNodeId) == null || b.FindNode(o.ToNodeId) == null)
+                {
+                    report.Errors.Add($"{name} references an unknown node");
+                    continue;
+                }
+                if (!o.StrideMetres.HasValue)
+                {
+                    report.MissingMeasurements.Add($"{name}: {o.Steps:0.#} steps, stride not calibrated (no metric distance derived)");
+                    continue;
+                }
+                float paced = o.Steps * o.StrideMetres.Value;
+                float? mapped = finder.ShortestDistance(o.FromNodeId, o.ToNodeId);
+                if (!mapped.HasValue) report.Warnings.Add($"{name}: '{o.FromNodeId}' and '{o.ToNodeId}' are not connected in the graph");
+                else if (Math.Abs(mapped.Value - paced) > ObservationTolerance * paced)
+                    report.Warnings.Add($"{name}: map distance {mapped.Value:0.0} m disagrees with paced {paced:0.0} m ({o.Steps:0.#} steps x {o.StrideMetres.Value:0.00} m)");
+            }
         }
 
         private static void CheckIsolatedNodes(ValidationReport report, BuildingData b)

@@ -6,6 +6,9 @@ They establish **topology and room labels only**. No coordinates, lengths, width
 positions can be **measured** from them. Any draft built from them uses estimates only.
 Use this sheet as the checklist for the on-site survey ([MAPPING_GUIDE.md](../MAPPING_GUIDE.md)).
 
+**Second set of drawings (2026-10-17):** a hand overview sketch of the left side, and an
+expanded drawing of the G18/G21 junction (L1). See "Observations from the second drawings" below.
+
 **Drafted so far:** the left section (hall, L1, L2), in
 [`Assets/Atria/MappingData/prp_g_left_draft.json`](../../Assets/Atria/MappingData/prp_g_left_draft.json).
 All of its geometry is estimated; see "Left-section draft" below.
@@ -79,3 +82,59 @@ directions.
 * **Simplifications:** the sketched junction outlines are closer to octagons, but they are
   modelled as regular hexagons. The corridor from L1 to L2 is modelled as two straight runs
   with a 90° bend.
+
+## Observations from the second drawings
+### Observed (shown clearly in the drawings)
+* **Entrance 1** is on the left of L1, at the outer corner of the bend where the corridor from
+  L1 turns up towards G17 and L2. In the overview sketch it is labelled "entrance 1", left of
+  the lower of the two circled hexagon junctions.
+* **L1 (expanded drawing):**
+  * the corridor runs all the way round the central area
+  * the central outline is drawn as an **octagon**; the outer outline is six-sided
+  * **G18 ×2** is on the upper-right side, with **Physics Research Lab -II** labelled beside
+    them
+  * **G21 ×2** is on the lower side
+  * corridors leave towards the upper-left (to the bend, Entrance 1 and G17) and towards the
+    right (to the longer corridor and hall)
+* **Overview sketch:**
+  * L2 (upper) and L1 (lower) are a close pair joined via the bend
+  * a large polygon lies to the right of L1 (taken to be the central hall)
+  * a corridor leaves L2's upper left and goes up
+
+### Approximate (observed but not measured)
+* **About 15 normal walking steps** from Entrance 1 to the start of the hexagonal junction
+  (L1), before turning into the longer corridor.
+  * Stored in the draft as observation `OBS_ENT1_TO_L1` (`CORR_BEND` → `L1_S270`) with
+    `approximate: true`.
+  * **Not converted to metres**, because no stride is calibrated.
+  * For reference only, not used in the data: at typical strides of 0.6–0.8 m this would be
+    roughly 9–12 m. The draft's estimated corridor gives about 7.5 m from the bend node and
+    about 6.3 m to L1's outer edge, so the corridor is probably drawn too short. It is left
+    unchanged until the stride is calibrated.
+
+### Changed in the draft
+* Added `ENT_1` "Entrance 1 (observed; position estimated)" at the bend node. Its 1.6 m opening
+  is in the west wall facing the corridor to L1. It is listed first, so the app selects it by
+  default; "DRAFT START: central hall (not an entrance)" is kept as a second start point.
+* L1's centre is now an octagonal void: `innerSides: 8`, inner radius 2.0 m (estimated). It is
+  still drawn as the darker recessed area, and routes go round it.
+* Nothing else moved: no room, door, corridor or connection was added or repositioned.
+
+### Still unknown (needs on-site measurement)
+* **Stride:** your calibrated stride length, from a taped 10 m walked three times. Then add
+  `"strideMetres"` to `OBS_ENT1_TO_L1` and the validator checks the corridor length.
+* **Entrance 1:** which wall it is in (west, south or the diagonal corner as drawn), its width,
+  and whether it has doors.
+* **L1 dimensions:** outer and inner sizes, corridor widths, and the exact angles at which the
+  corridors join L1. They are drawn near L1's left and right corners; the draft joins them at
+  the side midpoints.
+* **L2's centre:** a hexagon in the overview sketch, octagonal in the first screenshots. It is
+  left as a hexagon.
+* **Hall:** drawn as a large hexagon-like polygon in the overview and as an octagon earlier.
+  It is left as an octagon.
+* **Lower junction in the overview sketch** (octagonal centre, an "entrance" on its left, a
+  label that may read "ECE rooms", "main entrance" to the right): its position relative to
+  the hall is unclear, so it is not modelled.
+* **Other features in the overview sketch:** the hatched element at the top of L2 (stairs?)
+  and where L2's upper-left corridor leads.
+* **Door positions:** G17's door position, and the G18/G21 door offsets along their sides.

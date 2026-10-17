@@ -93,6 +93,13 @@ namespace Atria.Core.Navigation
             return result;
         }
 
+        /// <summary>Shortest walkable distance between two nodes, or null if either is unknown or they are not connected.</summary>
+        public float? ShortestDistance(string fromNodeId, string toNodeId)
+        {
+            if (!_graph.TryGetIndex(fromNodeId, out int a) || !_graph.TryGetIndex(toNodeId, out int b)) return null;
+            return ShortestPath(a, new Dictionary<int, int> { [b] = 0 }, out _, out float d) == null ? (float?)null : d;
+        }
+
         private List<int> ShortestPath(int start, Dictionary<int, int> goals, out List<NavGraph.Link> links, out float distance)
         {
             int n = _graph.NodeCount;

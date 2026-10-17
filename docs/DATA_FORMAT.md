@@ -36,6 +36,7 @@ or `verified`. The app shows a warning banner unless it is `verified`.
                  "from": [x,z], "to": [x,z], "width": 2.4, "provenance": "estimated" },  // centre line + clear width
               { "id": "HEX_A", "floor": "F1", "shape": "hexRing",   // hexagonal corridor round a central void
                  "center": [x,z], "outerRadius": 8, "innerRadius": 5, "rotation": 30,  // radii centre-to-corner, metres
+                 "innerSides": 6, "innerRotation": 30,  // centre outline: regular polygon (e.g. 8 = octagon), default = outer
                  "innerEdge": "opening",              // "opening" (default): darker recessed centre, no wall; "wall": solid core
                  "provenance": "estimated" }],        // expands to six convex pieces HEX_A#0..#5 (+ void HEX_A#void)
   "nodes":    [{ "id": "N1", "floor": "F1", "kind": "corridor|intersection|entrance", "x": 0, "z": 0, "provenance": "..." }],
@@ -53,7 +54,11 @@ or `verified`. The app shows a warning banner unless it is `verified`.
                  ] },
                { "id": "G99", "number": "G99", "floor": "G" },  // known room, location unknown: searchable, not routable
                { "id": "OLD", "number": "OLD", "floor": "F1",   // single-door shorthand (still supported)
-                 "accessNode": "N7", "door": { "x": -1.2, "z": 6 } }]
+                 "accessNode": "N7", "door": { "x": -1.2, "z": 6 } }],
+  "observations": [{ "id": "OBS_1", "kind": "pacedSteps", "from": "N1", "to": "N7",   // raw field notes
+                 "steps": 15, "approximate": true,
+                 "strideMetres": 0.72,               // omit until calibrated: then no metric distance is derived
+                 "note": "..." }]
 }
 ```
 
@@ -72,6 +77,10 @@ so use notes freely.
   is drawn as an area slightly darker than the walls, recessed slightly below the floor with no wall round it, and no door
   may open onto it (validator error).
   Use `"innerEdge": "wall"` for a solid core with full-height walls.
+* **Paced distance without a calibrated stride:** add an `observations` entry with `steps` and
+  no `strideMetres`. It is listed as a missing measurement, never converted to metres, and it
+  stops the file from being marked verified. With a stride, the validator warns if the map
+  distance between the two nodes differs from steps × stride by more than 25%.
 * **Corner nodes on hex rings:** a straight edge between two side midpoints cuts across the
   inner corner into the void, so the validator rejects it. Add a node at each corner on the
   ring's centre line (radius = (outer + inner) / 2).

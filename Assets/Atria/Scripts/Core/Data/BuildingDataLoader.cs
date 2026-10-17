@@ -49,15 +49,18 @@ namespace Atria.Core.Data
                 {
                     // A hexagonal corridor around a central void is not convex: expand it into six convex pieces.
                     if (!s.TryGetValue("center", out object c)) throw new FormatException($"hexRing space '{id}' needs a center");
-                    List<List<Vector2>> ring = Polygon2D.HexRing(Point(c, "space " + id), (float)Num(s, "outerRadius", 0),
-                        (float)Num(s, "innerRadius", 0), (float)Num(s, "rotation", 0));
+                    Vector2 center = Point(c, "space " + id);
+                    float rotation = (float)Num(s, "rotation", 0), innerRadius = (float)Num(s, "innerRadius", 0);
+                    int innerSides = (int)Num(s, "innerSides", 6);
+                    float innerRotation = (float)Num(s, "innerRotation", rotation);
+                    List<List<Vector2>> ring = Polygon2D.HexRing(center, (float)Num(s, "outerRadius", 0), innerRadius, rotation, innerSides, innerRotation);
                     polygons.AddRange(ring);
                     // "innerEdge": "opening" (default) = dark recessed centre, no wall; "wall" = solid core with full-height walls.
                     string innerEdge = Str(s, "innerEdge") ?? "opening";
                     if (innerEdge == "opening")
                     {
                         var hole = new VoidData { Id = id + "#void", FloorId = Req(s, "floor"), Provenance = Prov(s) };
-                        foreach (List<Vector2> piece in ring) hole.Polygon.Add(piece[3]); // inner corner of each trapezoid
+                        hole.Polygon.AddRange(Polygon2D.RegularPolygon(center, innerSides, innerRadius, innerRotation));
                         Polygon2D.MakeCounterClockwise(hole.Polygon);
                         b.Voids.Add(hole);
                     }
@@ -167,6 +170,21 @@ namespace Atria.Core.Data
                     foreach (object a in aliases)
                         if (a is string s) room.Aliases.Add(s);
                 b.Rooms.Add(room);
+            }
+
+            foreach (var o in Objects(root, "observations"))
+            {
+                b.Observations.Add(new SurveyObservation
+                {
+                    Id = Req(o, "id"),
+                    Kind = Str(o, "kind") ?? "pacedSteps",
+                    FromNodeId = Req(o, "from"),
+                    ToNodeId = Req(o, "to"),
+                    Steps = (float)Num(o, "steps", 0),
+                    StrideMetres = o.TryGetValue("strideMetres", out object st) && st is double sd ? (float?)sd : null,
+                    Approximate = Bool(o, "approximate", true),
+                    Note = Str(o, "note"),
+                });
             }
 
             return b;

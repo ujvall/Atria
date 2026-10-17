@@ -3,7 +3,7 @@
  "buildingId": "PRP-G-DRAFT-LEFT",
  "displayName": "PRP ground floor, left section (PROVISIONAL DRAFT)",
  "dataStatus": "partial",
- "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Not included because unknown: entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance.",
+ "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance.",
  "walkingSpeedMps": 1.2,
  "defaultCorridorWidth": 2.4,
  "defaultDoorWidth": 1.0,
@@ -65,9 +65,12 @@
     2.0
    ],
    "outerRadius": 5.0,
-   "innerRadius": 2.2,
+   "innerRadius": 2.0,
    "rotation": 0,
-   "provenance": "estimated"
+   "provenance": "estimated",
+   "innerSides": 8,
+   "innerRotation": 0,
+   "note": "Centre outline drawn as an octagon in the expanded junction drawing (2026-10-17); outer hexagon and all sizes estimated"
   },
   {
    "id": "L2",
@@ -431,7 +434,8 @@
    "kind": "intersection",
    "x": -34.6,
    "z": 2.0,
-   "provenance": "estimated"
+   "provenance": "estimated",
+   "note": "Corridor bend; Entrance 1 is drawn at its outer corner"
   },
   {
    "id": "CORR_G17",
@@ -687,6 +691,18 @@
  ],
  "entrances": [
   {
+   "id": "ENT_1",
+   "label": "Entrance 1 (observed; position estimated)",
+   "node": "CORR_BEND",
+   "opening": {
+    "x": -35.8,
+    "z": 2.0,
+    "width": 1.6
+   },
+   "provenance": "estimated",
+   "note": "Drawn at the outer (left/lower) corner of the bend west of L1. Modelled as a gap in the west wall facing the corridor to L1; which wall and the width are unknown."
+  },
+  {
    "id": "DRAFT_START_HALL",
    "label": "DRAFT START: central hall (not an entrance)",
    "node": "HALL_C",
@@ -833,6 +849,17 @@
    "provenance": "placeholder",
    "doors": [],
    "note": "Label seen near L1 above G18; may be G18 itself. Location not mapped."
+  }
+ ],
+ "observations": [
+  {
+   "id": "OBS_ENT1_TO_L1",
+   "kind": "pacedSteps",
+   "from": "CORR_BEND",
+   "to": "L1_S270",
+   "steps": 15,
+   "approximate": true,
+   "note": "About 15 normal walking steps from Entrance 1 to the start of the hexagonal junction (L1), before turning into the longer corridor. Stride not calibrated, so no metric distance is derived. The paced end point is L1's outer edge, about 1.2 m before node L1_S270."
   }
  ]
 }

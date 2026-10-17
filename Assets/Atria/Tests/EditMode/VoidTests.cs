@@ -90,7 +90,7 @@ namespace Atria.Core.Tests
             BuildingData b = BuildingDataLoader.FromJson(System.IO.File.ReadAllText(TestData.FindRepoFile(PrpDraftTests.DraftRelativePath)));
             CollectionAssert.AreEquivalent(new[] { "L1#void", "L2#void" }, b.Voids.Select(v => v.Id).ToArray());
             FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
-            Assert.AreEqual(12, layout.Walls.Count(w => w.BordersVoid));
+            Assert.AreEqual(8 + 6, layout.Walls.Count(w => w.BordersVoid)); // L1 octagon + L2 hexagon
             Assert.IsFalse(b.Nodes.Any(n => layout.IsInVoid(new Vector2(n.Position.X, n.Position.Z))));
 
             var finder = new RouteFinder(b);

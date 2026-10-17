@@ -200,6 +200,52 @@ namespace Atria.Core.Tests
             Assert.IsTrue(report.Errors.Any(e => e.Contains("NOWHERE")), report.ToString());
         }
 
+        [Test]
+        public void HexRing_WithOctagonalCentreIsConvexPiecesAroundTheOpening()
+        {
+            List<List<Vector2>> pieces = Polygon2D.HexRing(Vector2.Zero, 5f, 2f, 0f, innerSides: 8, innerRotationDegrees: 0f);
+            Assert.AreEqual(12, pieces.Count); // hexagon corners (6) + octagon corners (8), two shared (0 and 180 degrees)
+            foreach (List<Vector2> p in pieces)
+            {
+                Polygon2D.MakeCounterClockwise(p);
+                Assert.IsTrue(Polygon2D.IsConvex(p));
+            }
+            float hex = 1.5f * (float)Math.Sqrt(3) * 25f, oct = 2f * (float)Math.Sqrt(2) * 4f;
+            Assert.AreEqual(hex - oct, pieces.Sum(p => Math.Abs(Polygon2D.SignedArea(p))), 1e-2f);
+            List<WallSegment> walls = WallGenerator.BuildOutline(pieces.Cast<IList<Vector2>>().ToList());
+            float octPerimeter = 8f * 2f * 2f * (float)Math.Sin(Math.PI / 8);
+            Assert.AreEqual(30f + octPerimeter, walls.Sum(w => w.Length), 1e-3f);
+            Assert.Throws<FormatException>(() => Polygon2D.HexRing(Vector2.Zero, 5f, 4.9f, 0f, innerSides: 8)); // octagon pokes out of the hexagon
+            Assert.Throws<FormatException>(() => Polygon2D.HexRing(Vector2.Zero, 5f, 2f, 0f, innerSides: 2));
+        }
+
+        [Test]
+        public void Observation_WithStrideIsComparedWithTheMap()
+        {
+            BuildingData b = TestData.Plus(); // S(0,-20) to N(0,20) is 40 m
+            b.Observations.Add(new SurveyObservation { Id = "OK", FromNodeId = "S", ToNodeId = "N", Steps = 57, StrideMetres = 0.7f });
+            b.Observations.Add(new SurveyObservation { Id = "OFF", FromNodeId = "S", ToNodeId = "N", Steps = 30, StrideMetres = 0.7f });
+            b.Observations.Add(new SurveyObservation { Id = "ISOLATED", FromNodeId = "S", ToNodeId = "ISO", Steps = 10, StrideMetres = 0.7f });
+            b.Observations.Add(new SurveyObservation { Id = "GHOST", FromNodeId = "S", ToNodeId = "NOWHERE", Steps = 10 });
+            ValidationReport report = BuildingValidator.Validate(b);
+            Assert.IsFalse(report.Warnings.Any(w => w.Contains("'OK'")), report.ToString());
+            Assert.IsTrue(report.Warnings.Any(w => w.Contains("'OFF'") && w.Contains("disagrees")), report.ToString());
+            Assert.IsTrue(report.Warnings.Any(w => w.Contains("'ISOLATED'") && w.Contains("not connected")), report.ToString());
+            Assert.IsTrue(report.Errors.Any(e => e.Contains("'GHOST'")), report.ToString());
+        }
+
+        [Test]
+        public void Observation_LoadsFromJsonWithoutStride()
+        {
+            string json = HexJson.TrimEnd().TrimEnd('}') + @", ""observations"": [ { ""id"": ""O1"", ""from"": ""IN"", ""to"": ""S"", ""steps"": 15, ""note"": ""approx"" } ] }";
+            BuildingData b = BuildingDataLoader.FromJson(json);
+            SurveyObservation o = b.Observations.Single();
+            Assert.AreEqual("pacedSteps", o.Kind);
+            Assert.IsNull(o.StrideMetres);
+            Assert.IsTrue(o.Approximate);
+            Assert.IsTrue(BuildingValidator.Validate(b).MissingMeasurements.Any(m => m.Contains("'O1'")));
+        }
+
         /// <summary>Every packaged data file and every mapping draft must load and validate without errors.</summary>
         [Test]
         public void AllDataFilesAndDrafts_AreValid()

@@ -43,6 +43,8 @@ namespace Atria.Core.Data
         public readonly List<EdgeData> Edges = new List<EdgeData>();
         public readonly List<EntranceData> Entrances = new List<EntranceData>();
         public readonly List<RoomData> Rooms = new List<RoomData>();
+        /// <summary>Raw survey observations (e.g. paced steps) kept alongside the estimated geometry.</summary>
+        public readonly List<SurveyObservation> Observations = new List<SurveyObservation>();
 
         public bool IsVerified => DataStatus == "verified";
 
@@ -51,6 +53,23 @@ namespace Atria.Core.Data
         public EntranceData FindEntrance(string id) => Entrances.Find(e => e.Id == id);
         public RoomData FindRoom(string id) => Rooms.Find(r => r.Id == id);
         public SpaceData FindSpace(string id) => Spaces.Find(s => s.Id == id);
+    }
+
+    /// <summary>
+    /// A field observation such as "about 15 normal steps from A to B". It is stored as observed
+    /// and only compared with the geometry once a calibrated stride length is recorded.
+    /// </summary>
+    public sealed class SurveyObservation
+    {
+        public string Id;
+        public string Kind;
+        public string FromNodeId;
+        public string ToNodeId;
+        public float Steps;
+        /// <summary>Calibrated stride in metres, or null while uncalibrated (no metric distance is derived).</summary>
+        public float? StrideMetres;
+        public bool Approximate;
+        public string Note;
     }
 
     public sealed class FloorData

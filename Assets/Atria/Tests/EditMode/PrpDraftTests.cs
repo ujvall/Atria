@@ -45,9 +45,10 @@ namespace Atria.Core.Tests
         {
             BuildingData b = Load();
             FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
-            foreach (string ring in new[] { "L1", "L2" })
+            // L1: hexagon outside, octagon centre (expanded drawing) -> 12 convex pieces; L2: hexagon/hexagon -> 6.
+            foreach ((string ring, int pieces) in new[] { ("L1", 12), ("L2", 6) })
             {
-                Assert.AreEqual(6, b.Spaces.Count(s => s.Id.StartsWith(ring + "#")), ring);
+                Assert.AreEqual(pieces, b.Spaces.Count(s => s.Id.StartsWith(ring + "#")), ring);
                 NodeData corner = b.FindNode(ring + "_C0");
                 var center = new Vector2(corner.Position.X, corner.Position.Z - 3.6f);
                 Assert.IsFalse(layout.IsWalkable(center), ring + " void must not be walkable");
@@ -110,9 +111,10 @@ namespace Atria.Core.Tests
             // The corridor beyond the top of L2 is unknown: L2's north corner only connects around the ring.
             Assert.AreEqual(2, b.Edges.Count(e => e.From == "L2_C0" || e.To == "L2_C0"));
 
-            // No entrances are invented: the only start point is labelled as not an entrance.
-            Assert.AreEqual(1, b.Entrances.Count);
-            StringAssert.Contains("not an entrance", b.Entrances[0].Label);
+            // Only Entrance 1 is observed; the hall start point stays labelled as not an entrance.
+            CollectionAssert.AreEqual(new[] { "ENT_1", "DRAFT_START_HALL" }, b.Entrances.Select(e => e.Id).ToArray());
+            StringAssert.Contains("not an entrance", b.FindEntrance("DRAFT_START_HALL").Label);
+            Assert.AreEqual(Provenance.Estimated, b.FindEntrance("ENT_1").Provenance);
         }
 
         [Test]
@@ -126,6 +128,54 @@ namespace Atria.Core.Tests
             Assert.IsNull(demo.FindExact("G23"));
             CollectionAssert.AreEquivalent(new[] { "G21", "G23", "G25", "G26" }, draft.Search("G2").Select(m => m.Room.Id).ToArray());
             Assert.AreEqual("PHYSICS-LAB-II", draft.Search("physics")[0].Room.Id);
+        }
+
+        [Test]
+        public void Draft_Entrance1IsAtTheBendAndReachesG18AndG21()
+        {
+            BuildingData b = Load();
+            ValidationReport report = BuildingValidator.Validate(b);
+            Assert.IsTrue(report.IsValid, report.ToString()); // the opening lies on a wall
+            EntranceData e1 = b.FindEntrance("ENT_1");
+            Assert.AreEqual("CORR_BEND", e1.NodeId);
+            Assert.IsTrue(FloorLayout.Build(b, b.Floors[0]).Entrances["ENT_1"].Placed);
+
+            var finder = new RouteFinder(b);
+            foreach (string room in new[] { "G18", "G21" })
+            {
+                RouteResult r = finder.FindRoute("ENT_1", room);
+                Assert.IsTrue(r.Success, room);
+                Assert.AreEqual("CORR_BEND", r.Nodes[0].Id);
+                Assert.AreEqual("L1_S270", r.Nodes[1].Id, room + ": enters L1 from the corridor west of it");
+            }
+            Assert.IsTrue(finder.FindRoute("ENT_1", "G23").Success); // and up the corridor to L2
+        }
+
+        [Test]
+        public void Draft_L1CentreIsAnOctagonalVoid()
+        {
+            BuildingData b = Load();
+            VoidData l1 = b.Voids.Single(v => v.Id == "L1#void");
+            VoidData l2 = b.Voids.Single(v => v.Id == "L2#void");
+            Assert.AreEqual(8, l1.Polygon.Count);
+            Assert.AreEqual(6, l2.Polygon.Count);
+            Assert.IsTrue(Polygon2D.IsConvex(l1.Polygon));
+        }
+
+        [Test]
+        public void Draft_FifteenStepObservationIsStoredUncalibrated()
+        {
+            BuildingData b = Load();
+            SurveyObservation o = b.Observations.Single();
+            Assert.AreEqual("OBS_ENT1_TO_L1", o.Id);
+            Assert.AreEqual(15f, o.Steps);
+            Assert.IsTrue(o.Approximate);
+            Assert.IsNull(o.StrideMetres, "no stride has been calibrated, so no metric distance may be derived");
+            Assert.AreEqual("CORR_BEND", o.FromNodeId);
+            Assert.AreEqual("L1_S270", o.ToNodeId);
+            ValidationReport report = BuildingValidator.Validate(b);
+            Assert.IsTrue(report.MissingMeasurements.Any(m => m.Contains("OBS_ENT1_TO_L1") && m.Contains("stride not calibrated")));
+            Assert.IsFalse(report.Warnings.Any(w => w.Contains("OBS_ENT1_TO_L1")));
         }
     }
 }

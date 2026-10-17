@@ -20,23 +20,75 @@ namespace Atria.Core.Geometry
         }
 
         /// <summary>
-        /// Six convex trapezoids forming a hexagonal corridor ring around a central void.
-        /// Radii are centre-to-corner; the corridor's clear width is (outer - inner) * cos 30°.
-        /// <paramref name="rotationDegrees"/> is the yaw (0 = +Z, 90 = +X) of the first corner.
+        /// Convex pieces forming a corridor ring between an outer regular hexagon and an inner
+        /// regular polygon (the central void). Radii are centre-to-corner; rotations are the yaw
+        /// (0 = +Z, 90 = +X) of the first corner. With a hexagonal inner outline this is six
+        /// trapezoids. Otherwise the ring is cut along rays through every corner of both outlines,
+        /// which keeps each piece convex.
         /// </summary>
-        public static List<List<Vector2>> HexRing(Vector2 center, float outerRadius, float innerRadius, float rotationDegrees)
+        public static List<List<Vector2>> HexRing(Vector2 center, float outerRadius, float innerRadius, float rotationDegrees,
+            int innerSides = 6, float? innerRotationDegrees = null)
         {
             if (!(innerRadius > 0f && outerRadius > innerRadius))
                 throw new FormatException($"hexRing needs 0 < innerRadius < outerRadius (got {innerRadius}, {outerRadius})");
-            var pieces = new List<List<Vector2>>();
-            for (int k = 0; k < 6; k++)
+            if (innerSides < 3) throw new FormatException($"hexRing innerSides must be at least 3 (got {innerSides})");
+            List<Vector2> outer = RegularPolygon(center, 6, outerRadius, rotationDegrees);
+            List<Vector2> inner = RegularPolygon(center, innerSides, innerRadius, innerRotationDegrees ?? rotationDegrees);
+
+            var angles = new List<double>();
+            foreach (Vector2 v in outer) angles.Add(Yaw(v - center));
+            foreach (Vector2 v in inner)
             {
-                double a0 = (rotationDegrees + 60.0 * k) * Math.PI / 180.0, a1 = a0 + Math.PI / 3.0;
-                var d0 = new Vector2((float)Math.Sin(a0), (float)Math.Cos(a0));
-                var d1 = new Vector2((float)Math.Sin(a1), (float)Math.Cos(a1));
-                pieces.Add(new List<Vector2> { center + d0 * outerRadius, center + d1 * outerRadius, center + d1 * innerRadius, center + d0 * innerRadius });
+                double a = Yaw(v - center);
+                if (Vector2.Distance(RayHit(center, a, outer), center) <= innerRadius + Epsilon)
+                    throw new FormatException("hexRing inner outline must fit inside the outer hexagon");
+                angles.Add(a);
+            }
+            angles.Sort();
+            var unique = new List<double>();
+            foreach (double a in angles)
+                if (unique.Count == 0 || a - unique[unique.Count - 1] > 1e-4) unique.Add(a);
+            if (unique.Count > 1 && unique[0] + 360.0 - unique[unique.Count - 1] <= 1e-4) unique.RemoveAt(unique.Count - 1);
+
+            var pieces = new List<List<Vector2>>();
+            for (int i = 0; i < unique.Count; i++)
+            {
+                double a0 = unique[i], a1 = unique[(i + 1) % unique.Count];
+                pieces.Add(new List<Vector2> { RayHit(center, a0, outer), RayHit(center, a1, outer), RayHit(center, a1, inner), RayHit(center, a0, inner) });
             }
             return pieces;
+        }
+
+        /// <summary>Corners of a regular polygon; the first corner is at yaw <paramref name="rotationDegrees"/>.</summary>
+        public static List<Vector2> RegularPolygon(Vector2 center, int sides, float radius, float rotationDegrees)
+        {
+            var pts = new List<Vector2>();
+            for (int k = 0; k < sides; k++)
+            {
+                double a = (rotationDegrees + 360.0 * k / sides) * Math.PI / 180.0;
+                pts.Add(center + new Vector2((float)Math.Sin(a), (float)Math.Cos(a)) * radius);
+            }
+            return pts;
+        }
+
+        private static double Yaw(Vector2 d) => (Math.Atan2(d.X, d.Y) * 180.0 / Math.PI + 360.0) % 360.0;
+
+        /// <summary>Where a ray from <paramref name="center"/> at the given yaw leaves a convex polygon containing it.</summary>
+        private static Vector2 RayHit(Vector2 center, double yawDegrees, IList<Vector2> poly)
+        {
+            double r = yawDegrees * Math.PI / 180.0;
+            var dir = new Vector2((float)Math.Sin(r), (float)Math.Cos(r));
+            float best = float.MaxValue;
+            for (int i = 0; i < poly.Count; i++)
+            {
+                Vector2 a = poly[i], e = poly[(i + 1) % poly.Count] - a;
+                float denom = Cross(dir, e);
+                if (Math.Abs(denom) < 1e-9f) continue;
+                float t = Cross(a - center, e) / denom;   // distance along the ray
+                float u = Cross(a - center, dir) / denom; // position along the edge
+                if (t > 0f && u >= -1e-4f && u <= 1f + 1e-4f && t < best) best = t;
+            }
+            return center + dir * best;
         }
 
         public static void MakeCounterClockwise(List<Vector2> poly)
