@@ -87,6 +87,18 @@ available here, and all three exist in Unity 6.
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
+## Main Entrance added to the PRP draft (2026-10-17)
+* **Added:** start point `ENT_MAIN` "Main Entrance (position estimated)".
+  * **Doorway:** a 2.4 m opening centred on the hall's courtyard/garden-facing (+z) side, at
+    (0, 10.625), computed from the hall polygon.
+  * **Spawn:** 0.8 m inside the threshold, at (0, 9.825). The camera starts facing −z, into
+    the hall and away from the garden.
+  * **Graph link:** one new edge to the hall centre.
+* **Unchanged:** Entrance 1 is still the default start, and it and the hall start point are
+  unchanged. No geometry, rooms or doors changed.
+* **Ambiguity:** the screenshot showing the entrance did not arrive in that session. The side
+  was inferred from "face inward, away from the garden". The width is unknown.
+
 ## Right wing added to the PRP draft (2026-10-17)
 * **Added:**
   * the corridor from the hall's right side (a dog-leg, as drawn)

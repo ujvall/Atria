@@ -182,3 +182,13 @@ that session.
   are
 * all real dimensions, and the right wing's entrances (the "main entrance" in the overview is
   not placed)
+
+## Main Entrance (`ENT_MAIN`)
+* **Modelled:** a doorway centred on the hall's courtyard/garden-facing side (+z). The camera
+  starts 0.8 m inside it, facing into the hall.
+* **Unknown:**
+  * **Side:** taken from your description; the screenshot was not received.
+  * **Width:** 2.4 m is an estimate.
+  * **Doors:** whether the entrance has doors.
+  * **Relation to the first overview sketch:** that sketch has a "main entrance" label to the
+    right of a lower octagonal junction. Please confirm it is the same entrance.

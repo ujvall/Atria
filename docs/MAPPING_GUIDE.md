@@ -136,6 +136,8 @@ removes the warning banner.
      upper-right corner.
    * From *Entrance 1*, a right-wing route crosses the whole building: L1, the hall, then the
      right wing.
+   * From *Main Entrance (position estimated)*, you start in the middle of the hall's
+     garden-side doorway, facing into the hall. Every route first walks to the hall centre.
 6. **While scrubbing, check that:**
    * the camera stays on corridor floor and never crosses a recessed centre
    * door signs face into the corridor

@@ -112,7 +112,7 @@ namespace Atria.Core.Tests
             Assert.AreEqual(2, b.Edges.Count(e => e.From == "L2_C0" || e.To == "L2_C0"));
 
             // Only Entrance 1 is observed; the hall start point stays labelled as not an entrance.
-            CollectionAssert.AreEqual(new[] { "ENT_1", "DRAFT_START_HALL" }, b.Entrances.Select(e => e.Id).ToArray());
+            CollectionAssert.AreEqual(new[] { "ENT_1", "ENT_MAIN", "DRAFT_START_HALL" }, b.Entrances.Select(e => e.Id).ToArray());
             StringAssert.Contains("not an entrance", b.FindEntrance("DRAFT_START_HALL").Label);
             Assert.AreEqual(Provenance.Estimated, b.FindEntrance("ENT_1").Provenance);
         }
@@ -277,6 +277,70 @@ namespace Atria.Core.Tests
             RouteResult g23 = finder.FindRoute("ENT_1", "G23");
             Assert.IsTrue(g23.Success);
             Assert.IsFalse(g23.Nodes.Any(n => n.Id.StartsWith("R1") || n.Id.StartsWith("R2") || n.Id == "HALL_E"), "left-wing routes do not detour through the right wing");
+        }
+
+        // ------------------------------------------------------------------ main entrance
+
+        [Test]
+        public void MainEntrance_IsCentredOnTheHallsGardenSide()
+        {
+            BuildingData b = Load();
+            SpaceData hall = b.FindSpace("HALL");
+            // The hall edge facing +z (towards the courtyard/garden).
+            Vector2 a = hall.Polygon.OrderByDescending(p => p.Y).ElementAt(0), c = hall.Polygon.OrderByDescending(p => p.Y).ElementAt(1);
+            Vector2 faceMid = (a + c) * 0.5f;
+            OpeningPlacement door = FloorLayout.Build(b, b.Floors[0]).Entrances["ENT_MAIN"];
+            Assert.IsTrue(door.Placed, "the opening lies on the hall wall");
+            Assert.AreEqual(faceMid.X, door.Center.X, 1e-3f, "centred along the face");
+            Assert.AreEqual(faceMid.Y, door.Center.Y, 1e-3f);
+            Assert.AreEqual(0f, door.Inward.X, 1e-4f);
+            Assert.AreEqual(-1f, door.Inward.Y, 1e-4f, "inward points away from the garden, into the hall");
+        }
+
+        [Test]
+        public void MainEntrance_SpawnIsJustInsideAndClearOfTheWall()
+        {
+            BuildingData b = Load();
+            FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
+            OpeningPlacement door = layout.Entrances["ENT_MAIN"];
+            NodeData spawn = b.FindNode(b.FindEntrance("ENT_MAIN").NodeId);
+            var p = new Vector2(spawn.Position.X, spawn.Position.Z);
+            Assert.IsTrue(layout.IsWalkable(p), "spawn is inside the building");
+            float depth = Vector2.Dot(p - door.Center, door.Inward);
+            Assert.AreEqual(0.8f, depth, 1e-3f, "0.8 m inside the threshold");
+            Assert.AreEqual(0f, Vector2.Distance(door.Center + door.Inward * depth, p), 1e-3f, "straight in from the doorway midpoint");
+            float nearestWall = layout.Walls.Min(w => Vector2.Distance(Vector2.Lerp(w.A, w.B, Polygon2D.ClosestParameter(w.A, w.B, p)), p));
+            Assert.Greater(nearestWall, 0.5f, "camera clears every wall");
+        }
+
+        [Test]
+        public void MainEntrance_StartsFacingInwardAndJoinsTheCorridorGraph()
+        {
+            BuildingData b = Load();
+            var finder = new RouteFinder(b);
+            foreach (string room in new[] { "G16", "G18", "G23", "G08", "G05", "LIFT" })
+            {
+                RouteResult r = finder.FindRoute("ENT_MAIN", room);
+                Assert.IsTrue(r.Success, room);
+                Assert.AreEqual("HALL_MAIN_ENT", r.Nodes[0].Id, room);
+                Assert.AreEqual("HALL_C", r.Nodes[1].Id, room + ": walks into the hall first");
+                RoutePath path = RoutePath.FromRoute(r, new RoutePathSettings());
+                Assert.AreEqual(180f, path.YawAtProgress(0f), 1f, room + ": starts facing into the hall (-z), away from the garden");
+            }
+        }
+
+        [Test]
+        public void ExistingStartsAreUnchangedByTheMainEntrance()
+        {
+            BuildingData b = Load();
+            Assert.AreEqual("ENT_1", b.Entrances[0].Id, "Entrance 1 stays the default start");
+            Assert.AreEqual("CORR_BEND", b.FindEntrance("ENT_1").NodeId);
+            Assert.AreEqual(new Vector2(-35.8f, 2f), b.FindEntrance("ENT_1").Opening.Center);
+            Assert.AreEqual("HALL_C", b.FindEntrance("DRAFT_START_HALL").NodeId);
+            var finder = new RouteFinder(b);
+            CollectionAssert.AreEqual(new[] { "CORR_BEND", "L1_S270" }, finder.FindRoute("ENT_1", "G21").Nodes.Take(2).Select(n => n.Id).ToArray());
+            Assert.IsFalse(finder.FindRoute("ENT_1", "G23").Nodes.Any(n => n.Id == "HALL_MAIN_ENT"));
+            Assert.IsFalse(finder.FindRoute("DRAFT_START_HALL", "G08").Nodes.Any(n => n.Id == "HALL_MAIN_ENT"));
         }
     }
 }

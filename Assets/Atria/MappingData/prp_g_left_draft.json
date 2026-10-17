@@ -897,6 +897,15 @@
    "z": 21.6,
    "provenance": "estimated",
    "note": "Lift landmark on the right wall of the corridor above R2; no vertical connection mapped"
+  },
+  {
+   "id": "HALL_MAIN_ENT",
+   "floor": "G",
+   "kind": "entrance",
+   "x": 0.0,
+   "z": 9.825,
+   "provenance": "estimated",
+   "note": "Main Entrance start: midpoint of the hall's courtyard-facing (+z) side, 0.8 m inside the threshold"
   }
  ],
  "edges": [
@@ -1409,6 +1418,12 @@
    "to": "R2_LIFT",
    "width": 2.4,
    "provenance": "estimated"
+  },
+  {
+   "from": "HALL_MAIN_ENT",
+   "to": "HALL_C",
+   "width": 2.4,
+   "provenance": "estimated"
   }
  ],
  "entrances": [
@@ -1423,6 +1438,18 @@
    },
    "provenance": "estimated",
    "note": "Drawn at the outer (left/lower) corner of the bend west of L1. Modelled as a gap in the west wall facing the corridor to L1; which wall and the width are unknown."
+  },
+  {
+   "id": "ENT_MAIN",
+   "label": "Main Entrance (position estimated)",
+   "node": "HALL_MAIN_ENT",
+   "opening": {
+    "x": 0.0,
+    "z": 10.625,
+    "width": 2.4
+   },
+   "provenance": "estimated",
+   "note": "Centred on the hall's courtyard/garden-facing side, as drawn on the user's screenshot (not received in the session that added it; side inferred from 'face inward, away from the garden'). Width unknown: 2.4 m estimated."
   },
   {
    "id": "DRAFT_START_HALL",
