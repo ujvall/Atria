@@ -24,9 +24,12 @@ namespace Atria.App.UI
         /// <summary>Raised only for user drags/taps on the scrubber, never for programmatic updates.</summary>
         public event Action<float> ScrubbedByUser;
 
-        private const int MaxResultRows = 20;
+        // Results grow the page instead of scrolling inside it (nested scroll views fight over drags).
+        private const int MaxResultRows = 6;
+        private const float ActionBarHeight = 320f;
 
         private Canvas _canvas;
+        private CanvasScaler _scaler;
         private RectTransform _safeArea;
         private Rect _appliedSafeArea;
         private GameObject _searchScreen, _walkScreen;
@@ -51,11 +54,10 @@ namespace Atria.App.UI
             _canvas = canvasGo.AddComponent<Canvas>();
             _canvas.renderMode = RenderMode.ScreenSpaceOverlay;
             _canvas.pixelPerfect = false;
-            var scaler = canvasGo.AddComponent<CanvasScaler>();
-            scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-            scaler.referenceResolution = new Vector2(1080, 1920);
-            scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-            scaler.matchWidthOrHeight = 0.5f;
+            _scaler = canvasGo.AddComponent<CanvasScaler>();
+            _scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+            _scaler.referenceResolution = new Vector2(1080, 1920);
+            _scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
             canvasGo.AddComponent<GraphicRaycaster>();
             EnsureEventSystem();
 
@@ -87,37 +89,46 @@ namespace Atria.App.UI
             Image screen = UiFactory.Panel("SearchScreen", _safeArea, UiFactory.Background);
             UiFactory.Stretch(screen.rectTransform);
             _searchScreen = screen.gameObject;
-            UiFactory.Vertical(screen, 48, 22);
 
-            UiFactory.Size(UiFactory.Label("Title", screen.transform, "Atria", 76, UiFactory.TextPrimary, FontStyle.Bold), 96);
-            UiFactory.Size(UiFactory.Label("Subtitle", screen.transform, "Pearl Research Park · indoor directions · works offline", 30, UiFactory.TextSecondary), 44);
+            // Route summary and Start stay pinned at the bottom; everything else scrolls above them,
+            // so no control is clipped on short screens.
+            Image bar = UiFactory.Panel("ActionBar", screen.transform, UiFactory.Surface);
+            bar.rectTransform.anchorMin = new Vector2(0, 0);
+            bar.rectTransform.anchorMax = new Vector2(1, 0);
+            bar.rectTransform.pivot = new Vector2(0.5f, 0);
+            bar.rectTransform.sizeDelta = new Vector2(0, ActionBarHeight);
+            UiFactory.Vertical(bar, 36, 12);
 
-            if (!string.IsNullOrEmpty(warningBanner)) AddBanner(screen.transform, warningBanner, 28);
-
-            UiFactory.Size(UiFactory.Label("DestLabel", screen.transform, "1  Where are you going?", 36, UiFactory.TextPrimary, FontStyle.Bold), 52);
-            _query = UiFactory.Input("Query", screen.transform, "Room number", 40);
-            UiFactory.Size(_query, 120);
-            _query.onValueChanged.AddListener(q => QueryChanged?.Invoke(q));
-
-            // Results list with an overlaid message for empty / unknown states.
-            Image resultsBox = UiFactory.Panel("Results", screen.transform, UiFactory.Surface);
-            UiFactory.Size(resultsBox, 360, 1);
-            var scroll = resultsBox.gameObject.AddComponent<ScrollRect>();
-            RectTransform viewport = UiFactory.Stretch(UiFactory.Rect("Viewport", resultsBox.transform), 8, 8, 8, 8);
+            RectTransform viewport = UiFactory.Stretch(UiFactory.Rect("Scroll", screen.transform), 0, 0, 0, ActionBarHeight);
+            viewport.gameObject.AddComponent<Image>().color = Color.clear; // drag target for empty space
             viewport.gameObject.AddComponent<RectMask2D>();
-            _resultsContent = UiFactory.Rect("Content", viewport);
-            _resultsContent.anchorMin = new Vector2(0, 1);
-            _resultsContent.anchorMax = new Vector2(1, 1);
-            _resultsContent.pivot = new Vector2(0.5f, 1);
-            _resultsContent.sizeDelta = Vector2.zero;
-            UiFactory.Vertical(_resultsContent, 0, 6);
-            var fitter = _resultsContent.gameObject.AddComponent<ContentSizeFitter>();
-            fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            RectTransform body = UiFactory.Rect("Content", viewport);
+            body.anchorMin = new Vector2(0, 1);
+            body.anchorMax = new Vector2(1, 1);
+            body.pivot = new Vector2(0.5f, 1);
+            body.sizeDelta = Vector2.zero;
+            UiFactory.Vertical(body, 48, 22);
+            body.gameObject.AddComponent<ContentSizeFitter>().verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            var scroll = viewport.gameObject.AddComponent<ScrollRect>();
             scroll.viewport = viewport;
-            scroll.content = _resultsContent;
+            scroll.content = body;
             scroll.horizontal = false;
             scroll.movementType = ScrollRect.MovementType.Clamped;
             scroll.scrollSensitivity = 30f;
+
+            UiFactory.Size(UiFactory.Label("Title", body, "Atria", 76, UiFactory.TextPrimary, FontStyle.Bold), 96);
+            UiFactory.Size(UiFactory.Label("Subtitle", body, "Pearl Research Park · indoor directions · works offline", 30, UiFactory.TextSecondary), 44);
+
+            if (!string.IsNullOrEmpty(warningBanner)) AddBanner(body, warningBanner, 28);
+
+            UiFactory.Size(UiFactory.Label("DestLabel", body, "1  Where are you going?", 36, UiFactory.TextPrimary, FontStyle.Bold), 52);
+            _query = UiFactory.Input("Query", body, "Room number", 40);
+            UiFactory.Size(_query, 120);
+            _query.onValueChanged.AddListener(q => QueryChanged?.Invoke(q));
+
+            Image resultsBox = UiFactory.Panel("Results", body, UiFactory.Surface);
+            UiFactory.Vertical(resultsBox, 8, 6);
+            _resultsContent = resultsBox.rectTransform;
             for (int i = 0; i < MaxResultRows; i++)
             {
                 int index = i;
@@ -130,25 +141,25 @@ namespace Atria.App.UI
                 _resultRows.Add((row, label));
             }
             _resultsMessage = UiFactory.Label("Message", resultsBox.transform, "", 32, UiFactory.TextSecondary, FontStyle.Normal, TextAnchor.MiddleCenter);
-            UiFactory.Stretch(_resultsMessage.rectTransform, 32, 32, 16, 16);
+            UiFactory.Size(_resultsMessage, 120);
 
-            _selectedRoom = UiFactory.Label("Selected", screen.transform, "No room selected", 34, UiFactory.TextSecondary);
+            _selectedRoom = UiFactory.Label("Selected", body, "No room selected", 34, UiFactory.TextSecondary);
             UiFactory.Size(_selectedRoom, 50);
 
-            UiFactory.Size(UiFactory.Label("EntranceLabel", screen.transform, "2  Which entrance are you at?", 36, UiFactory.TextPrimary, FontStyle.Bold), 52);
+            UiFactory.Size(UiFactory.Label("EntranceLabel", body, "2  Which entrance are you at?", 36, UiFactory.TextPrimary, FontStyle.Bold), 52);
             for (int i = 0; i < entrances.Count; i++)
             {
                 int index = i;
-                Button b = UiFactory.Button("Entrance" + i, screen.transform, entrances[i].Label, 34, UiFactory.Surface, UiFactory.TextPrimary, out _);
+                Button b = UiFactory.Button("Entrance" + i, body, entrances[i].Label, 34, UiFactory.Surface, UiFactory.TextPrimary, out _);
                 UiFactory.Size(b, 104);
                 b.onClick.AddListener(() => EntranceChosen?.Invoke(index));
                 _entranceButtons.Add((b, (Image)b.targetGraphic));
             }
 
-            _routeSummary = UiFactory.Label("RouteSummary", screen.transform, "", 34, UiFactory.TextPrimary);
+            _routeSummary = UiFactory.Label("RouteSummary", bar.transform, "", 34, UiFactory.TextPrimary);
             UiFactory.Size(_routeSummary, 96);
 
-            _startButton = UiFactory.Button("Start", screen.transform, "Start walkthrough", 44, UiFactory.Accent, UiFactory.AccentText, out _);
+            _startButton = UiFactory.Button("Start", bar.transform, "Start walkthrough", 44, UiFactory.Accent, UiFactory.AccentText, out _);
             UiFactory.Size(_startButton, 140);
             _startButton.onClick.AddListener(() => StartPressed?.Invoke());
         }
@@ -258,6 +269,8 @@ namespace Atria.App.UI
                 _resultRooms.Add(room);
                 _resultRows[i].label.text = string.IsNullOrEmpty(room.Name) ? room.Number : room.Number + "   ·   " + room.Name;
             }
+            if (message == null && matches.Count > _resultRows.Count)
+                message = $"Showing {_resultRows.Count} of {matches.Count}. Type more of the room number to narrow the list.";
             _resultsMessage.text = message ?? string.Empty;
             _resultsMessage.gameObject.SetActive(!string.IsNullOrEmpty(message));
         }
@@ -303,9 +316,11 @@ namespace Atria.App.UI
             return new Rect(0f, bottom, 1f, Mathf.Max(0.1f, height));
         }
 
-        /// <summary>Keeps controls clear of notches and gesture bars.</summary>
+        /// <summary>Keeps controls clear of notches and gesture bars; call every frame (cheap when nothing changed).</summary>
         public void ApplySafeArea()
         {
+            // Portrait (the shipping orientation) keeps a constant 1080-unit width; landscape editor previews fit by height.
+            _scaler.matchWidthOrHeight = Screen.width > Screen.height ? 1f : 0f;
             Rect safe = Screen.safeArea;
             if (safe == _appliedSafeArea || Screen.width <= 0 || Screen.height <= 0) return;
             _appliedSafeArea = safe;

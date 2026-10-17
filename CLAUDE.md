@@ -10,6 +10,54 @@ Read `docs/STATUS.md` first (current milestone, verified vs. unverified), then `
 - Don't commit, push or switch branches without the user's explicit OK.
 - Graphify and Ponytail are dev-only tools (`docs/DEV_TOOLS.md`) and must never become app dependencies.
 
+## Workflow rules (standing user instructions)
+
+Quality comes first. Token efficiency means cutting redundant exploration and output. It never
+means skipping reasoning, tests or verification.
+
+1. **Ponytail first.** Invoke `/ponytail` before exploring or implementing, and follow its
+   instructions. If it is unavailable, say so briefly and continue.
+2. **Graphify for navigation.**
+   * Read `graphify-out/GRAPH_REPORT.md` first, if it exists and is current.
+   * Use `graphify query`, `explain` and `path` to find the relevant files and symbols, then
+     confirm the details in the source.
+   * If the graph is stale, run `graphify update .` (AST only). Never rebuild the whole graph
+     for a small task.
+3. **Explore by task.**
+   * Read only the relevant functions, call sites and tests, using targeted search and line
+     ranges.
+   * Reuse existing patterns.
+   * Widen the search only when the evidence is incomplete.
+4. **Minimal context.**
+   * Don't dump whole files, logs or reports into context; filter output.
+   * Don't re-read unchanged files or restate requests and decisions.
+   * Keep plans short. For large tasks, work in phases with a compact progress summary.
+5. **Smallest complete solution.**
+   * Avoid speculative abstractions, unrelated refactors, reformatting and new dependencies.
+   * Never weaken validation, error handling, security or accessibility.
+6. **Testing.**
+   * Run the narrowest relevant tests first, then the broader checks.
+   * Investigate failures instead of guessing.
+   * Report only the commands that actually ran and their real results.
+7. **Git.**
+   * Check `git status` and diffs before editing, and preserve unrelated changes.
+   * No reset, clean, force-push or history rewrite without authorization.
+   * **Commit or push only when the user explicitly asks**, and stage only task files.
+   * Author commits as the user (`ujvall`), with **no AI co-author trailers or attribution**.
+   * The user is the sole owner and contributor. Never add collaborators, members, bots or
+     co-authors, and never change repository access. If the environment demands an automated
+     commit or push, stop and explain instead.
+8. **Communication.**
+   * Be concise and ask only when a decision truly blocks progress.
+   * Finish with a short report: what changed, which files, the checks that ran and their
+     results, and any limitations.
+9. **Done means:**
+   * The requested behaviour works and existing behaviour is preserved.
+   * The relevant tests and checks pass.
+   * The diff has no unrelated changes.
+   * Any limitations are stated.
+   * For UI work, verify the rendered result where the environment allows.
+
 ## graphify
 
 This project has a knowledge graph at graphify-out/ with god nodes, community structure, and cross-file relationships.

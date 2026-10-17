@@ -46,9 +46,14 @@ available here, and all three exist in Unity 6.
 6. **Visuals.**
    * Sign auto-fit (`Renderer.localBounds` on a TextMesh): check the size and readability.
    * Door and sign orientation, face winding (no inside-out walls), and the camera viewport between the UI bars.
-7. **Editor menu.** Check that **Atria > 1/2/3** run, including the PlayerSettings APIs:
+7. **Game view layout.**
+   * Use a portrait resolution such as 1080×2400 or 720×1280; the app ships portrait-only.
+   * The search page should scroll, with the summary and Start pinned at the bottom.
+   * In the **Scene** view, a Screen Space Overlay canvas shows as a large flat rectangle
+     floating over the grid. That is how the editor draws it, not a runtime problem.
+8. **Editor menu.** Check that **Atria > 1/2/3** run, including the PlayerSettings APIs:
    `minSdkVersion` API 26, IL2CPP, ARM64+ARMv7, and `forceInternetPermission = false`.
-8. **Device checks.** Touch scrubbing, safe area, frame rate on a low-end phone, APK size and
+9. **Device checks.** Touch scrubbing, safe area, frame rate on a low-end phone, APK size and
    airplane mode.
 
 ## Changes in this session

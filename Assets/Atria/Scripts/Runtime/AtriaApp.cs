@@ -274,6 +274,7 @@ namespace Atria.App
 
         private void Update()
         {
+            _ui.ApplySafeArea();
             if (BackRequested())
             {
                 if (_ui.IsWalkthroughVisible) ExitWalkthrough();
