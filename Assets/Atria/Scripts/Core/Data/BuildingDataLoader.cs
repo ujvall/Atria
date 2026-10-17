@@ -43,17 +43,46 @@ namespace Atria.Core.Data
 
             foreach (var s in Objects(root, "spaces"))
             {
-                var space = new SpaceData
+                string id = Req(s, "id");
+                var polygons = new List<List<Vector2>>();
+                if (Str(s, "shape") == "hexRing")
                 {
-                    Id = Req(s, "id"),
-                    FloorId = Req(s, "floor"),
-                    Kind = Str(s, "kind") ?? "corridor",
-                    Provenance = Prov(s),
-                };
-                if (s.TryGetValue("polygon", out object poly) && poly is List<object> pts)
-                    foreach (object p in pts) space.Polygon.Add(Point(p, "space " + space.Id));
-                Polygon2D.MakeCounterClockwise(space.Polygon);
-                b.Spaces.Add(space);
+                    // A hexagonal corridor around a central void is not convex: expand it into six convex pieces.
+                    if (!s.TryGetValue("center", out object c)) throw new FormatException($"hexRing space '{id}' needs a center");
+                    polygons.AddRange(Polygon2D.HexRing(Point(c, "space " + id), (float)Num(s, "outerRadius", 0),
+                        (float)Num(s, "innerRadius", 0), (float)Num(s, "rotation", 0)));
+                }
+                else if (Str(s, "shape") == "corridor")
+                {
+                    // Straight corridor given by its centre line: a rectangle at any angle.
+                    if (!s.TryGetValue("from", out object f) || !s.TryGetValue("to", out object t)) throw new FormatException($"corridor space '{id}' needs from and to");
+                    Vector2 a = Point(f, "space " + id), c = Point(t, "space " + id);
+                    float half = (float)Num(s, "width", b.DefaultCorridorWidth) * 0.5f;
+                    if (Vector2.Distance(a, c) < 1e-3f || half <= 0f) throw new FormatException($"corridor space '{id}' needs distinct ends and a positive width");
+                    Vector2 dir = Vector2.Normalize(c - a), side = new Vector2(-dir.Y, dir.X) * half;
+                    polygons.Add(new List<Vector2> { a - side, c - side, c + side, a + side });
+                }
+                else
+                {
+                    var poly = new List<Vector2>();
+                    if (s.TryGetValue("polygon", out object raw) && raw is List<object> pts)
+                        foreach (object p in pts) poly.Add(Point(p, "space " + id));
+                    polygons.Add(poly);
+                }
+
+                for (int k = 0; k < polygons.Count; k++)
+                {
+                    var space = new SpaceData
+                    {
+                        Id = polygons.Count == 1 ? id : id + "#" + k,
+                        FloorId = Req(s, "floor"),
+                        Kind = Str(s, "kind") ?? "corridor",
+                        Provenance = Prov(s),
+                    };
+                    space.Polygon.AddRange(polygons[k]);
+                    Polygon2D.MakeCounterClockwise(space.Polygon);
+                    b.Spaces.Add(space);
+                }
             }
 
             foreach (var n in Objects(root, "nodes"))
@@ -105,10 +134,24 @@ namespace Atria.Core.Data
                     Number = Str(r, "number") ?? Req(r, "id"),
                     Name = Str(r, "name"),
                     FloorId = Req(r, "floor"),
-                    AccessNodeId = Str(r, "accessNode"),
-                    Door = Opening(r, "door", b.DefaultDoorWidth),
                     Provenance = Prov(r),
                 };
+                if (r.ContainsKey("doors"))
+                {
+                    foreach (var d in Objects(r, "doors"))
+                        room.Doors.Add(new RoomDoor
+                        {
+                            AccessNodeId = Req(d, "accessNode"),
+                            // Position stays unknown (null) unless both coordinates were recorded.
+                            Opening = d.ContainsKey("x") && d.ContainsKey("z") ? OpeningFrom(d, b.DefaultDoorWidth) : null,
+                            Provenance = d.ContainsKey("provenance") ? Prov(d) : room.Provenance,
+                        });
+                }
+                else if (Str(r, "accessNode") != null)
+                {
+                    // Single-door shorthand: "accessNode" + optional "door": {x, z, width}.
+                    room.Doors.Add(new RoomDoor { AccessNodeId = Str(r, "accessNode"), Opening = Opening(r, "door", b.DefaultDoorWidth), Provenance = room.Provenance });
+                }
                 if (r.TryGetValue("aliases", out object al) && al is List<object> aliases)
                     foreach (object a in aliases)
                         if (a is string s) room.Aliases.Add(s);
@@ -171,7 +214,11 @@ namespace Atria.Core.Data
 
         private static OpeningData Opening(Dictionary<string, object> o, string key, float defaultWidth)
         {
-            if (!o.TryGetValue(key, out object v) || !(v is Dictionary<string, object> d)) return null;
+            return o.TryGetValue(key, out object v) && v is Dictionary<string, object> d ? OpeningFrom(d, defaultWidth) : null;
+        }
+
+        private static OpeningData OpeningFrom(Dictionary<string, object> d, float defaultWidth)
+        {
             return new OpeningData
             {
                 Center = new Vector2((float)Num(d, "x", 0), (float)Num(d, "z", 0)),

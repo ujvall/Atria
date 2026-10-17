@@ -72,7 +72,7 @@ namespace Atria.Core.Tests
         public void MissingAccessNode_ReportsMissingNode()
         {
             BuildingData b = TestData.Plus();
-            b.FindRoom("R-N").AccessNodeId = "GHOST";
+            b.FindRoom("R-N").Doors[0].AccessNodeId = "GHOST";
             Assert.AreEqual(RouteFailure.MissingNode, new RouteFinder(b).FindRoute("SOUTH", "R-N").Failure);
         }
 

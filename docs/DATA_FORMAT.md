@@ -31,7 +31,12 @@ or `verified`. The app shows a warning banner unless it is `verified`.
   "defaultDoorWidth": 1.0,
   "floors":   [{ "id": "F1", "name": "First floor", "elevation": 0, "wallHeight": 3.0 }],
   "spaces":   [{ "id": "CORR_1", "floor": "F1", "kind": "corridor", "provenance": "measured",
-                 "polygon": [[x,z], ...] }],          // CONVEX walkable areas; split L/T shapes into pieces
+                 "polygon": [[x,z], ...] },           // CONVEX walkable areas; split L/T shapes into pieces
+              { "id": "CORR_2", "floor": "F1", "shape": "corridor",  // straight corridor at any angle
+                 "from": [x,z], "to": [x,z], "width": 2.4, "provenance": "estimated" },  // centre line + clear width
+              { "id": "HEX_A", "floor": "F1", "shape": "hexRing",   // hexagonal corridor round a central void
+                 "center": [x,z], "outerRadius": 8, "innerRadius": 5, "rotation": 30,  // radii centre-to-corner, metres
+                 "provenance": "estimated" }],        // expands to six convex pieces HEX_A#0..#5
   "nodes":    [{ "id": "N1", "floor": "F1", "kind": "corridor|intersection|entrance", "x": 0, "z": 0, "provenance": "..." }],
   "edges":    [{ "from": "N1", "to": "N2", "navigable": true, "kind": "corridor|stairs|lift",
                  "distance": 12.4,   // optional measured walking distance; else straight-line length
@@ -39,11 +44,34 @@ or `verified`. The app shows a warning banner unless it is `verified`.
                  "provenance": "..." }],
   "entrances":[{ "id": "ENT_MAIN", "label": "Main entrance", "node": "N1",
                  "opening": { "x": 0, "z": -4, "width": 2.0 }, "provenance": "..." }],
-  "rooms":    [{ "id": "PRP-101", "number": "PRP 101", "name": "...", "aliases": ["101"],
-                 "floor": "F1", "accessNode": "N7",   // corridor node in front of the door; routes end here
-                 "door": { "x": -1.2, "z": 6, "width": 1.0 }, "provenance": "..." }]
+  "rooms":    [{ "id": "G23", "number": "G23", "name": "...", "aliases": ["G 23"],
+                 "floor": "G", "provenance": "estimated",
+                 "doors": [                           // one entry per door; routes go to the nearest one
+                   { "accessNode": "N7", "x": -1.2, "z": 6, "width": 1.0, "provenance": "measured" },
+                   { "accessNode": "N8" }             // door exists, exact position unknown: not drawn
+                 ] },
+               { "id": "G99", "number": "G99", "floor": "G" },  // known room, location unknown: searchable, not routable
+               { "id": "OLD", "number": "OLD", "floor": "F1",   // single-door shorthand (still supported)
+                 "accessNode": "N7", "door": { "x": -1.2, "z": 6 } }]
 }
 ```
+
+Any other key (for example `"note": "door seen in sketch 3, unpaced"`) is ignored by the loader,
+so use notes freely.
+
+## Recording what you don't know
+* **Unknown connection:** leave the edge out, or add it with `"navigable": false` and a note.
+  The router never uses either.
+* **Unknown length:** omit `distance`; the straight-line length between the nodes is used.
+* **Unknown width:** omit `width`; `defaultCorridorWidth` is used, and the gap is listed as a
+  missing measurement.
+* **Unknown door position:** give the door's `accessNode` only, with no `x`/`z`.
+* **Room known, location unknown:** list it with no doors.
+* **Corner nodes on hex rings:** a straight edge between two side midpoints cuts across the
+  inner corner into the void, so the validator rejects it. Add a node at each corner on the
+  ring's centre line (radius = (outer + inner) / 2).
+* **Status:** use `"partial"` while mapping. `"verified"` is rejected while any item is
+  `placeholder` or `estimated`, any door position is unknown, or any edge width is missing.
 
 ## Rules the validator enforces
 * IDs are unique, and every reference (floor, node, access node) exists.
@@ -53,12 +81,17 @@ or `verified`. The app shows a warning banner unless it is `verified`.
   An edge that cuts a corner is reported as passing through a wall.
 * Every door and entrance opening lies within 0.25 m of a generated wall.
 * Floor-changing edges must have kind `stairs` or `lift`.
-* Warnings: a door more than 4 m from its access node, a room unreachable from every entrance,
-  or an entrance count other than 3.
+* Room IDs are unique, and every door's access node exists on the room's floor.
+* `"verified"` status requires every item to be measured.
+* **Warnings:**
+  * a door more than 4 m from its access node
+  * a room unreachable from every entrance
+  * a room with no doors yet
+  * a node with no navigable connection
+  * two rooms with the same printed number
+  * an entrance count other than 3
+* **Missing measurements:** a separate survey to-do list, not errors. It covers every
+  placeholder or estimated item, unknown door positions and unrecorded widths.
 
-## Adding the real first floor
-1. Draw the corridors as convex polygons, using measurements where you have them.
-2. Put a node at every corridor junction, every bend, and in front of every door.
-3. Connect only the links you have physically walked.
-4. Add each room with the number exactly as printed on its sign.
-5. Validate the file, then set provenance honestly.
+## Adding the real building
+Follow [MAPPING_GUIDE.md](MAPPING_GUIDE.md), which takes you from a sketch to a validated file.

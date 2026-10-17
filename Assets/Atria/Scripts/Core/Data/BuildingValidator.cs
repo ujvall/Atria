@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Atria.Core.Geometry;
 using Atria.Core.Navigation;
+using Atria.Core.Search;
 
 namespace Atria.Core.Data
 {
@@ -10,10 +11,12 @@ namespace Atria.Core.Data
     {
         public readonly List<string> Errors = new List<string>();
         public readonly List<string> Warnings = new List<string>();
+        /// <summary>Survey to-do list: everything still placeholder/estimated or unrecorded. Not an error.</summary>
+        public readonly List<string> MissingMeasurements = new List<string>();
         public bool IsValid => Errors.Count == 0;
 
         public override string ToString() =>
-            $"{Errors.Count} error(s), {Warnings.Count} warning(s)" +
+            $"{Errors.Count} error(s), {Warnings.Count} warning(s), {MissingMeasurements.Count} missing measurement(s)" +
             (Errors.Count > 0 ? "\nErrors:\n  " + string.Join("\n  ", Errors) : "") +
             (Warnings.Count > 0 ? "\nWarnings:\n  " + string.Join("\n  ", Warnings) : "");
     }
@@ -88,22 +91,69 @@ namespace Atria.Core.Data
                     report.Errors.Add($"Entrance '{en.Id}' opening does not lie on a wall (within {WallGenerator.OpeningSnapTolerance} m)");
             }
 
+            CheckDuplicates(report, "room number", b.Rooms, r => RoomSearch.Normalize(r.Number), asWarning: true);
             foreach (RoomData r in b.Rooms)
             {
                 if (b.FindFloor(r.FloorId) == null) report.Errors.Add($"Room '{r.Id}' references unknown floor '{r.FloorId}'");
-                NodeData access = b.FindNode(r.AccessNodeId);
-                if (access == null) { report.Errors.Add($"Room '{r.Id}' has no valid access node"); continue; }
-                if (access.FloorId != r.FloorId) report.Errors.Add($"Room '{r.Id}' access node is on a different floor");
-                if (r.Door == null) { report.Warnings.Add($"Room '{r.Id}' has no door position"); continue; }
-                if (layouts.TryGetValue(r.FloorId, out FloorLayout layout) &&
-                    (!layout.Doors.TryGetValue(r.Id, out OpeningPlacement p) || !p.Placed))
-                    report.Errors.Add($"Room '{r.Id}' door does not lie on a wall (within {WallGenerator.OpeningSnapTolerance} m)");
-                if (Vector2.Distance(Plan(access.Position), r.Door.Center) > MaxDoorToAccessNode)
-                    report.Warnings.Add($"Room '{r.Id}' door is more than {MaxDoorToAccessNode} m from its access node");
+                if (r.Doors.Count == 0) { report.Warnings.Add($"Room '{r.Id}' has no doors yet (searchable, but not routable)"); continue; }
+                for (int i = 0; i < r.Doors.Count; i++)
+                {
+                    RoomDoor door = r.Doors[i];
+                    string name = $"Room '{r.Id}' door {i}";
+                    NodeData access = b.FindNode(door.AccessNodeId);
+                    if (access == null) { report.Errors.Add($"{name} references unknown access node '{door.AccessNodeId}'"); continue; }
+                    if (access.FloorId != r.FloorId) report.Errors.Add($"{name} access node is on a different floor");
+                    if (door.Opening == null) { report.MissingMeasurements.Add($"{name}: position unknown (not drawn)"); continue; }
+                    if (layouts.TryGetValue(r.FloorId, out FloorLayout layout) &&
+                        (!layout.Doors.TryGetValue(FloorLayout.DoorKey(r.Id, i), out OpeningPlacement p) || !p.Placed))
+                        report.Errors.Add($"{name} does not lie on a wall (within {WallGenerator.OpeningSnapTolerance} m)");
+                    if (Vector2.Distance(Plan(access.Position), door.Opening.Center) > MaxDoorToAccessNode)
+                        report.Warnings.Add($"{name} is more than {MaxDoorToAccessNode} m from its access node");
+                }
             }
 
+            CheckIsolatedNodes(report, b);
+            CheckVerificationStatus(report, b);
             if (report.Errors.Count == 0) CheckReachability(report, b);
             return report;
+        }
+
+        private static void CheckIsolatedNodes(ValidationReport report, BuildingData b)
+        {
+            var linked = new HashSet<string>();
+            foreach (EdgeData e in b.Edges)
+                if (e.Navigable) { linked.Add(e.From); linked.Add(e.To); }
+            foreach (NodeData n in b.Nodes)
+                if (!linked.Contains(n.Id)) report.Warnings.Add($"Node '{n.Id}' has no navigable connections");
+        }
+
+        /// <summary>
+        /// Lists what still needs surveying, and refuses a "verified" building that contains any
+        /// unmeasured item: provisional data must never be presented as verified.
+        /// </summary>
+        private static void CheckVerificationStatus(ValidationReport report, BuildingData b)
+        {
+            var missing = report.MissingMeasurements;
+            foreach (SpaceData s in b.Spaces)
+                if (s.Provenance != Provenance.Measured) missing.Add($"Space '{s.Id}' outline is {s.Provenance}");
+            foreach (NodeData n in b.Nodes)
+                if (n.Provenance != Provenance.Measured) missing.Add($"Node '{n.Id}' position is {n.Provenance}");
+            foreach (EdgeData e in b.Edges)
+            {
+                if (e.Provenance != Provenance.Measured) missing.Add($"Edge '{e.From}'-'{e.To}' is {e.Provenance}");
+                if (!e.Width.HasValue) missing.Add($"Edge '{e.From}'-'{e.To}' width not recorded (default {b.DefaultCorridorWidth} m used)");
+            }
+            foreach (EntranceData en in b.Entrances)
+                if (en.Provenance != Provenance.Measured) missing.Add($"Entrance '{en.Id}' is {en.Provenance}");
+            foreach (RoomData r in b.Rooms)
+            {
+                if (r.Provenance != Provenance.Measured) missing.Add($"Room '{r.Id}' is {r.Provenance}");
+                for (int i = 0; i < r.Doors.Count; i++)
+                    if (r.Doors[i].Provenance != Provenance.Measured) missing.Add($"Room '{r.Id}' door {i} is {r.Doors[i].Provenance}");
+            }
+
+            if (b.IsVerified && missing.Count > 0)
+                report.Errors.Add($"dataStatus is \"verified\" but {missing.Count} item(s) are unmeasured or unknown; use \"partial\" until every item is measured");
         }
 
         private static void CheckEdgeClearance(ValidationReport report, string name, FloorLayout layout, Vector2 a, Vector2 c, float width)
@@ -129,6 +179,7 @@ namespace Atria.Core.Data
             var finder = new RouteFinder(b);
             foreach (RoomData r in b.Rooms)
             {
+                if (r.Doors.Count == 0) continue; // already reported as unmapped
                 bool any = false;
                 foreach (EntranceData e in b.Entrances)
                     if (finder.FindRoute(e.Id, r.Id).Success) { any = true; break; }
@@ -136,11 +187,11 @@ namespace Atria.Core.Data
             }
         }
 
-        private static void CheckDuplicates<T>(ValidationReport report, string kind, List<T> items, Func<T, string> id)
+        private static void CheckDuplicates<T>(ValidationReport report, string kind, List<T> items, Func<T, string> id, bool asWarning = false)
         {
             var seen = new HashSet<string>();
             foreach (T item in items)
-                if (!seen.Add(id(item))) report.Errors.Add($"Duplicate {kind} id '{id(item)}'");
+                if (!seen.Add(id(item))) (asWarning ? report.Warnings : report.Errors).Add($"Duplicate {kind} '{id(item)}'");
         }
 
         private static Vector2 Plan(Vector3 p) => new Vector2(p.X, p.Z);

@@ -76,7 +76,7 @@ namespace Atria.Core.Tests
         {
             BuildingData b = TestData.Plus();
             b.Edges.Add(new EdgeData { From = "X", To = "GHOST" });
-            b.FindRoom("R-N").Door.Center = new Vector2(5f, 5f); // not on any wall
+            b.FindRoom("R-N").Doors[0].Opening.Center = new Vector2(5f, 5f); // not on any wall
             ValidationReport report = BuildingValidator.Validate(b);
             Assert.IsTrue(report.Errors.Any(e => e.Contains("GHOST")), report.ToString());
             Assert.IsTrue(report.Errors.Any(e => e.Contains("R-N") && e.Contains("door")), report.ToString());
@@ -105,8 +105,8 @@ namespace Atria.Core.Tests
             float perimeter = layout.Walls.Sum(w => w.Length);
             float expected = 8 * (21f - 1.2f) + 4 * 2.4f + 16f - 1.0f; // plus arms + ends + island - door gap
             Assert.AreEqual(expected, perimeter, 1e-3f);
-            Assert.IsTrue(layout.Doors["R-N"].Placed);
-            Assert.AreEqual(-1f, layout.Doors["R-N"].Inward.X, 1e-4f); // door faces into the corridor (west)
+            Assert.IsTrue(layout.Doors["R-N#0"].Placed);
+            Assert.AreEqual(-1f, layout.Doors["R-N#0"].Inward.X, 1e-4f); // door faces into the corridor (west)
         }
 
         [Test]

@@ -19,6 +19,26 @@ namespace Atria.Core.Geometry
             return area * 0.5f;
         }
 
+        /// <summary>
+        /// Six convex trapezoids forming a hexagonal corridor ring around a central void.
+        /// Radii are centre-to-corner; the corridor's clear width is (outer - inner) * cos 30°.
+        /// <paramref name="rotationDegrees"/> is the yaw (0 = +Z, 90 = +X) of the first corner.
+        /// </summary>
+        public static List<List<Vector2>> HexRing(Vector2 center, float outerRadius, float innerRadius, float rotationDegrees)
+        {
+            if (!(innerRadius > 0f && outerRadius > innerRadius))
+                throw new FormatException($"hexRing needs 0 < innerRadius < outerRadius (got {innerRadius}, {outerRadius})");
+            var pieces = new List<List<Vector2>>();
+            for (int k = 0; k < 6; k++)
+            {
+                double a0 = (rotationDegrees + 60.0 * k) * Math.PI / 180.0, a1 = a0 + Math.PI / 3.0;
+                var d0 = new Vector2((float)Math.Sin(a0), (float)Math.Cos(a0));
+                var d1 = new Vector2((float)Math.Sin(a1), (float)Math.Cos(a1));
+                pieces.Add(new List<Vector2> { center + d0 * outerRadius, center + d1 * outerRadius, center + d1 * innerRadius, center + d0 * innerRadius });
+            }
+            return pieces;
+        }
+
         public static void MakeCounterClockwise(List<Vector2> poly)
         {
             if (poly.Count >= 3 && SignedArea(poly) < 0f) poly.Reverse();

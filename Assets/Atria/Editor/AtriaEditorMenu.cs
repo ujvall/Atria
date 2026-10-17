@@ -101,20 +101,31 @@ namespace Atria.EditorTools
         }
 
         [MenuItem("Atria/Validate Building Data", priority = 20)]
-        public static void ValidateBuildingData()
+        public static void ValidateBuildingData() => ValidateFile(BuildingJsonPath);
+
+        /// <summary>Validates whichever building JSON is selected in the Project window (e.g. a mapping draft).</summary>
+        [MenuItem("Atria/Validate Selected JSON", priority = 21)]
+        public static void ValidateSelectedJson() => ValidateFile(AssetDatabase.GetAssetPath(Selection.activeObject));
+
+        [MenuItem("Atria/Validate Selected JSON", true)]
+        private static bool CanValidateSelectedJson() => AssetDatabase.GetAssetPath(Selection.activeObject).EndsWith(".json");
+
+        private static void ValidateFile(string path)
         {
-            var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(BuildingJsonPath);
-            if (asset == null) { Debug.LogError("[Atria] Missing " + BuildingJsonPath); return; }
+            var asset = AssetDatabase.LoadAssetAtPath<TextAsset>(path);
+            if (asset == null) { Debug.LogError("[Atria] Missing " + path); return; }
             try
             {
                 BuildingData building = BuildingDataLoader.FromJson(asset.text);
                 ValidationReport report = BuildingValidator.Validate(building);
-                string summary = $"[Atria] {building.DisplayName} (status: {building.DataStatus}): {report}";
+                string summary = $"[Atria] {path}: {building.DisplayName} (status: {building.DataStatus}): {report}";
                 if (report.IsValid) Debug.Log(summary); else Debug.LogError(summary);
+                if (report.MissingMeasurements.Count > 0)
+                    Debug.Log($"[Atria] Still to survey ({report.MissingMeasurements.Count}):\n  " + string.Join("\n  ", report.MissingMeasurements));
             }
             catch (System.FormatException e)
             {
-                Debug.LogError("[Atria] " + e.Message);
+                Debug.LogError($"[Atria] {path}: {e.Message}");
             }
         }
     }

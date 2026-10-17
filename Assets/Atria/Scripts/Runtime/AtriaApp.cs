@@ -232,7 +232,7 @@ namespace Atria.App
         private void EnterWalkthrough()
         {
             if (_route == null || _path == null) return;
-            _view.Doors.TryGetValue(_route.Room.Id, out DoorVisual door);
+            _view.Doors.TryGetValue(Atria.Core.Geometry.FloorLayout.DoorKey(_route.Room.Id, _route.DoorIndex), out DoorVisual door);
             _routeVisuals.Show(_path, door);
             _ui.ShowWalkthrough();
             _ui.SetWalkthroughTitle($"To {_route.Room.Number}\nfrom {_route.Entrance.Label}");

@@ -41,6 +41,7 @@ namespace Atria.App
     public sealed class BuildingView
     {
         public GameObject Root;
+        /// <summary>Keyed by <see cref="FloorLayout.DoorKey"/>.</summary>
         public readonly Dictionary<string, DoorVisual> Doors = new Dictionary<string, DoorVisual>();
     }
 
@@ -91,11 +92,16 @@ namespace Atria.App
 
                 foreach (RoomData room in building.Rooms)
                 {
-                    if (room.FloorId != floor.Id || !layout.Doors.TryGetValue(room.Id, out OpeningPlacement door) || !door.Placed) continue;
-                    DoorVisual dv = ToVisual(door, y0, h);
-                    view.Doors[room.Id] = dv;
-                    AddDoor(mb, dv, s);
-                    AddRoomSigns(mb, floorRoot, dv, room.Number, signText, font, s);
+                    for (int i = 0; i < room.Doors.Count; i++)
+                    {
+                        string key = FloorLayout.DoorKey(room.Id, i);
+                        // Doors whose position is still unknown are not drawn.
+                        if (room.FloorId != floor.Id || !layout.Doors.TryGetValue(key, out OpeningPlacement door) || !door.Placed) continue;
+                        DoorVisual dv = ToVisual(door, y0, h);
+                        view.Doors[key] = dv;
+                        AddDoor(mb, dv, s);
+                        AddRoomSigns(mb, floorRoot, dv, room.Number, signText, font, s);
+                    }
                 }
 
                 foreach (EntranceData entrance in building.Entrances)

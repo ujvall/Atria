@@ -10,13 +10,16 @@ namespace Atria.Core.Geometry
         public FloorData Floor;
         public readonly List<SpaceData> Spaces = new List<SpaceData>();
         public List<WallSegment> Walls = new List<WallSegment>();
-        /// <summary>Door placements keyed by room id.</summary>
+        /// <summary>Door placements keyed by <see cref="DoorKey"/>.</summary>
         public readonly Dictionary<string, OpeningPlacement> Doors = new Dictionary<string, OpeningPlacement>();
         /// <summary>Entrance placements keyed by entrance id.</summary>
         public readonly Dictionary<string, OpeningPlacement> Entrances = new Dictionary<string, OpeningPlacement>();
 
         public const string DoorTagPrefix = "door:";
         public const string EntranceTagPrefix = "entrance:";
+
+        /// <summary>Key of a room's door: "ROOM#0", "ROOM#1", ... in the order the doors are listed.</summary>
+        public static string DoorKey(string roomId, int doorIndex) => roomId + "#" + doorIndex;
 
         public static FloorLayout Build(BuildingData building, FloorData floor)
         {
@@ -32,8 +35,9 @@ namespace Atria.Core.Geometry
 
             var requests = new List<OpeningRequest>();
             foreach (RoomData r in building.Rooms)
-                if (r.FloorId == floor.Id && r.Door != null)
-                    requests.Add(new OpeningRequest { Tag = DoorTagPrefix + r.Id, Center = r.Door.Center, Width = r.Door.Width });
+                for (int i = 0; i < r.Doors.Count; i++)
+                    if (r.FloorId == floor.Id && r.Doors[i].Opening != null)
+                        requests.Add(new OpeningRequest { Tag = DoorTagPrefix + DoorKey(r.Id, i), Center = r.Doors[i].Opening.Center, Width = r.Doors[i].Opening.Width });
             foreach (EntranceData e in building.Entrances)
             {
                 NodeData node = building.FindNode(e.NodeId);

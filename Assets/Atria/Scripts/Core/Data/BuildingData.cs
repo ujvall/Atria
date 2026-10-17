@@ -48,6 +48,7 @@ namespace Atria.Core.Data
         public NodeData FindNode(string id) => Nodes.Find(n => n.Id == id);
         public EntranceData FindEntrance(string id) => Entrances.Find(e => e.Id == id);
         public RoomData FindRoom(string id) => Rooms.Find(r => r.Id == id);
+        public SpaceData FindSpace(string id) => Spaces.Find(s => s.Id == id);
     }
 
     public sealed class FloorData
@@ -121,9 +122,20 @@ namespace Atria.Core.Data
         public string Name;
         public readonly List<string> Aliases = new List<string>();
         public string FloorId;
-        /// <summary>Corridor node directly in front of the door; routes end here.</summary>
+        /// <summary>
+        /// Every door of the room. Empty means the room is known to exist but is not mapped yet:
+        /// it is searchable, and routing reports it as unmapped instead of guessing.
+        /// </summary>
+        public readonly List<RoomDoor> Doors = new List<RoomDoor>();
+        public Provenance Provenance;
+    }
+
+    public sealed class RoomDoor
+    {
+        /// <summary>Corridor node directly in front of this door; routes to the room end here.</summary>
         public string AccessNodeId;
-        public OpeningData Door;
+        /// <summary>Door gap on the wall, or null while the exact position is unknown (nothing is drawn).</summary>
+        public OpeningData Opening;
         public Provenance Provenance;
     }
 }

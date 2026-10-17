@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **35/35 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **47/47 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -64,6 +64,16 @@ available here, and all three exist in Unity 6.
   are possibly obsolete in Unity 6, and the defaults are fine.
 * Added Graphify and Ponytail as dev-only tooling: `.claude/`, `CLAUDE.md`, `docs/DEV_TOOLS.md`.
   `graphify-out/` is git-ignored.
+
+## Mapping workflow (added 2026-10-17)
+* The schema now supports rooms with several doors (routes go to the nearest door), doors with
+  unknown positions, rooms with unknown locations, and the `hexRing` and `corridor` space
+  shorthands. It also has a missing-measurement report and a rule that `"verified"` requires
+  every item to be measured.
+* See [MAPPING_GUIDE.md](MAPPING_GUIDE.md), and
+  [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md) for what the
+  sketches show.
+* No real PRP JSON exists yet: the sketches carry no scale or measurements.
 
 ## Known limitations
 * Rooms are drawn as closed doors in the corridor wall; there are no room interiors yet.

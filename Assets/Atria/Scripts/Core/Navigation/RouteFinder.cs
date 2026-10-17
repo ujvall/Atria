@@ -20,7 +20,10 @@ namespace Atria.Core.Navigation
         public RouteFailure Failure;
         public EntranceData Entrance;
         public RoomData Room;
-        /// <summary>Ordered nodes from the entrance node to the room's access node.</summary>
+        /// <summary>Index into <see cref="RoomData.Doors"/> of the door the route reaches (the nearest one), or -1.</summary>
+        public int DoorIndex = -1;
+        public RoomDoor Door => DoorIndex >= 0 ? Room.Doors[DoorIndex] : null;
+        /// <summary>Ordered nodes from the entrance node to the chosen door's access node.</summary>
         public readonly List<NodeData> Nodes = new List<NodeData>();
         /// <summary>Edges between consecutive <see cref="Nodes"/> (Count = Nodes.Count - 1).</summary>
         public readonly List<EdgeData> Edges = new List<EdgeData>();
@@ -58,17 +61,22 @@ namespace Atria.Core.Navigation
             };
             if (result.Entrance == null) { result.Failure = RouteFailure.UnknownEntrance; return result; }
             if (result.Room == null) { result.Failure = RouteFailure.UnknownRoom; return result; }
-            if (!_graph.TryGetIndex(result.Entrance.NodeId, out int start) ||
-                !_graph.TryGetIndex(result.Room.AccessNodeId, out int goal))
+            // A room may have several doors; route to whichever is nearest.
+            var goals = new Dictionary<int, int>(); // graph node -> door index
+            for (int d = 0; d < result.Room.Doors.Count; d++)
+                if (_graph.TryGetIndex(result.Room.Doors[d].AccessNodeId, out int g) && !goals.ContainsKey(g)) goals[g] = d;
+            if (!_graph.TryGetIndex(result.Entrance.NodeId, out int start) || goals.Count == 0)
             {
                 result.Failure = RouteFailure.MissingNode;
                 return result;
             }
 
-            List<int> path = ShortestPath(start, goal, out List<NavGraph.Link> links, out float distance);
+            List<int> path = ShortestPath(start, goals, out List<NavGraph.Link> links, out float distance);
             if (path == null) { result.Failure = RouteFailure.Unreachable; return result; }
+            result.DoorIndex = goals[path[path.Count - 1]];
 
-            bool unverified = result.Entrance.Provenance != Provenance.Measured || result.Room.Provenance != Provenance.Measured;
+            bool unverified = result.Entrance.Provenance != Provenance.Measured || result.Room.Provenance != Provenance.Measured
+                || result.Door.Provenance != Provenance.Measured;
             foreach (int i in path)
             {
                 NodeData n = _graph.Node(i);
@@ -85,7 +93,7 @@ namespace Atria.Core.Navigation
             return result;
         }
 
-        private List<int> ShortestPath(int start, int goal, out List<NavGraph.Link> links, out float distance)
+        private List<int> ShortestPath(int start, Dictionary<int, int> goals, out List<NavGraph.Link> links, out float distance)
         {
             int n = _graph.NodeCount;
             var dist = new float[n];
@@ -93,6 +101,7 @@ namespace Atria.Core.Navigation
             var prevLink = new NavGraph.Link[n];
             for (int i = 0; i < n; i++) { dist[i] = float.PositiveInfinity; prevNode[i] = -1; }
             dist[start] = 0f;
+            int goal = -1;
 
             // Priority queue: sorted set keyed by (distance, node); stale entries are removed on relaxation.
             var open = new SortedSet<(float, int)>();
@@ -101,7 +110,7 @@ namespace Atria.Core.Navigation
             {
                 (float d, int u) = open.Min;
                 open.Remove(open.Min);
-                if (u == goal) break;
+                if (goals.ContainsKey(u)) { goal = u; break; } // first goal popped is the nearest
                 if (d > dist[u]) continue;
                 foreach (NavGraph.Link link in _graph.Links(u))
                 {
@@ -116,8 +125,8 @@ namespace Atria.Core.Navigation
             }
 
             links = new List<NavGraph.Link>();
-            distance = dist[goal];
-            if (float.IsPositiveInfinity(distance)) return null;
+            distance = goal >= 0 ? dist[goal] : float.PositiveInfinity;
+            if (goal < 0) return null;
 
             var path = new List<int>();
             for (int v = goal; v != -1; v = prevNode[v])

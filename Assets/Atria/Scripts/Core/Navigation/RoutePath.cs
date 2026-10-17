@@ -49,10 +49,11 @@ namespace Atria.Core.Navigation
             foreach (EdgeData e in route.Edges) widths.Add(e.Width ?? settings.DefaultWidth);
 
             float? endYaw = null;
-            if (route.Room?.Door != null && points.Count > 0)
+            OpeningData door = route.Door?.Opening;
+            if (door != null && points.Count > 0)
             {
                 Vector3 end = points[points.Count - 1];
-                var toDoor = new Vector2(route.Room.Door.Center.X - end.X, route.Room.Door.Center.Y - end.Z);
+                var toDoor = new Vector2(door.Center.X - end.X, door.Center.Y - end.Z);
                 if (toDoor.LengthSquared() > 1e-6f) endYaw = YawOf(toDoor);
             }
             return Build(points, widths, endYaw, settings);
