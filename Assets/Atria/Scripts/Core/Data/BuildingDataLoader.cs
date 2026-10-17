@@ -49,8 +49,19 @@ namespace Atria.Core.Data
                 {
                     // A hexagonal corridor around a central void is not convex: expand it into six convex pieces.
                     if (!s.TryGetValue("center", out object c)) throw new FormatException($"hexRing space '{id}' needs a center");
-                    polygons.AddRange(Polygon2D.HexRing(Point(c, "space " + id), (float)Num(s, "outerRadius", 0),
-                        (float)Num(s, "innerRadius", 0), (float)Num(s, "rotation", 0)));
+                    List<List<Vector2>> ring = Polygon2D.HexRing(Point(c, "space " + id), (float)Num(s, "outerRadius", 0),
+                        (float)Num(s, "innerRadius", 0), (float)Num(s, "rotation", 0));
+                    polygons.AddRange(ring);
+                    // "innerEdge": "opening" (default) = open cutout with a rail; "wall" = solid core with full-height walls.
+                    string innerEdge = Str(s, "innerEdge") ?? "opening";
+                    if (innerEdge == "opening")
+                    {
+                        var hole = new VoidData { Id = id + "#void", FloorId = Req(s, "floor"), Provenance = Prov(s) };
+                        foreach (List<Vector2> piece in ring) hole.Polygon.Add(piece[3]); // inner corner of each trapezoid
+                        Polygon2D.MakeCounterClockwise(hole.Polygon);
+                        b.Voids.Add(hole);
+                    }
+                    else if (innerEdge != "wall") throw new FormatException($"hexRing space '{id}': innerEdge must be \"opening\" or \"wall\"");
                 }
                 else if (Str(s, "shape") == "corridor")
                 {

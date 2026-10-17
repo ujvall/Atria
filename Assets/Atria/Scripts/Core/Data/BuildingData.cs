@@ -37,6 +37,8 @@ namespace Atria.Core.Data
 
         public readonly List<FloorData> Floors = new List<FloorData>();
         public readonly List<SpaceData> Spaces = new List<SpaceData>();
+        /// <summary>Open cutouts in the floor (e.g. the centre of a hex ring): not walkable, drawn as a railed pit.</summary>
+        public readonly List<VoidData> Voids = new List<VoidData>();
         public readonly List<NodeData> Nodes = new List<NodeData>();
         public readonly List<EdgeData> Edges = new List<EdgeData>();
         public readonly List<EntranceData> Entrances = new List<EntranceData>();
@@ -69,6 +71,16 @@ namespace Atria.Core.Data
         public string FloorId;
         public string Kind;
         /// <summary>Outline in plan (x, z), normalised to counter-clockwise order on load.</summary>
+        public readonly List<Vector2> Polygon = new List<Vector2>();
+        public Provenance Provenance;
+    }
+
+    /// <summary>A convex opening in the floor. Walls bordering it become low rails instead of full-height walls.</summary>
+    public sealed class VoidData
+    {
+        public string Id;
+        public string FloorId;
+        /// <summary>Outline in plan (x, z), counter-clockwise.</summary>
         public readonly List<Vector2> Polygon = new List<Vector2>();
         public Provenance Provenance;
     }

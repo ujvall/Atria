@@ -9,6 +9,7 @@ namespace Atria.Core.Geometry
     {
         public FloorData Floor;
         public readonly List<SpaceData> Spaces = new List<SpaceData>();
+        public readonly List<VoidData> Voids = new List<VoidData>();
         public List<WallSegment> Walls = new List<WallSegment>();
         /// <summary>Door placements keyed by <see cref="DoorKey"/>.</summary>
         public readonly Dictionary<string, OpeningPlacement> Doors = new Dictionary<string, OpeningPlacement>();
@@ -45,12 +46,31 @@ namespace Atria.Core.Geometry
                     requests.Add(new OpeningRequest { Tag = EntranceTagPrefix + e.Id, Center = e.Opening.Center, Width = e.Opening.Width });
             }
 
+            foreach (VoidData v in building.Voids)
+                if (v.FloorId == floor.Id && v.Polygon.Count >= 3) layout.Voids.Add(v);
+
             foreach (OpeningPlacement p in WallGenerator.CutOpenings(layout.Walls, requests))
             {
                 if (p.Tag.StartsWith(DoorTagPrefix)) layout.Doors[p.Tag.Substring(DoorTagPrefix.Length)] = p;
                 else layout.Entrances[p.Tag.Substring(EntranceTagPrefix.Length)] = p;
             }
+            for (int i = 0; i < layout.Walls.Count; i++)
+            {
+                WallSegment w = layout.Walls[i];
+                w.BordersVoid = layout.IsVoidBehind((w.A + w.B) * 0.5f, w.Inward);
+                layout.Walls[i] = w;
+            }
             return layout;
+        }
+
+        /// <summary>True if the point just behind a wall line (away from the walkable side) is inside a void.</summary>
+        public bool IsVoidBehind(Vector2 pointOnWall, Vector2 inward) => IsInVoid(pointOnWall - inward * 0.01f);
+
+        public bool IsInVoid(Vector2 p)
+        {
+            foreach (VoidData v in Voids)
+                if (Polygon2D.ContainsConvex(v.Polygon, p, 0f)) return true;
+            return false;
         }
 
         public bool IsWalkable(Vector2 p)

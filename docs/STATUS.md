@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **59/59 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **66/66 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -86,6 +86,17 @@ available here, and all three exist in Unity 6.
   * The demo is now labelled "Fictional demo corridor (SAMPLE, not PRP)".
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
+
+## Hex-ring centre fix (2026-10-17)
+* **Before:** each ring's centre looked like a solid hexagonal pillar. The renderer drew every
+  edge of the walkable outline as a 3 m capped wall, including the inner hexagon. The floor
+  and routing were already correct: there was no floor or route across the centre.
+* **Now:**
+  * Hex rings record their centre as a floor void (configurable with `innerEdge`).
+  * Inner edges become 1 m rails.
+  * The opening shows as a dark pit below floor level.
+* **Still to check in Unity:** the visual result (rail height, pit contrast, how the open
+  shaft above the void looks under the ring ceiling).
 
 ## Known limitations
 * Rooms are drawn as closed doors in the corridor wall; there are no room interiors yet.

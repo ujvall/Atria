@@ -104,9 +104,13 @@ namespace Atria.Core.Data
                     if (access == null) { report.Errors.Add($"{name} references unknown access node '{door.AccessNodeId}'"); continue; }
                     if (access.FloorId != r.FloorId) report.Errors.Add($"{name} access node is on a different floor");
                     if (door.Opening == null) { report.MissingMeasurements.Add($"{name}: position unknown (not drawn)"); continue; }
-                    if (layouts.TryGetValue(r.FloorId, out FloorLayout layout) &&
-                        (!layout.Doors.TryGetValue(FloorLayout.DoorKey(r.Id, i), out OpeningPlacement p) || !p.Placed))
-                        report.Errors.Add($"{name} does not lie on a wall (within {WallGenerator.OpeningSnapTolerance} m)");
+                    if (layouts.TryGetValue(r.FloorId, out FloorLayout layout))
+                    {
+                        if (!layout.Doors.TryGetValue(FloorLayout.DoorKey(r.Id, i), out OpeningPlacement p) || !p.Placed)
+                            report.Errors.Add($"{name} does not lie on a wall (within {WallGenerator.OpeningSnapTolerance} m)");
+                        else if (layout.IsVoidBehind(p.Center, p.Inward))
+                            report.Errors.Add($"{name} opens onto a floor void, not a room");
+                    }
                     if (Vector2.Distance(Plan(access.Position), door.Opening.Center) > MaxDoorToAccessNode)
                         report.Warnings.Add($"{name} is more than {MaxDoorToAccessNode} m from its access node");
                 }
