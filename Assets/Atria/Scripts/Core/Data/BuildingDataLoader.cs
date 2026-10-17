@@ -52,7 +52,7 @@ namespace Atria.Core.Data
                     List<List<Vector2>> ring = Polygon2D.HexRing(Point(c, "space " + id), (float)Num(s, "outerRadius", 0),
                         (float)Num(s, "innerRadius", 0), (float)Num(s, "rotation", 0));
                     polygons.AddRange(ring);
-                    // "innerEdge": "opening" (default) = open cutout with a rail; "wall" = solid core with full-height walls.
+                    // "innerEdge": "opening" (default) = dark recessed centre, no wall; "wall" = solid core with full-height walls.
                     string innerEdge = Str(s, "innerEdge") ?? "opening";
                     if (innerEdge == "opening")
                     {

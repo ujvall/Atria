@@ -14,10 +14,8 @@ namespace Atria.App
         public float DoorHeight = 2.1f;
         public float EntranceHeight = 2.5f;
         public float WallSignHeight = 1.6f;
-        [UnityEngine.Tooltip("Height of the rail around an open floor void (e.g. a hex ring's centre).")]
-        public float VoidRailHeight = 1.0f;
-        [UnityEngine.Tooltip("How far below the floor the dark bottom of a void is drawn.")]
-        public float VoidDepth = 1.5f;
+        [UnityEngine.Tooltip("How far the dark, solid-filled centre of a hex ring sits below the floor.")]
+        public float VoidRecessDepth = 0.15f;
         public float FlagSignHeight = 2.3f;
         public bool Ceiling = true;
 
@@ -30,7 +28,6 @@ namespace Atria.App
         public Color32 SignTextColor = new Color32(255, 255, 255, 255);
         public Color32 EntranceColor = new Color32(70, 150, 90, 255);
         public Color32 GroundColor = new Color32(150, 165, 135, 255);
-        public Color32 VoidRailColor = new Color32(88, 92, 100, 255);
         public Color32 VoidSideColor = new Color32(40, 42, 48, 255);
         public Color32 VoidBottomColor = new Color32(14, 15, 18, 255);
     }
@@ -97,8 +94,8 @@ namespace Atria.App
 
                 foreach (WallSegment w in layout.Walls)
                 {
-                    if (w.BordersVoid) AddWallPiece(mb, World(w.A, y0), World(w.B, y0), Dir(w.Inward), 0f, s.VoidRailHeight, s.WallThickness, s.VoidRailColor);
-                    else AddWallPiece(mb, World(w.A, y0), World(w.B, y0), Dir(w.Inward), 0f, h, s.WallThickness, s.WallColor);
+                    // No wall along a void edge: the floor just steps down into the recessed centre.
+                    if (!w.BordersVoid) AddWallPiece(mb, World(w.A, y0), World(w.B, y0), Dir(w.Inward), 0f, h, s.WallThickness, s.WallColor);
                 }
                 foreach (VoidData v in layout.Voids)
                 {
@@ -145,7 +142,7 @@ namespace Atria.App
                 var ground = new MeshBuilder();
                 Vector3 c = bounds.center, e = bounds.extents + new Vector3(60f, 0f, 60f);
                 // Keep the ground below any void pit, otherwise it would cap the opening.
-                float gy = minElevation - (hasVoids ? s.VoidDepth + 0.05f : 0.03f);
+                float gy = minElevation - (hasVoids ? s.VoidRecessDepth + 0.05f : 0.03f);
                 ground.AddFacing(new Vector3(c.x - e.x, gy, c.z - e.z), new Vector3(c.x + e.x, gy, c.z - e.z),
                     new Vector3(c.x + e.x, gy, c.z + e.z), new Vector3(c.x - e.x, gy, c.z + e.z), Vector3.up, s.GroundColor);
                 MeshBuilder.CreateObject("Ground", view.Root.transform, ground.ToMesh("Ground"), surface);
@@ -154,8 +151,8 @@ namespace Atria.App
         }
 
         /// <summary>
-        /// An open floor void: no floor or ceiling is generated over it; it gets dark inner sides
-        /// going down to a dark bottom <see cref="BuildingVisualSettings.VoidDepth"/> below the floor.
+        /// A floor void: a dark, solid-filled area recessed <see cref="BuildingVisualSettings.VoidRecessDepth"/>
+        /// below the floor, with short dark sides where the floor steps down.
         /// </summary>
         private static void AddVoidPit(MeshBuilder mb, VoidData v, float y0, BuildingVisualSettings s)
         {
@@ -163,7 +160,7 @@ namespace Atria.App
             Vector3 centre = Vector3.zero;
             foreach (NVector2 p in v.Polygon)
             {
-                bottom.Add(World(p, y0 - s.VoidDepth));
+                bottom.Add(World(p, y0 - s.VoidRecessDepth));
                 centre += World(p, y0);
             }
             centre /= v.Polygon.Count;
@@ -171,7 +168,7 @@ namespace Atria.App
             for (int i = 0; i < v.Polygon.Count; i++)
             {
                 Vector3 a = World(v.Polygon[i], y0), b = World(v.Polygon[(i + 1) % v.Polygon.Count], y0);
-                Vector3 down = Vector3.down * s.VoidDepth;
+                Vector3 down = Vector3.down * s.VoidRecessDepth;
                 Vector3 towardCentre = centre - (a + b) * 0.5f;
                 towardCentre.y = 0f;
                 mb.AddFacing(a, b, b + down, a + down, towardCentre, s.VoidSideColor);

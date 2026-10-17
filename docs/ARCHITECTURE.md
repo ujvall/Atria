@@ -32,9 +32,8 @@ building.json ──► BuildingDataLoader ──► BuildingData ──┬─�
   where data says. Junctions need no hand-built walls, and geometry stays independent of the
   navigation graph.
 * **Floor voids.** A hex ring's centre is a `VoidData` cutout: no floor or ceiling is
-  generated over it, wall edges that border it (`WallSegment.BordersVoid`) become a 1 m rail
-  instead of a 3 m wall, and a dark pit (sides plus a bottom 1.5 m below the floor) makes the
-  opening read as a hole. It is all in the same single floor mesh, with no extra materials,
+  generated over it, wall edges that border it (`WallSegment.BordersVoid`) get no wall at all, and the area is a
+  dark, solid fill recessed 0.15 m below the floor (`VoidRecessDepth`). It is all in the same single floor mesh, with no extra materials,
   lights or transparency.
 * **No route through a wall.** The validator samples every navigable same-floor edge at its
   centreline and at ±45% of its clear width. Any sample outside walkable space is a data error.

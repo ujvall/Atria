@@ -9,7 +9,7 @@ namespace Atria.Core.Geometry
         public Vector2 A;
         public Vector2 B;
         public Vector2 Inward;
-        /// <summary>True when the non-walkable side is an open floor void (drawn as a rail, not a wall).</summary>
+        /// <summary>True when the non-walkable side is an open floor void (no wall is drawn there).</summary>
         public bool BordersVoid;
         public float Length => Vector2.Distance(A, B);
     }

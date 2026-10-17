@@ -37,7 +37,7 @@ namespace Atria.Core.Data
 
         public readonly List<FloorData> Floors = new List<FloorData>();
         public readonly List<SpaceData> Spaces = new List<SpaceData>();
-        /// <summary>Open cutouts in the floor (e.g. the centre of a hex ring): not walkable, drawn as a railed pit.</summary>
+        /// <summary>Open cutouts in the floor (e.g. the centre of a hex ring): not walkable, drawn as a dark recessed area.</summary>
         public readonly List<VoidData> Voids = new List<VoidData>();
         public readonly List<NodeData> Nodes = new List<NodeData>();
         public readonly List<EdgeData> Edges = new List<EdgeData>();
@@ -75,7 +75,7 @@ namespace Atria.Core.Data
         public Provenance Provenance;
     }
 
-    /// <summary>A convex opening in the floor. Walls bordering it become low rails instead of full-height walls.</summary>
+    /// <summary>A convex opening in the floor. No walls are drawn along its edge.</summary>
     public sealed class VoidData
     {
         public string Id;

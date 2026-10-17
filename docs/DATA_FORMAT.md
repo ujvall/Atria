@@ -36,7 +36,7 @@ or `verified`. The app shows a warning banner unless it is `verified`.
                  "from": [x,z], "to": [x,z], "width": 2.4, "provenance": "estimated" },  // centre line + clear width
               { "id": "HEX_A", "floor": "F1", "shape": "hexRing",   // hexagonal corridor round a central void
                  "center": [x,z], "outerRadius": 8, "innerRadius": 5, "rotation": 30,  // radii centre-to-corner, metres
-                 "innerEdge": "opening",              // "opening" (default): open cutout with a 1 m rail; "wall": solid core
+                 "innerEdge": "opening",              // "opening" (default): dark recessed centre, no wall; "wall": solid core
                  "provenance": "estimated" }],        // expands to six convex pieces HEX_A#0..#5 (+ void HEX_A#void)
   "nodes":    [{ "id": "N1", "floor": "F1", "kind": "corridor|intersection|entrance", "x": 0, "z": 0, "provenance": "..." }],
   "edges":    [{ "from": "N1", "to": "N2", "navigable": true, "kind": "corridor|stairs|lift",
@@ -69,7 +69,8 @@ so use notes freely.
 * **Unknown door position:** give the door's `accessNode` only, with no `x`/`z`.
 * **Room known, location unknown:** list it with no doors.
 * **Hex-ring centre:** by default it is an open floor void (`HEX_A#void`). It is not walkable,
-  is drawn as a dark pit behind a 1 m rail, and no door may open onto it (validator error).
+  is drawn as a dark area recessed slightly below the floor with no wall round it, and no door
+  may open onto it (validator error).
   Use `"innerEdge": "wall"` for a solid core with full-height walls.
 * **Corner nodes on hex rings:** a straight edge between two side midpoints cuts across the
   inner corner into the void, so the validator rejects it. Add a node at each corner on the

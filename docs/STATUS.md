@@ -93,9 +93,10 @@ available here, and all three exist in Unity 6.
   and routing were already correct: there was no floor or route across the centre.
 * **Now:**
   * Hex rings record their centre as a floor void (configurable with `innerEdge`).
-  * Inner edges become 1 m rails.
-  * The opening shows as a dark pit below floor level.
-* **Still to check in Unity:** the visual result (rail height, pit contrast, how the open
+  * No wall is drawn along the inner edges. A 1 m rail was tried first; the user rejected it
+    because it still looked like a pillar.
+  * The centre is a dark, solid-filled area 0.15 m below the floor.
+* **Still to check in Unity:** the visual result (recess depth and contrast, how the open
   shaft above the void looks under the ring ceiling).
 
 ## Known limitations

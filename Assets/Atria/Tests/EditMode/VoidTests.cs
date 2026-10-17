@@ -8,7 +8,7 @@ using NUnit.Framework;
 
 namespace Atria.Core.Tests
 {
-    /// <summary>Hex-ring centres are open floor voids: never walkable, never routed through, drawn as rails not walls.</summary>
+    /// <summary>Hex-ring centres are open floor voids: never walkable, never routed through, never walled in.</summary>
     public class VoidTests
     {
         private const string RingJson = @"{
@@ -50,7 +50,7 @@ namespace Atria.Core.Tests
         }
 
         [Test]
-        public void OnlyInnerEdgesBecomeRails()
+        public void OnlyInnerEdgesBorderTheVoid()
         {
             BuildingData b = BuildingDataLoader.FromJson(RingJson);
             FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
@@ -111,7 +111,7 @@ namespace Atria.Core.Tests
         }
 
         [Test]
-        public void Demo_HasNoVoidsAndNoRails()
+        public void Demo_HasNoVoids()
         {
             BuildingData b = TestData.LoadShippedSample();
             Assert.IsEmpty(b.Voids);
