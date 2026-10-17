@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "buildingId": "PRP-SAMPLE",
+  "displayName": "Pearl Research Park (SAMPLE layout)",
+  "dataStatus": "sample",
+  "notes": "PLACEHOLDER DATA. This is an invented T-shaped corridor used to exercise routing and the walkthrough camera. It is NOT the architecture of Pearl Research Park. Room numbers DEMO-xxx and entrances A/B/C are fictitious. Replace with surveyed data (see docs/DATA_FORMAT.md).",
+  "walkingSpeedMps": 1.2,
+  "defaultCorridorWidth": 2.4,
+  "defaultDoorWidth": 1.0,
+
+  "floors": [
+    { "id": "F1", "name": "First floor (sample)", "elevation": 0.0, "wallHeight": 3.0 }
+  ],
+
+  "spaces": [
+    { "id": "LOBBY_A",  "floor": "F1", "kind": "lobby",    "provenance": "placeholder", "polygon": [[-3, -4], [3, -4], [3, 0], [-3, 0]] },
+    { "id": "CORR_1",   "floor": "F1", "kind": "corridor", "provenance": "placeholder", "polygon": [[-1.2, 0], [1.2, 0], [1.2, 31.2], [-1.2, 31.2]] },
+    { "id": "CORR_2",   "floor": "F1", "kind": "corridor", "provenance": "placeholder", "polygon": [[1.2, 28.8], [36, 28.8], [36, 31.2], [1.2, 31.2]] },
+    { "id": "CORR_3",   "floor": "F1", "kind": "corridor", "provenance": "placeholder", "polygon": [[22.8, 31.2], [25.2, 31.2], [25.2, 52], [22.8, 52]] }
+  ],
+
+  "nodes": [
+    { "id": "N_ENT_A", "floor": "F1", "kind": "entrance",     "x": 0,  "z": -3, "provenance": "placeholder" },
+    { "id": "N_C1_06", "floor": "F1", "kind": "corridor",     "x": 0,  "z": 6,  "provenance": "placeholder" },
+    { "id": "N_C1_14", "floor": "F1", "kind": "corridor",     "x": 0,  "z": 14, "provenance": "placeholder" },
+    { "id": "N_C1_22", "floor": "F1", "kind": "corridor",     "x": 0,  "z": 22, "provenance": "placeholder" },
+    { "id": "N_J1",    "floor": "F1", "kind": "intersection", "x": 0,  "z": 30, "provenance": "placeholder" },
+    { "id": "N_C2_08", "floor": "F1", "kind": "corridor",     "x": 8,  "z": 30, "provenance": "placeholder" },
+    { "id": "N_C2_16", "floor": "F1", "kind": "corridor",     "x": 16, "z": 30, "provenance": "placeholder" },
+    { "id": "N_J2",    "floor": "F1", "kind": "intersection", "x": 24, "z": 30, "provenance": "placeholder" },
+    { "id": "N_C2_30", "floor": "F1", "kind": "corridor",     "x": 30, "z": 30, "provenance": "placeholder" },
+    { "id": "N_ENT_B", "floor": "F1", "kind": "entrance",     "x": 35, "z": 30, "provenance": "placeholder" },
+    { "id": "N_C3_38", "floor": "F1", "kind": "corridor",     "x": 24, "z": 38, "provenance": "placeholder" },
+    { "id": "N_C3_46", "floor": "F1", "kind": "corridor",     "x": 24, "z": 46, "provenance": "placeholder" },
+    { "id": "N_ENT_C", "floor": "F1", "kind": "entrance",     "x": 24, "z": 51, "provenance": "placeholder" }
+  ],
+
+  "edges": [
+    { "from": "N_ENT_A", "to": "N_C1_06", "provenance": "placeholder" },
+    { "from": "N_C1_06", "to": "N_C1_14", "provenance": "placeholder" },
+    { "from": "N_C1_14", "to": "N_C1_22", "provenance": "placeholder" },
+    { "from": "N_C1_22", "to": "N_J1",    "provenance": "placeholder" },
+    { "from": "N_J1",    "to": "N_C2_08", "provenance": "placeholder" },
+    { "from": "N_C2_08", "to": "N_C2_16", "provenance": "placeholder" },
+    { "from": "N_C2_16", "to": "N_J2",    "provenance": "placeholder" },
+    { "from": "N_J2",    "to": "N_C2_30", "provenance": "placeholder" },
+    { "from": "N_C2_30", "to": "N_ENT_B", "provenance": "placeholder" },
+    { "from": "N_J2",    "to": "N_C3_38", "provenance": "placeholder" },
+    { "from": "N_C3_38", "to": "N_C3_46", "provenance": "placeholder" },
+    { "from": "N_C3_46", "to": "N_ENT_C", "provenance": "placeholder" }
+  ],
+
+  "entrances": [
+    { "id": "ENT_A", "label": "Entrance A (placeholder)", "node": "N_ENT_A", "provenance": "placeholder", "opening": { "x": 0,  "z": -4, "width": 2.0 } },
+    { "id": "ENT_B", "label": "Entrance B (placeholder)", "node": "N_ENT_B", "provenance": "placeholder", "opening": { "x": 36, "z": 30, "width": 2.0 } },
+    { "id": "ENT_C", "label": "Entrance C (placeholder)", "node": "N_ENT_C", "provenance": "placeholder", "opening": { "x": 24, "z": 52, "width": 2.0 } }
+  ],
+
+  "rooms": [
+    { "id": "DEMO-101", "number": "DEMO-101", "name": "Sample room", "aliases": ["D101"], "floor": "F1", "accessNode": "N_C1_06", "door": { "x": -1.2, "z": 6 },   "provenance": "placeholder" },
+    { "id": "DEMO-102", "number": "DEMO-102", "name": "Sample room", "aliases": ["D102"], "floor": "F1", "accessNode": "N_C1_06", "door": { "x": 1.2,  "z": 6 },   "provenance": "placeholder" },
+    { "id": "DEMO-103", "number": "DEMO-103", "name": "Sample room", "aliases": ["D103"], "floor": "F1", "accessNode": "N_C1_14", "door": { "x": -1.2, "z": 14 },  "provenance": "placeholder" },
+    { "id": "DEMO-104", "number": "DEMO-104", "name": "Sample room", "aliases": ["D104"], "floor": "F1", "accessNode": "N_C1_22", "door": { "x": 1.2,  "z": 22 },  "provenance": "placeholder" },
+    { "id": "DEMO-111", "number": "DEMO-111", "name": "Sample room", "aliases": ["D111"], "floor": "F1", "accessNode": "N_C2_08", "door": { "x": 8,    "z": 31.2 }, "provenance": "placeholder" },
+    { "id": "DEMO-112", "number": "DEMO-112", "name": "Sample room", "aliases": ["D112"], "floor": "F1", "accessNode": "N_C2_16", "door": { "x": 16,   "z": 28.8 }, "provenance": "placeholder" },
+    { "id": "DEMO-113", "number": "DEMO-113", "name": "Sample room", "aliases": ["D113"], "floor": "F1", "accessNode": "N_C2_30", "door": { "x": 30,   "z": 28.8 }, "provenance": "placeholder" },
+    { "id": "DEMO-121", "number": "DEMO-121", "name": "Sample room", "aliases": ["D121"], "floor": "F1", "accessNode": "N_C3_38", "door": { "x": 22.8, "z": 38 },  "provenance": "placeholder" },
+    { "id": "DEMO-122", "number": "DEMO-122", "name": "Sample room", "aliases": ["D122"], "floor": "F1", "accessNode": "N_C3_46", "door": { "x": 25.2, "z": 46 },  "provenance": "placeholder" }
+  ]
+}

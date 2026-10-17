@@ -1,0 +1,23 @@
+<!--
+  Out-of-Unity harness: compiles Atria.Core and its EditMode tests with the .NET SDK so the
+  routing/geometry core can be tested without the Unity Editor (e.g. in CI or a cloud shell).
+  Unity ignores this folder. Run: dotnet test Tools/CoreTests
+-->
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <LangVersion>9.0</LangVersion>
+    <Nullable>disable</Nullable>
+    <IsPackable>false</IsPackable>
+    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="../../Assets/Atria/Scripts/Core/**/*.cs" />
+    <Compile Include="../../Assets/Atria/Tests/EditMode/**/*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="NUnit" Version="3.14.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.6.0" />
+  </ItemGroup>
+</Project>
