@@ -172,8 +172,8 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    -19.584,
-    -3.193
+    -20.219,
+    -3.489
    ],
    "to": [
     -27.922,
@@ -1898,6 +1898,19 @@
    ],
    "note": "Landmark only: no other floor or vertical route is modelled",
    "name": "Lift (landmark)"
+  },
+  {
+   "id": "LOWER-LEFT-BLOCK",
+   "number": "Lower-left block (not mapped yet)",
+   "name": "Separate block reached by the corridor below L1",
+   "floor": "G",
+   "provenance": "estimated",
+   "doors": [
+    {
+     "accessNode": "CORR_LBLOCK_END"
+    }
+   ],
+   "note": "Destination at the end of the branch corridor below L1 (user annotation). The block's interior, rooms and entrance position are unknown; the door position is not drawn."
   }
  ],
  "observations": [

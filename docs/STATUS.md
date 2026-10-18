@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **84/84 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **85/85 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -86,6 +86,19 @@ available here, and all three exist in Unity 6.
   * The demo is now labelled "Fictional demo corridor (SAMPLE, not PRP)".
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
+
+## Block C refinement: lower-left block as a destination (2026-10-18)
+* **Branch is now a real destination:** a new unmapped landmark, `LOWER-LEFT-BLOCK`
+  ("Lower-left block (not mapped yet)"), sits at the end of `CORR_LB1_BLOCK`. Its door position
+  is not drawn. Search "block" finds it, and routes reach it from the Main Entrance and
+  Entrance 1 via the bend before L1. The block's interior is not mapped.
+* **Junction fix:** the branch now starts 0.5 m further back, inside the hall corridor. This
+  removes a wall notch where it met the bend.
+* **Photos:** they show open-air courtyards at the hex centres. These stay non-walkable and
+  slightly recessed.
+* **Symmetry:** the wings are approximately mirrored. You confirmed this is acceptable.
+* **Unchanged:** the right wing, the hall, the entrances and every room position (checked by
+  JSON comparison against the previous commit).
 
 ## Left wing: branch to the lower-left block, shorter run after L1 (2026-10-18)
 * **New branch:** from your annotation, the hall corridor's bend before L1 is a junction. It

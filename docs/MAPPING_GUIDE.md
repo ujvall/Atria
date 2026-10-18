@@ -128,6 +128,8 @@ removes the warning banner.
    (PROVISIONAL DRAFT)' … override: yes`. The banner reads **PROVISIONAL PRP DRAFT**.
 3. **Left wing (unchanged):** start at *Entrance 1* and search `G23`, `G18` or `G21`. The route
    goes from the bend into L1 and up to L2, and never through the hall's right side.
+   From the *Main Entrance* or *Entrance 1*, search `block`: the route to *Lower-left block
+   (not mapped yet)* takes the branch below L1 and ends where that corridor ends.
 4. **Right wing:** with either start point, search each of these and start the walkthrough:
    * `G08`, `G07`, `G10`, `G11` (lower-right junction R1, octagonal recessed centre)
    * `G03`, `G04`, `G05`, `G06`, `Electrical` (upper-right junction R2, hexagonal recessed

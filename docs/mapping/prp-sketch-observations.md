@@ -235,3 +235,14 @@ and approximate. In the model, one placement ≈ 0.30 m.
 * **Still unknown:**
   * the block's layout, rooms and how far away it is
   * whether the right wing's down-right branch leads to a matching block
+
+## Lower-left block as a destination (2026-10-18)
+* **Modelled:** the branch's end is now a searchable destination, `LOWER-LEFT-BLOCK`.
+  * Its provenance is estimated, and it has no door position.
+  * Nothing inside the block is mapped.
+* **Junction:** the branch starts 0.5 m back along the hall corridor. This closes the wall
+  notch at the bend before L1.
+* **Photos:** the hex centres are open-air courtyards. They stay non-walkable.
+* **Still unknown:**
+  * the block's entrance position and its distance from the bend
+  * the real corridor widths and lengths, apart from the R2 counts

@@ -295,7 +295,7 @@ namespace Atria.Core.Tests
             Assert.Less(Vector2.Distance(lc, new Vector2(bend.Position.X, bend.Position.Z)), Vector2.Distance(rc, new Vector2(rbend.Position.X, rbend.Position.Z)));
 
             // Left-wing rooms keep their observed sides, labels and door counts.
-            CollectionAssert.AreEquivalent(new[] { "G16", "G17", "G18", "G21", "G23", "G25", "G26", "PHYSICS-LAB-II" },
+            CollectionAssert.AreEquivalent(new[] { "G16", "G17", "G18", "G21", "G23", "G25", "G26", "PHYSICS-LAB-II", "LOWER-LEFT-BLOCK" },
                 b.Rooms.Select(r => r.Id).Except(RightWingRooms).ToArray());
             foreach (string id in new[] { "G18", "G21", "G23", "G25", "G26" }) Assert.AreEqual(2, b.FindRoom(id).Doors.Count, id);
             var finder = new RouteFinder(b);
@@ -444,7 +444,25 @@ namespace Atria.Core.Tests
             // The branch runs below L1 without touching its ring or centre, and has no invented rooms.
             NodeData end = b.FindNode("CORR_LBLOCK_END");
             Assert.IsTrue(layout.IsWalkable(new Vector2(end.Position.X, end.Position.Z)));
-            Assert.IsFalse(b.Rooms.Any(r => r.Doors.Any(d => d.AccessNodeId == "CORR_LBLOCK_END")));
+            // Its only destination is an explicitly unmapped landmark: no drawn door, no invented rooms.
+            RoomData block = b.Rooms.Single(r => r.Doors.Any(d => d.AccessNodeId == "CORR_LBLOCK_END"));
+            Assert.AreEqual("LOWER-LEFT-BLOCK", block.Id);
+            StringAssert.Contains("not mapped", block.Number);
+            Assert.IsNull(block.Doors.Single().Opening);
+            Assert.AreEqual("LOWER-LEFT-BLOCK", new RoomSearch(b.Rooms).Search("block")[0].Room.Id);
+            var finder = new RouteFinder(b);
+            foreach (string start in new[] { "ENT_MAIN", "ENT_1" })
+            {
+                RouteResult r = finder.FindRoute(start, "LOWER-LEFT-BLOCK");
+                Assert.IsTrue(r.Success, start);
+                CollectionAssert.Contains(r.Nodes.Select(n => n.Id).ToList(), "CORR_LB1", start + ": goes through the junction below L1");
+                Assert.AreEqual("CORR_LBLOCK_END", r.Nodes.Last().Id);
+            }
+            // The branch's near end stays inside the corridors it joins, so the junction walls have no stub or notch.
+            Vector2 lb1 = new Vector2(b.FindNode("CORR_LB1").Position.X, b.FindNode("CORR_LB1").Position.Z);
+            var others = b.Spaces.Where(s => s.Id == "CORR_HALL_L1" || s.Id == "CORR_LB1_L1").ToList();
+            foreach (Vector2 corner in b.FindSpace("CORR_LB1_BLOCK").Polygon.Where(p => Vector2.Distance(p, lb1) < 2f))
+                Assert.IsTrue(others.Any(o => Polygon2D.ContainsConvex(o.Polygon, corner, 1e-3f)), $"branch corner {corner} pokes out of the junction");
             SpaceData branch = b.FindSpace("CORR_LB1_BLOCK");
             foreach (SpaceData ring in b.Spaces.Where(s => s.Id.StartsWith("L1#")))
                 foreach (Vector2 p in branch.Polygon)
