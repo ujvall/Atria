@@ -256,3 +256,8 @@ and approximate. In the model, one placement ≈ 0.30 m.
   * the L1 connector lengthened to 4.29 m past the ring (estimated)
   * the same change mirrored at R1
 * **Not changed:** the hex junctions are not rotated, so the doors and Entrance 1 stay put.
+
+## Shorter hall corridors (2026-10-18)
+* **Observed (your marked screenshot):** the hall-to-junction stretch was drawn too long.
+* **Modelled:** both wings moved 4.5 m towards the hall along the lane, as rigid blocks. The
+  stretch is now 6.57 m from `HALL_W` (estimated, not measured).

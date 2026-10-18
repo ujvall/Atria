@@ -87,6 +87,19 @@ available here, and all three exist in Unity 6.
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
+## Shorter hall corridors to L1 and R1 (2026-10-18)
+* **Shorter stretch:** from your marked screenshot, the stretch from the hall to the junction
+  below L1 was too long. It is now 6.57 m from `HALL_W`, down from 11.07 m. About 5 m of
+  corridor now shows outside the hall.
+* **How:** each wing slid 4.5 m along the straight lane towards the hall, the right wing as a
+  mirror of the left. "Each wing" means everything beyond the hall's side walls: the junctions,
+  L1/L2 and R1/R2, every room door, Entrance 1, G17, the lift and the lower-left block's end.
+* **Unchanged:** the hall, the Main Entrance, G16 and the demo. Within each wing nothing moved
+  relative to anything else, so no room, door, side or connection changed relative to its
+  junction. The lane stays straight.
+* **Checks:** 85/85 tests pass. Both junction outlines are still clean, and the plot was
+  inspected.
+
 ## Straight lane at the L1 and R1 junctions (2026-10-18)
 * **One lane:** from your corrected sketch, the hall corridor and the branch to the lower-left
   block are now one straight lane at about 252° yaw, from `HALL_W` to the unchanged block end.
