@@ -3,7 +3,7 @@
  "buildingId": "PRP-G-DRAFT-LEFT",
  "displayName": "PRP Block C ground floor, left + right wings (PROVISIONAL DRAFT)",
  "dataStatus": "partial",
- "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance. Right wing (R1 lower-right, R2 upper-right, lift) added from the first sketch set's right-hand close-ups; all positions estimated.",
+ "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance. Right wing (R1 lower-right, R2 upper-right, lift) added from the first sketch set's right-hand close-ups; all positions estimated. R2 proportions (side, corridor width, upper corridor, angled approach) set from the user's heel-to-toe foot-placement counts (~0.30 m each, approximate); floor height 2.75-3 m confirmed.",
  "walkingSpeedMps": 1.2,
  "defaultCorridorWidth": 2.4,
  "defaultDoorWidth": 1.0,
@@ -12,7 +12,8 @@
    "id": "G",
    "name": "Ground floor? (unconfirmed)",
    "elevation": 0,
-   "wallHeight": 3.0
+   "wallHeight": 2.9,
+   "note": "Floor-to-ceiling height confirmed by the user as approximately 2.75-3 m; 2.9 m used"
   }
  ],
  "spaces": [
@@ -151,14 +152,14 @@
    "floor": "G",
    "shape": "hexRing",
    "center": [
-    34.53,
-    15.1
+    37.906,
+    18.35
    ],
-   "outerRadius": 5.0,
-   "innerRadius": 2.2,
+   "outerRadius": 6.3,
+   "innerRadius": 3.529,
    "rotation": 0,
    "provenance": "estimated",
-   "note": "Upper-right junction; hexagonal centre; sizes estimated"
+   "note": "Upper-right junction; hexagonal centre. Side = 21 foot placements (~0.30 m each); ring corridor kept at 8 placements wide; position estimated"
   },
   {
    "id": "RCORR_HALL_B1",
@@ -200,8 +201,8 @@
     2.45
    ],
    "to": [
-    35.174,
-    4.671
+    38.549,
+    6.621
    ],
    "width": 2.4,
    "provenance": "estimated"
@@ -211,12 +212,12 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    34.53,
-    3.557
+    37.906,
+    5.507
    ],
    "to": [
-    34.53,
-    10.8
+    37.906,
+    12.75
    ],
    "width": 2.4,
    "provenance": "estimated"
@@ -226,16 +227,16 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    34.53,
-    19.4
+    37.906,
+    23.95
    ],
    "to": [
-    34.53,
-    24.1
+    37.906,
+    34.55
    ],
    "width": 2.4,
    "provenance": "estimated",
-   "note": "Corridor above R2 with the lift; it continues beyond the drawing, so its end wall here is a placeholder"
+   "note": "Corridor above R2 with the lift: 33 x 8 foot placements (length x width); continues beyond the measured part, end wall is where the count stopped"
   }
  ],
  "nodes": [
@@ -701,168 +702,168 @@
    "id": "R2_C0",
    "floor": "G",
    "kind": "intersection",
-   "x": 34.53,
-   "z": 18.7,
+   "x": 37.906,
+   "z": 23.265,
    "provenance": "estimated"
   },
   {
    "id": "R2_C60",
    "floor": "G",
    "kind": "intersection",
-   "x": 37.648,
-   "z": 16.9,
+   "x": 42.162,
+   "z": 20.807,
    "provenance": "estimated"
   },
   {
    "id": "R2_C120",
    "floor": "G",
    "kind": "intersection",
-   "x": 37.648,
-   "z": 13.3,
+   "x": 42.162,
+   "z": 15.893,
    "provenance": "estimated"
   },
   {
    "id": "R2_C180",
    "floor": "G",
    "kind": "intersection",
-   "x": 34.53,
-   "z": 11.5,
+   "x": 37.906,
+   "z": 13.436,
    "provenance": "estimated"
   },
   {
    "id": "R2_C240",
    "floor": "G",
    "kind": "intersection",
-   "x": 31.412,
-   "z": 13.3,
+   "x": 33.65,
+   "z": 15.893,
    "provenance": "estimated"
   },
   {
    "id": "R2_C300",
    "floor": "G",
    "kind": "intersection",
-   "x": 31.412,
-   "z": 16.9,
+   "x": 33.65,
+   "z": 20.807,
    "provenance": "estimated"
   },
   {
    "id": "R2_S30",
    "floor": "G",
    "kind": "corridor",
-   "x": 36.089,
-   "z": 17.8,
+   "x": 40.034,
+   "z": 22.036,
    "provenance": "estimated"
   },
   {
    "id": "R2_S90",
    "floor": "G",
    "kind": "corridor",
-   "x": 37.648,
-   "z": 15.1,
+   "x": 42.162,
+   "z": 18.35,
    "provenance": "estimated"
   },
   {
    "id": "R2_G05_a",
    "floor": "G",
    "kind": "corridor",
-   "x": 37.648,
-   "z": 16.8,
+   "x": 42.162,
+   "z": 20.05,
    "provenance": "estimated"
   },
   {
    "id": "R2_ELECTRICAL-ROOM_a",
    "floor": "G",
    "kind": "corridor",
-   "x": 37.648,
-   "z": 15.1,
+   "x": 42.162,
+   "z": 18.35,
    "provenance": "estimated"
   },
   {
    "id": "R2_G05_b",
    "floor": "G",
    "kind": "corridor",
-   "x": 37.648,
-   "z": 13.4,
+   "x": 42.162,
+   "z": 16.65,
    "provenance": "estimated"
   },
   {
    "id": "R2_S150",
    "floor": "G",
    "kind": "corridor",
-   "x": 36.089,
-   "z": 12.4,
+   "x": 40.034,
+   "z": 14.664,
    "provenance": "estimated"
   },
   {
    "id": "R2_G06_a",
    "floor": "G",
    "kind": "corridor",
-   "x": 37.215,
-   "z": 13.05,
+   "x": 41.16,
+   "z": 15.314,
    "provenance": "estimated"
   },
   {
    "id": "R2_G06_b",
    "floor": "G",
    "kind": "corridor",
-   "x": 35.829,
-   "z": 12.25,
+   "x": 39.774,
+   "z": 14.514,
    "provenance": "estimated"
   },
   {
    "id": "R2_S210",
    "floor": "G",
    "kind": "corridor",
-   "x": 32.971,
-   "z": 12.4,
+   "x": 35.778,
+   "z": 14.664,
    "provenance": "estimated"
   },
   {
    "id": "R2_S270",
    "floor": "G",
    "kind": "corridor",
-   "x": 31.412,
-   "z": 15.1,
+   "x": 33.65,
+   "z": 18.35,
    "provenance": "estimated"
   },
   {
    "id": "R2_G04_a",
    "floor": "G",
    "kind": "corridor",
-   "x": 31.412,
-   "z": 14.1,
+   "x": 33.65,
+   "z": 17.35,
    "provenance": "estimated"
   },
   {
    "id": "R2_G04_b",
    "floor": "G",
    "kind": "corridor",
-   "x": 31.412,
-   "z": 16.1,
+   "x": 33.65,
+   "z": 19.35,
    "provenance": "estimated"
   },
   {
    "id": "R2_S330",
    "floor": "G",
    "kind": "corridor",
-   "x": 32.971,
-   "z": 17.8,
+   "x": 35.778,
+   "z": 22.036,
    "provenance": "estimated"
   },
   {
    "id": "R2_G03_a",
    "floor": "G",
    "kind": "corridor",
-   "x": 31.932,
-   "z": 17.2,
+   "x": 34.739,
+   "z": 21.436,
    "provenance": "estimated"
   },
   {
    "id": "R2_G03_b",
    "floor": "G",
    "kind": "corridor",
-   "x": 33.231,
-   "z": 17.95,
+   "x": 36.038,
+   "z": 22.186,
    "provenance": "estimated"
   },
   {
@@ -885,18 +886,27 @@
    "id": "RCORR_B2",
    "floor": "G",
    "kind": "intersection",
-   "x": 34.53,
-   "z": 4.3,
+   "x": 37.906,
+   "z": 6.25,
    "provenance": "estimated"
   },
   {
    "id": "R2_LIFT",
    "floor": "G",
    "kind": "lift",
-   "x": 34.53,
-   "z": 21.6,
+   "x": 37.906,
+   "z": 26.15,
    "provenance": "estimated",
    "note": "Lift landmark on the right wall of the corridor above R2; no vertical connection mapped"
+  },
+  {
+   "id": "R2_UP_END",
+   "floor": "G",
+   "kind": "corridor",
+   "x": 37.906,
+   "z": 33.95,
+   "provenance": "estimated",
+   "note": "Where the 33-placement count of the upper corridor ends"
   },
   {
    "id": "HALL_MAIN_ENT",
@@ -1420,6 +1430,12 @@
    "provenance": "estimated"
   },
   {
+   "from": "R2_LIFT",
+   "to": "R2_UP_END",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
    "from": "HALL_MAIN_ENT",
    "to": "HALL_C",
    "width": 2.4,
@@ -1679,14 +1695,14 @@
    "doors": [
     {
      "accessNode": "R2_G03_a",
-     "x": 31.326,
-     "z": 18.25,
+     "x": 34.139,
+     "z": 22.475,
      "provenance": "estimated"
     },
     {
      "accessNode": "R2_G03_b",
-     "x": 32.625,
-     "z": 19.0,
+     "x": 35.438,
+     "z": 23.225,
      "provenance": "estimated"
     }
    ],
@@ -1700,14 +1716,14 @@
    "doors": [
     {
      "accessNode": "R2_G04_a",
-     "x": 30.2,
-     "z": 14.1,
+     "x": 32.45,
+     "z": 17.35,
      "provenance": "estimated"
     },
     {
      "accessNode": "R2_G04_b",
-     "x": 30.2,
-     "z": 16.1,
+     "x": 32.45,
+     "z": 19.35,
      "provenance": "estimated"
     }
    ],
@@ -1721,14 +1737,14 @@
    "doors": [
     {
      "accessNode": "R2_G05_a",
-     "x": 38.86,
-     "z": 16.8,
+     "x": 43.362,
+     "z": 20.05,
      "provenance": "estimated"
     },
     {
      "accessNode": "R2_G05_b",
-     "x": 38.86,
-     "z": 13.4,
+     "x": 43.362,
+     "z": 16.65,
      "provenance": "estimated"
     }
    ],
@@ -1742,14 +1758,14 @@
    "doors": [
     {
      "accessNode": "R2_G06_a",
-     "x": 37.821,
-     "z": 12.0,
+     "x": 41.76,
+     "z": 14.275,
      "provenance": "estimated"
     },
     {
      "accessNode": "R2_G06_b",
-     "x": 36.435,
-     "z": 11.2,
+     "x": 40.374,
+     "z": 13.475,
      "provenance": "estimated"
     }
    ],
@@ -1763,8 +1779,8 @@
    "doors": [
     {
      "accessNode": "R2_ELECTRICAL-ROOM_a",
-     "x": 38.86,
-     "z": 15.1,
+     "x": 43.362,
+     "z": 18.35,
      "provenance": "estimated"
     }
    ],
@@ -1778,8 +1794,8 @@
    "doors": [
     {
      "accessNode": "R2_LIFT",
-     "x": 35.73,
-     "z": 21.6,
+     "x": 39.106,
+     "z": 26.15,
      "width": 1.2,
      "provenance": "estimated"
     }
@@ -1797,6 +1813,44 @@
    "steps": 15,
    "approximate": true,
    "note": "About 15 normal walking steps from Entrance 1 to the start of the hexagonal junction (L1), before turning into the longer corridor. Stride not calibrated, so no metric distance is derived. The paced end point is L1's outer edge, about 1.2 m before node L1_S270."
+  },
+  {
+   "id": "OBS_R2_UPPER_CORRIDOR",
+   "kind": "footPlacements",
+   "from": "R2_C0",
+   "to": "R2_UP_END",
+   "steps": 33,
+   "strideMetres": 0.3,
+   "approximate": true,
+   "note": "33 heel-to-toe placements along the straight corridor above R2 (from R2's outer corner). Graph nodes sit ~1.4 m inside the ring and ~0.6 m before the end, within the validator tolerance."
+  },
+  {
+   "id": "OBS_R1_R2_ANGLED_APPROACH",
+   "kind": "footPlacements",
+   "from": "R1_C60",
+   "to": "RCORR_B2",
+   "steps": 23,
+   "strideMetres": 0.3,
+   "approximate": true,
+   "note": "23 heel-to-toe placements along the angled approach from R1's outer corner to the bend below R2; graph node R1_C60 is ~1.6 m inside R1's corner."
   }
- ]
+ ],
+ "footPlacementCounts": {
+  "method": "Consecutive heel-to-toe foot placements wearing EU 44 Crocs (counts, not feet). Approximate.",
+  "unitMetres": 0.3,
+  "unitNote": "Approximate length of one placement, chosen so the 8-placement corridor width equals the 2.4 m corridor width used elsewhere. Relative unit, not a calibrated measurement.",
+  "junction": "R2 (upper-right junction, lift corridor above it)",
+  "counts": {
+   "upperCorridorWidth": 8,
+   "upperCorridorLength": 33,
+   "angledApproach": 23,
+   "junctionSide": 21
+  },
+  "applied": {
+   "upperCorridorWidth": "RCORR_R2_UP width 2.4 m",
+   "upperCorridorLength": "RCORR_R2_UP from R2's outer top corner, 9.9 m",
+   "angledApproach": "RCORR_R1_B2 from R1's outer corner to the bend RCORR_B2, 6.9 m",
+   "junctionSide": "R2 outer side = outerRadius 6.3 m"
+  }
+ }
 }

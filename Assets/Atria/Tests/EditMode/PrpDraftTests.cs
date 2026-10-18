@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System;
 using System.IO;
 using System.Linq;
@@ -166,7 +167,7 @@ namespace Atria.Core.Tests
         public void Draft_FifteenStepObservationIsStoredUncalibrated()
         {
             BuildingData b = Load();
-            SurveyObservation o = b.Observations.Single();
+            SurveyObservation o = b.Observations.Single(x => x.Id == "OBS_ENT1_TO_L1");
             Assert.AreEqual("OBS_ENT1_TO_L1", o.Id);
             Assert.AreEqual(15f, o.Steps);
             Assert.IsTrue(o.Approximate);
@@ -341,6 +342,69 @@ namespace Atria.Core.Tests
             CollectionAssert.AreEqual(new[] { "CORR_BEND", "L1_S270" }, finder.FindRoute("ENT_1", "G21").Nodes.Take(2).Select(n => n.Id).ToArray());
             Assert.IsFalse(finder.FindRoute("ENT_1", "G23").Nodes.Any(n => n.Id == "HALL_MAIN_ENT"));
             Assert.IsFalse(finder.FindRoute("DRAFT_START_HALL", "G08").Nodes.Any(n => n.Id == "HALL_MAIN_ENT"));
+        }
+
+        // ------------------------------------------------------------------ R2 foot-placement counts
+
+        private const float Placement = 0.30f; // one heel-to-toe EU 44 Crocs placement, approximate
+
+        [Test]
+        public void R2_ProportionsFollowTheFootPlacementCounts()
+        {
+            BuildingData b = Load();
+            FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
+            // Junction side = 21 placements; for a regular hexagon the side equals the outer radius.
+            List<Vector2> outer = Polygon2D.RegularPolygon(Vector2.Zero, 6, 21 * Placement, 0f);
+            Assert.AreEqual(21 * Placement, Vector2.Distance(outer[0], outer[1]), 1e-3f);
+            VoidData centre = b.Voids.Single(v => v.Id == "R2#void");
+            Vector2 c = centre.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / centre.Polygon.Count;
+            float outerApothem = 21 * Placement * (float)Math.Cos(Math.PI / 6);
+            float innerApothem = Vector2.Distance(c, (centre.Polygon[0] + centre.Polygon[1]) * 0.5f);
+            Assert.AreEqual(8 * Placement, outerApothem - innerApothem, 0.01f, "ring corridor keeps the 8-placement width");
+            Assert.AreEqual(6, centre.Polygon.Count);
+            Assert.IsFalse(layout.IsWalkable(c));
+
+            // Upper corridor: 33 x 8 placements from R2's outer top corner.
+            float topCorner = c.Y + 21 * Placement;
+            var up = b.Spaces.Single(s => s.Id == "RCORR_R2_UP");
+            float zMax = up.Polygon.Max(p => p.Y), xMin = up.Polygon.Min(p => p.X), xMax = up.Polygon.Max(p => p.X);
+            Assert.AreEqual(33 * Placement, zMax - topCorner, 0.01f);
+            Assert.AreEqual(8 * Placement, xMax - xMin, 0.01f);
+
+            // Angled approach: 23 placements from R1's outer corner to the bend.
+            Vector2 r1 = b.Voids.Single(v => v.Id == "R1#void").Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / 8f;
+            NodeData bend = b.FindNode("RCORR_B2");
+            Assert.AreEqual(23 * Placement, Vector2.Distance(r1, new Vector2(bend.Position.X, bend.Position.Z)) - 5f, 0.02f);
+
+            // Counts are stored with their method; the map agrees with them within the validator tolerance.
+            ValidationReport report = BuildingValidator.Validate(b);
+            Assert.IsTrue(report.IsValid, report.ToString());
+            foreach (string id in new[] { "OBS_R2_UPPER_CORRIDOR", "OBS_R1_R2_ANGLED_APPROACH" })
+            {
+                SurveyObservation o = b.Observations.Single(x => x.Id == id);
+                Assert.AreEqual("footPlacements", o.Kind);
+                Assert.IsTrue(o.Approximate);
+                Assert.IsFalse(report.Warnings.Any(w => w.Contains(id)), report.ToString());
+            }
+        }
+
+        [Test]
+        public void FloorHeight_IsTheConfirmedValueAndNothingIsMarkedVerified()
+        {
+            BuildingData b = Load();
+            Assert.That(b.Floors.Single().WallHeight, Is.InRange(2.75f, 3.0f));
+            Assert.IsFalse(b.IsVerified);
+            Assert.IsFalse(b.Spaces.Any(s => s.Provenance == Provenance.Measured));
+        }
+
+        [Test]
+        public void R2_RoutesStillReachEveryRightWingRoomFromAllStarts()
+        {
+            BuildingData b = Load();
+            var finder = new RouteFinder(b);
+            foreach (string start in new[] { "ENT_1", "ENT_MAIN", "DRAFT_START_HALL" })
+                foreach (string room in new[] { "G03", "G04", "G05", "G06", "ELECTRICAL-ROOM", "LIFT", "G08", "G23" })
+                    Assert.IsTrue(finder.FindRoute(start, room).Success, $"{start} -> {room}");
         }
     }
 }

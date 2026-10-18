@@ -81,6 +81,10 @@ so use notes freely.
   no `strideMetres`. It is listed as a missing measurement, never converted to metres, and it
   stops the file from being marked verified. With a stride, the validator warns if the map
   distance between the two nodes differs from steps × stride by more than 25%.
+* **Foot-placement counts** (heel-to-toe shoe lengths): record them as observations with
+  `"kind": "footPlacements"`, the raw count in `steps`, and the approximate placement length in
+  `strideMetres`. Keep the raw counts and the method in a free-form block, for example
+  `footPlacementCounts`. They are approximate and never make an item `measured`.
 * **Corner nodes on hex rings:** a straight edge between two side midpoints cuts across the
   inner corner into the void, so the validator rejects it. Add a node at each corner on the
   ring's centre line (radius = (outer + inner) / 2).

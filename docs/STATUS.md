@@ -20,7 +20,7 @@ Unity Editor and no Android SDK. Unity 6000.6.6f1 was still downloading on the W
 ## Verified (cloud session)
 | Check | Result |
 |---|---|
-| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **77/77 passed** |
+| `dotnet test Tools/CoreTests` (.NET 8, same test files as Unity EditMode) | **84/84 passed** |
 | Every `.json` and `.asmdef` parses as JSON (sample data, manifest, asmdefs, settings) | Pass |
 | Sample building validator: no errors and no warnings; every entrance reaches every room; the camera stays inside walkable space on all 27 routes | Pass (covered by tests) |
 | Runtime and editor C# against Unity reference DLLs (UnityEngine 2021.3, UnityEditor 2020.2, uGUI 2018.3), with three Unity-6-only APIs stubbed | **0 errors, 0 warnings** |
@@ -86,6 +86,21 @@ available here, and all three exist in Unity 6.
   * The demo is now labelled "Fictional demo corridor (SAMPLE, not PRP)".
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
+
+## R2 proportions from foot-placement counts (2026-10-18)
+* **Counts:** your heel-to-toe EU 44 Crocs counts are applied to R2 (upper-right junction) at
+  about 0.30 m per placement. At that scale, the 8-placement width matches the existing 2.4 m
+  corridors.
+  * Junction side: 21 → 6.3 m
+  * Ring corridor: kept at 8 placements
+  * Corridor above R2: 33 × 8 → 9.9 m long
+  * Angled approach from R1: 23 → 6.9 m
+* **Recorded:** the raw counts and the counting method are kept in `footPlacementCounts`, and
+  two `footPlacements` observations let the validator check them against the map.
+* **Floor height:** set to 2.9 m (you confirmed 2.75–3 m).
+* **Unchanged:** everything outside R2 and its corridors. All positions are still estimated.
+* **Not received:** the sketch image. The junction was identified from your description
+  (straight corridor above, angled approach and corridor below = R2).
 
 ## Main Entrance added to the PRP draft (2026-10-17)
 * **Added:** start point `ENT_MAIN` "Main Entrance (position estimated)".

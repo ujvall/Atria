@@ -192,3 +192,22 @@ that session.
   * **Doors:** whether the entrance has doors.
   * **Relation to the first overview sketch:** that sketch has a "main entrance" label to the
     right of a lower octagonal junction. Please confirm it is the same entrance.
+
+## R2 foot-placement counts (2026-10-18)
+**Method:** consecutive heel-to-toe placements wearing EU 44 Crocs. These are counts, not feet,
+and approximate. In the model, one placement ≈ 0.30 m.
+
+| Segment (as identified) | Count | Applied |
+|---|---|---|
+| Straight corridor above R2: width | 8 | 2.4 m (same as the existing corridors) |
+| Straight corridor above R2: length, from R2's top corner | 33 | 9.9 m; the lift stays 1.5 m up it |
+| Angled approach, R1's corner to the bend below R2 | 23 | 6.9 m |
+| Junction side (R2) | 21 | 6.3 m outer side; the ring corridor kept at 8 placements, so the centre side is about 3.5 m |
+| Floor height | — | 2.9 m (you confirmed 2.75–3 m) |
+
+* **Not measured:** the vertical corridor from the bend up into R2 (kept at 5.8 m) and every
+  other junction.
+* **Moved:** R2 shifted from (34.5, 15.1) to (37.9, 18.35) only because these lengths changed.
+  Its doors keep the same sides and offsets.
+* **Sketch image:** not received. The junction was identified from your description; if it is
+  a different junction, the counts move there.
