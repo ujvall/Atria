@@ -87,6 +87,16 @@ available here, and all three exist in Unity 6.
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
+## Left wing: branch to the lower-left block, shorter run after L1 (2026-10-18)
+* **New branch:** from your annotation, the hall corridor's bend before L1 is a junction. It
+  also continues down-left, below L1, towards the separate lower-left block.
+  * Added as corridor `CORR_LB1_BLOCK`, ending at `CORR_LBLOCK_END` after 8 m (placeholder).
+  * The block itself is not mapped, and no rooms were invented.
+* **Shorter run after L1:** the angled corridor from L1 to the Entrance 1 bend is now 3.0 m
+  instead of the mirrored 6.9 m (no count given). L2, G17 and Entrance 1 move with the bend.
+* **Unchanged:** the right wing, hall, G16, Main Entrance, and all rooms and their sides.
+* **Not modelled yet:** the right wing has a matching down-right branch in the first sketch.
+
 ## Left wing mirrored from the right wing (2026-10-18)
 * You confirmed the right wing's layout and asked for the left wing to be its mirror image. The
   left wing's geometry is now regenerated as the right wing reflected across the hall

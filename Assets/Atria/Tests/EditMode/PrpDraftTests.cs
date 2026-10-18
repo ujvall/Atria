@@ -271,23 +271,28 @@ namespace Atria.Core.Tests
         public void LeftWing_IsTheMirrorImageOfTheRightWing()
         {
             BuildingData b = Load();
-            // Geometry mirrors across the hall's centre line (x -> -x).
-            foreach ((string left, string right) in new[] { ("L1", "R1"), ("L2", "R2") })
-            {
-                VoidData l = b.Voids.Single(v => v.Id == left + "#void"), r = b.Voids.Single(v => v.Id == right + "#void");
-                Vector2 lc = l.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / l.Polygon.Count;
-                Vector2 rc = r.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / r.Polygon.Count;
-                Assert.AreEqual(-rc.X, lc.X, 1e-3f, left); Assert.AreEqual(rc.Y, lc.Y, 1e-3f, left);
-                Assert.AreEqual(r.Polygon.Count, l.Polygon.Count, left);
-                Assert.AreEqual(Math.Abs(Polygon2D.SignedArea(r.Polygon)), Math.Abs(Polygon2D.SignedArea(l.Polygon)), 1e-2f, left);
-            }
-            foreach ((string left, string right) in new[] { ("HALL_W", "HALL_E"), ("CORR_LB1", "RCORR_B1"), ("CORR_BEND", "RCORR_B2"), ("L2_UP_END", "R2_UP_END") })
+            // L1 and the hall corridor mirror the right wing across the hall's centre line (x -> -x).
+            VoidData l1 = b.Voids.Single(v => v.Id == "L1#void"), r1 = b.Voids.Single(v => v.Id == "R1#void");
+            Vector2 lc = l1.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / l1.Polygon.Count;
+            Vector2 rc = r1.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / r1.Polygon.Count;
+            Assert.AreEqual(-rc.X, lc.X, 1e-3f); Assert.AreEqual(rc.Y, lc.Y, 1e-3f);
+            Assert.AreEqual(r1.Polygon.Count, l1.Polygon.Count);
+            foreach ((string left, string right) in new[] { ("HALL_W", "HALL_E"), ("CORR_LB1", "RCORR_B1") })
             {
                 NodeData l = b.FindNode(left), r = b.FindNode(right);
                 Assert.AreEqual(-r.Position.X, l.Position.X, 1e-3f, left); Assert.AreEqual(r.Position.Z, l.Position.Z, 1e-3f, left);
             }
-            foreach ((string left, string right) in new[] { ("CORR_HALL_L1", "RCORR_HALL_B1"), ("CORR_LB1_L1", "RCORR_B1_R1"), ("CORR_L1_BEND", "RCORR_R1_B2"), ("CORR_BEND_L2", "RCORR_B2_R2"), ("CORR_L2_UP", "RCORR_R2_UP") })
+            foreach ((string left, string right) in new[] { ("CORR_HALL_L1", "RCORR_HALL_B1"), ("CORR_LB1_L1", "RCORR_B1_R1"), ("CORR_BEND_L2", "RCORR_B2_R2"), ("CORR_L2_UP", "RCORR_R2_UP") })
                 Assert.AreEqual(Math.Abs(Polygon2D.SignedArea(b.FindSpace(right).Polygon)), Math.Abs(Polygon2D.SignedArea(b.FindSpace(left).Polygon)), 1e-2f, left);
+            // L2 has R2's shape and size, mirrored side of the building.
+            VoidData l2 = b.Voids.Single(v => v.Id == "L2#void"), r2 = b.Voids.Single(v => v.Id == "R2#void");
+            Assert.AreEqual(Math.Abs(Polygon2D.SignedArea(r2.Polygon)), Math.Abs(Polygon2D.SignedArea(l2.Polygon)), 1e-2f);
+
+            // Deliberate difference (user): the angled run after L1 is shorter than the right wing's 6.9 m.
+            NodeData bend = b.FindNode("CORR_BEND");
+            Assert.AreEqual(3.0f, Vector2.Distance(lc, new Vector2(bend.Position.X, bend.Position.Z)) - 5f, 1e-2f);
+            NodeData rbend = b.FindNode("RCORR_B2");
+            Assert.Less(Vector2.Distance(lc, new Vector2(bend.Position.X, bend.Position.Z)), Vector2.Distance(rc, new Vector2(rbend.Position.X, rbend.Position.Z)));
 
             // Left-wing rooms keep their observed sides, labels and door counts.
             CollectionAssert.AreEquivalent(new[] { "G16", "G17", "G18", "G21", "G23", "G25", "G26", "PHYSICS-LAB-II" },
@@ -426,6 +431,25 @@ namespace Atria.Core.Tests
             foreach (string start in new[] { "ENT_1", "ENT_MAIN", "DRAFT_START_HALL" })
                 foreach (string room in new[] { "G03", "G04", "G05", "G06", "ELECTRICAL-ROOM", "LIFT", "G08", "G23" })
                     Assert.IsTrue(finder.FindRoute(start, room).Success, $"{start} -> {room}");
+        }
+
+        [Test]
+        public void LeftWing_HallCorridorAlsoContinuesTowardsTheLowerLeftBlock()
+        {
+            BuildingData b = Load();
+            FloorLayout layout = FloorLayout.Build(b, b.Floors[0]);
+            // The bend before L1 is a junction: to L1, back to the hall, and on towards the lower-left block.
+            string[] links = b.Edges.Where(e => e.From == "CORR_LB1" || e.To == "CORR_LB1").Select(e => e.From == "CORR_LB1" ? e.To : e.From).ToArray();
+            CollectionAssert.AreEquivalent(new[] { "HALL_W", "L1_C120", "CORR_LBLOCK_END" }, links);
+            // The branch runs below L1 without touching its ring or centre, and has no invented rooms.
+            NodeData end = b.FindNode("CORR_LBLOCK_END");
+            Assert.IsTrue(layout.IsWalkable(new Vector2(end.Position.X, end.Position.Z)));
+            Assert.IsFalse(b.Rooms.Any(r => r.Doors.Any(d => d.AccessNodeId == "CORR_LBLOCK_END")));
+            SpaceData branch = b.FindSpace("CORR_LB1_BLOCK");
+            foreach (SpaceData ring in b.Spaces.Where(s => s.Id.StartsWith("L1#")))
+                foreach (Vector2 p in branch.Polygon)
+                    Assert.IsFalse(Polygon2D.ContainsConvex(ring.Polygon, p), "branch corner inside L1");
+            Assert.IsTrue(new RouteFinder(b).ShortestDistance("HALL_MAIN_ENT", "CORR_LBLOCK_END").HasValue);
         }
     }
 }

@@ -3,7 +3,7 @@
  "buildingId": "PRP-G-DRAFT-LEFT",
  "displayName": "PRP Block C ground floor, left + right wings (PROVISIONAL DRAFT)",
  "dataStatus": "partial",
- "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance. Right wing (R1 lower-right, R2 upper-right, lift) added from the first sketch set's right-hand close-ups; all positions estimated. R2 proportions (side, corridor width, upper corridor, angled approach) set from the user's heel-to-toe foot-placement counts (~0.30 m each, approximate); floor height 2.75-3 m confirmed. Left wing rebuilt as the mirror image of the right wing's geometry (user, 2026-10-18); left-wing rooms keep their observed sides.",
+ "notes": "PROVISIONAL RECONSTRUCTION from unscaled hand sketches (2026-10-17). Topology follows docs/mapping/prp-sketch-observations.md; EVERY coordinate, size, width and door position is an estimate chosen only to make the topology drawable. Not surveyed, not for real navigation. Frame: origin = centre of the central hall, +z = towards the courtyard (up in the overview sketch), +x = right in the sketch. Entrance 1 added from the user's expanded junction drawing (position estimated); 15-step observation stored under 'observations'. Not included because unknown: the other entrances, the corridor beyond the top of L2, the right arm, stairs. 'DRAFT START' is a viewing start point, not an entrance. Right wing (R1 lower-right, R2 upper-right, lift) added from the first sketch set's right-hand close-ups; all positions estimated. R2 proportions (side, corridor width, upper corridor, angled approach) set from the user's heel-to-toe foot-placement counts (~0.30 m each, approximate); floor height 2.75-3 m confirmed. Left wing rebuilt as the mirror image of the right wing's geometry (user, 2026-10-18); left-wing rooms keep their observed sides. Left approach from L1 to the Entrance 1 bend shortened to 3.0 m and a branch towards the lower-left block added below L1 (user annotation, 2026-10-18).",
  "walkingSpeedMps": 1.2,
  "defaultCorridorWidth": 2.4,
  "defaultDoorWidth": 1.0,
@@ -78,8 +78,8 @@
    "floor": "G",
    "shape": "hexRing",
    "center": [
-    -37.906,
-    18.35
+    -34.528,
+    16.4
    ],
    "outerRadius": 6.3,
    "innerRadius": 3.529,
@@ -128,44 +128,60 @@
     2.45
    ],
    "to": [
-    -38.549,
-    6.621
+    -35.171,
+    4.672
    ],
    "width": 2.4,
    "provenance": "estimated",
-   "note": "Angled approach from L1 to the bend (Entrance 1); mirror of R1-R2's 23-placement approach"
+   "note": "Angled run from L1 to the bend (Entrance 1): 3.0 m, shorter than the right wing's per the user; estimated"
   },
   {
    "id": "CORR_BEND_L2",
    "floor": "G",
    "shape": "corridor",
    "from": [
-    -37.906,
-    5.507
+    -34.528,
+    3.557
    ],
    "to": [
-    -37.906,
-    12.75
+    -34.528,
+    10.8
    ],
    "width": 2.4,
    "provenance": "estimated",
-   "note": "Straight corridor from the bend up to L2, with G17 on it; mirror of the right wing"
+   "note": "Straight corridor from the bend up to L2, with G17 on it"
   },
   {
    "id": "CORR_L2_UP",
    "floor": "G",
    "shape": "corridor",
    "from": [
-    -37.906,
-    23.95
+    -34.528,
+    22.0
    ],
    "to": [
-    -37.906,
-    34.55
+    -34.528,
+    32.6
    ],
    "width": 2.4,
    "provenance": "estimated",
    "note": "Corridor leaving L2's top, as drawn in the overview sketch; length mirrored from the right wing (unmeasured on this side); destination unknown, end wall is a placeholder"
+  },
+  {
+   "id": "CORR_LB1_BLOCK",
+   "floor": "G",
+   "shape": "corridor",
+   "from": [
+    -19.584,
+    -3.193
+   ],
+   "to": [
+    -27.922,
+    -7.081
+   ],
+   "width": 2.4,
+   "provenance": "estimated",
+   "note": "Branch continuing down-left from the hall corridor's bend, below L1, towards the separate lower-left block (user's annotation); block not mapped, end wall is a placeholder"
   },
   {
    "id": "R1",
@@ -787,144 +803,144 @@
    "id": "L2_C0",
    "floor": "G",
    "kind": "intersection",
-   "x": -37.906,
-   "z": 23.265,
+   "x": -34.528,
+   "z": 21.314,
    "provenance": "estimated"
   },
   {
    "id": "L2_C60",
    "floor": "G",
    "kind": "intersection",
-   "x": -33.65,
-   "z": 20.807,
+   "x": -30.272,
+   "z": 18.857,
    "provenance": "estimated"
   },
   {
    "id": "L2_C120",
    "floor": "G",
    "kind": "intersection",
-   "x": -33.65,
-   "z": 15.893,
+   "x": -30.272,
+   "z": 13.943,
    "provenance": "estimated"
   },
   {
    "id": "L2_C180",
    "floor": "G",
    "kind": "intersection",
-   "x": -37.906,
-   "z": 13.436,
+   "x": -34.528,
+   "z": 11.485,
    "provenance": "estimated"
   },
   {
    "id": "L2_C240",
    "floor": "G",
    "kind": "intersection",
-   "x": -42.162,
-   "z": 15.893,
+   "x": -38.784,
+   "z": 13.943,
    "provenance": "estimated"
   },
   {
    "id": "L2_C300",
    "floor": "G",
    "kind": "intersection",
-   "x": -42.162,
-   "z": 20.807,
+   "x": -38.784,
+   "z": 18.857,
    "provenance": "estimated"
   },
   {
    "id": "L2_S30",
    "floor": "G",
    "kind": "corridor",
-   "x": -35.778,
-   "z": 22.036,
+   "x": -32.4,
+   "z": 20.086,
    "provenance": "estimated"
   },
   {
    "id": "L2_S90",
    "floor": "G",
    "kind": "corridor",
-   "x": -33.65,
-   "z": 18.35,
+   "x": -30.272,
+   "z": 16.4,
    "provenance": "estimated"
   },
   {
    "id": "L2_G26_a",
    "floor": "G",
    "kind": "corridor",
-   "x": -33.65,
-   "z": 19.35,
+   "x": -30.272,
+   "z": 17.4,
    "provenance": "estimated"
   },
   {
    "id": "L2_G26_b",
    "floor": "G",
    "kind": "corridor",
-   "x": -33.65,
-   "z": 17.35,
+   "x": -30.272,
+   "z": 15.4,
    "provenance": "estimated"
   },
   {
    "id": "L2_S150",
    "floor": "G",
    "kind": "corridor",
-   "x": -35.778,
-   "z": 14.664,
+   "x": -32.4,
+   "z": 12.714,
    "provenance": "estimated"
   },
   {
    "id": "L2_G25_a",
    "floor": "G",
    "kind": "corridor",
-   "x": -34.479,
-   "z": 15.414,
+   "x": -31.101,
+   "z": 13.464,
    "provenance": "estimated"
   },
   {
    "id": "L2_G25_b",
    "floor": "G",
    "kind": "corridor",
-   "x": -36.124,
-   "z": 14.464,
+   "x": -32.746,
+   "z": 12.514,
    "provenance": "estimated"
   },
   {
    "id": "L2_S210",
    "floor": "G",
    "kind": "corridor",
-   "x": -40.034,
-   "z": 14.664,
+   "x": -36.656,
+   "z": 12.714,
    "provenance": "estimated"
   },
   {
    "id": "L2_S270",
    "floor": "G",
    "kind": "corridor",
-   "x": -42.162,
-   "z": 18.35,
+   "x": -38.784,
+   "z": 16.4,
    "provenance": "estimated"
   },
   {
    "id": "L2_G23_a",
    "floor": "G",
    "kind": "corridor",
-   "x": -42.162,
-   "z": 17.35,
+   "x": -38.784,
+   "z": 15.4,
    "provenance": "estimated"
   },
   {
    "id": "L2_G23_b",
    "floor": "G",
    "kind": "corridor",
-   "x": -42.162,
-   "z": 19.35,
+   "x": -38.784,
+   "z": 17.4,
    "provenance": "estimated"
   },
   {
    "id": "L2_S330",
    "floor": "G",
    "kind": "corridor",
-   "x": -40.034,
-   "z": 22.036,
+   "x": -36.656,
+   "z": 20.086,
    "provenance": "estimated"
   },
   {
@@ -947,8 +963,8 @@
    "id": "CORR_BEND",
    "floor": "G",
    "kind": "intersection",
-   "x": -37.906,
-   "z": 6.25,
+   "x": -34.528,
+   "z": 4.3,
    "provenance": "estimated",
    "note": "Bend where the corridor from L1 turns up towards G17 and L2; Entrance 1 is at its outer corner"
   },
@@ -956,8 +972,8 @@
    "id": "CORR_G17",
    "floor": "G",
    "kind": "corridor",
-   "x": -37.906,
-   "z": 9.0,
+   "x": -34.528,
+   "z": 7.05,
    "provenance": "estimated",
    "note": "G17 label seen on this corridor; which wall and how far along are unknown"
   },
@@ -965,10 +981,19 @@
    "id": "L2_UP_END",
    "floor": "G",
    "kind": "corridor",
-   "x": -37.906,
-   "z": 33.95,
+   "x": -34.528,
+   "z": 32.0,
    "provenance": "estimated",
    "note": "End of the modelled part of the corridor above L2; it continues beyond the drawing"
+  },
+  {
+   "id": "CORR_LBLOCK_END",
+   "floor": "G",
+   "kind": "corridor",
+   "x": -27.379,
+   "z": -6.827,
+   "provenance": "estimated",
+   "note": "Towards the lower-left block (not mapped yet)"
   }
  ],
  "edges": [
@@ -1465,6 +1490,12 @@
    "provenance": "estimated"
   },
   {
+   "from": "CORR_LB1",
+   "to": "CORR_LBLOCK_END",
+   "width": 2.4,
+   "provenance": "estimated"
+  },
+  {
    "from": "HALL_C",
    "to": "HALL_W",
    "width": 2.4,
@@ -1513,8 +1544,8 @@
    "label": "Entrance 1 (observed; position estimated)",
    "node": "CORR_BEND",
    "opening": {
-    "x": -39.106,
-    "z": 6.55,
+    "x": -35.728,
+    "z": 4.6,
     "width": 1.6
    },
    "provenance": "estimated",
@@ -1590,14 +1621,14 @@
    "doors": [
     {
      "accessNode": "L2_G23_a",
-     "x": -43.362,
-     "z": 17.35,
+     "x": -39.984,
+     "z": 15.4,
      "provenance": "estimated"
     },
     {
      "accessNode": "L2_G23_b",
-     "x": -43.362,
-     "z": 19.35,
+     "x": -39.984,
+     "z": 17.4,
      "provenance": "estimated"
     }
    ],
@@ -1611,14 +1642,14 @@
    "doors": [
     {
      "accessNode": "L2_G26_a",
-     "x": -32.45,
-     "z": 19.35,
+     "x": -29.072,
+     "z": 17.4,
      "provenance": "estimated"
     },
     {
      "accessNode": "L2_G26_b",
-     "x": -32.45,
-     "z": 17.35,
+     "x": -29.072,
+     "z": 15.4,
      "provenance": "estimated"
     }
    ],
@@ -1632,14 +1663,14 @@
    "doors": [
     {
      "accessNode": "L2_G25_a",
-     "x": -33.879,
-     "z": 14.375,
+     "x": -30.501,
+     "z": 12.425,
      "provenance": "estimated"
     },
     {
      "accessNode": "L2_G25_b",
-     "x": -35.524,
-     "z": 13.425,
+     "x": -32.146,
+     "z": 11.475,
      "provenance": "estimated"
     }
    ],

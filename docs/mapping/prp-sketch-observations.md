@@ -224,3 +224,14 @@ and approximate. In the model, one placement ≈ 0.30 m.
   now where the angled approach from L1 turns straight up.
 * The earlier "Left-section draft" and "Changed in the draft" sections above describe the
   previous geometry. Positions and sizes in them are out of date.
+
+## Lower-left block branch and shorter L1 run (2026-10-18)
+* **Observed (your annotation):** the corridor from the hall does not only lead into L1. At the
+  bend just before L1 it continues down-left, passing below L1, to a separate block (the
+  wing seen at lower left in the 3D map view).
+* **Modelled:** an 8 m corridor branch at about 245° yaw, kept about 0.8 m clear of L1's
+  outline. It ends at a placeholder labelled "Towards the lower-left block (not mapped yet)".
+* **Changed:** L1 → Entrance 1 bend is now 3.0 m (estimated; you said it is shorter than drawn).
+* **Still unknown:**
+  * the block's layout, rooms and how far away it is
+  * whether the right wing's down-right branch leads to a matching block
