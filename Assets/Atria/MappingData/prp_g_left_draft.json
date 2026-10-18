@@ -92,12 +92,12 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    -8.513,
-    -0.887
+    -8.523,
+    -0.849
    ],
    "to": [
-    -21.182,
-    -3.818
+    -20.792,
+    -4.739
    ],
    "width": 2.4,
    "provenance": "estimated",
@@ -108,8 +108,8 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    -20.219,
-    -3.962
+    -19.986,
+    -4.096
    ],
    "to": [
     -23.876,
@@ -172,8 +172,8 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    -20.219,
-    -3.489
+    -19.077,
+    -4.195
    ],
    "to": [
     -27.922,
@@ -181,7 +181,7 @@
    ],
    "width": 2.4,
    "provenance": "estimated",
-   "note": "Branch continuing down-left from the hall corridor's bend, below L1, towards the separate lower-left block (user's annotation); block not mapped, end wall is a placeholder"
+   "note": "Straight continuation of the hall corridor past the junction below L1 (one lane, user correction 2026-10-18), towards the separate lower-left block (user's annotation); block not mapped, end wall is a placeholder"
   },
   {
    "id": "R1",
@@ -218,12 +218,12 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    8.513,
-    -0.887
+    8.523,
+    -0.849
    ],
    "to": [
-    21.182,
-    -3.818
+    20.792,
+    -4.739
    ],
    "width": 2.4,
    "provenance": "estimated",
@@ -234,8 +234,8 @@
    "floor": "G",
    "shape": "corridor",
    "from": [
-    20.219,
-    -3.962
+    19.986,
+    -4.096
    ],
    "to": [
     23.876,
@@ -632,8 +632,8 @@
    "id": "RCORR_B1",
    "floor": "G",
    "kind": "intersection",
-   "x": 20.672,
-   "z": -3.7,
+   "x": 19.553,
+   "z": -4.346,
    "provenance": "estimated"
   },
   {
@@ -955,8 +955,8 @@
    "id": "CORR_LB1",
    "floor": "G",
    "kind": "intersection",
-   "x": -20.672,
-   "z": -3.7,
+   "x": -19.553,
+   "z": -4.346,
    "provenance": "estimated"
   },
   {

@@ -460,6 +460,10 @@ namespace Atria.Core.Tests
             }
             // The branch's near end stays inside the corridors it joins, so the junction walls have no stub or notch.
             Vector2 lb1 = new Vector2(b.FindNode("CORR_LB1").Position.X, b.FindNode("CORR_LB1").Position.Z);
+            // Hall corridor and branch are one straight lane (user correction), with no kink at the junction.
+            Vector2 hallW = new Vector2(b.FindNode("HALL_W").Position.X, b.FindNode("HALL_W").Position.Z);
+            Vector2 lane = Vector2.Normalize(new Vector2(end.Position.X, end.Position.Z) - hallW), toJ = lb1 - hallW;
+            Assert.AreEqual(0f, lane.X * toJ.Y - lane.Y * toJ.X, 1e-2f, "junction below L1 lies on the straight lane");
             var others = b.Spaces.Where(s => s.Id == "CORR_HALL_L1" || s.Id == "CORR_LB1_L1").ToList();
             foreach (Vector2 corner in b.FindSpace("CORR_LB1_BLOCK").Polygon.Where(p => Vector2.Distance(p, lb1) < 2f))
                 Assert.IsTrue(others.Any(o => Polygon2D.ContainsConvex(o.Polygon, corner, 1e-3f)), $"branch corner {corner} pokes out of the junction");

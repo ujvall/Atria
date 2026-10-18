@@ -246,3 +246,13 @@ and approximate. In the model, one placement ≈ 0.30 m.
 * **Still unknown:**
   * the block's entrance position and its distance from the bend
   * the real corridor widths and lengths, apart from the R2 counts
+
+## Straight lane at the L1/R1 junctions (2026-10-18)
+* **Observed (your corrected sketch):** the hall corridor carries straight on towards the
+  lower-left block. The L1 connector drops down to meet it. The two do not form two angled
+  segments.
+* **Modelled:**
+  * a single lane at about 252° yaw
+  * the L1 connector lengthened to 4.29 m past the ring (estimated)
+  * the same change mirrored at R1
+* **Not changed:** the hex junctions are not rotated, so the doors and Entrance 1 stay put.

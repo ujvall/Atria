@@ -87,6 +87,21 @@ available here, and all three exist in Unity 6.
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
+## Straight lane at the L1 and R1 junctions (2026-10-18)
+* **One lane:** from your corrected sketch, the hall corridor and the branch to the lower-left
+  block are now one straight lane at about 252° yaw, from `HALL_W` to the unchanged block end.
+  This replaces the 257° and 245° pair that met at a kink.
+* **Junction and connector:** the junction `CORR_LB1` moved onto the lane, to (-19.553, -4.346).
+  The L1 connector is now 4.29 m long instead of 3.0 m, measured from the ring corner. It still
+  joins L1's lower-right corner at the same bearing.
+* **Right wing:** the hall corridor, junction `RCORR_B1` and R1 connector mirror the left side.
+  The hall corridor runs 1.3 m past the junction to cover the outside of the turn.
+* **Not changed:** L1 and R1 were not rotated. Rotating them would move the G18, G21, G08, G10
+  and G11 doors, and the Entrance 1 bend.
+  * No change to rooms, doors, entrances, connectivity or the demo.
+* **Checks:** the walls at both junctions form one outline with no gaps or notches. A test
+  asserts the left lane is straight.
+
 ## Block C refinement: lower-left block as a destination (2026-10-18)
 * **Branch is now a real destination:** a new unmapped landmark, `LOWER-LEFT-BLOCK`
   ("Lower-left block (not mapped yet)"), sits at the end of `CORR_LB1_BLOCK`. Its door position
