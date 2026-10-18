@@ -211,3 +211,16 @@ and approximate. In the model, one placement ≈ 0.30 m.
   Its doors keep the same sides and offsets.
 * **Sketch image:** not received. The junction was identified from your description; if it is
   a different junction, the counts move there.
+
+## Left wing as the mirror of the right wing (2026-10-18)
+* **Your instruction:** the right wing is the correct format; the left wing should look like
+  its mirror image.
+* **Geometry:** the left-wing positions, junction sizes and corridor angles are now the right
+  wing's, reflected across the hall's centre line. L2 is therefore the same size as R2 (its
+  own size has not been counted). A corridor above L2 matches the one your overview sketch
+  shows leaving L2 upwards; its length is mirrored and its destination unknown.
+* **Unchanged from your left-wing observations:** room labels and sides, the two-door rooms,
+  G17 on the corridor up to L2, and Entrance 1 at the outer corner of the bend. The bend is
+  now where the angled approach from L1 turns straight up.
+* The earlier "Left-section draft" and "Changed in the draft" sections above describe the
+  previous geometry. Positions and sizes in them are out of date.

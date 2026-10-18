@@ -109,8 +109,9 @@ namespace Atria.Core.Tests
             // Physics Research Lab -II: seen, not located -> searchable but unmapped.
             Assert.AreEqual(RouteFailure.MissingNode, finder.FindRoute(Start, "PHYSICS-LAB-II").Failure);
 
-            // The corridor beyond the top of L2 is unknown: L2's north corner only connects around the ring.
-            Assert.AreEqual(2, b.Edges.Count(e => e.From == "L2_C0" || e.To == "L2_C0"));
+            // The corridor above L2 (mirroring the right wing) leads nowhere known: it ends at a placeholder, with no rooms.
+            Assert.AreEqual(1, b.Edges.Count(e => e.From == "L2_UP_END" || e.To == "L2_UP_END"));
+            Assert.IsFalse(b.Rooms.Any(r => r.Doors.Any(d => d.AccessNodeId == "L2_UP_END")));
 
             // Only Entrance 1 is observed; the hall start point stays labelled as not an entrance.
             CollectionAssert.AreEqual(new[] { "ENT_1", "ENT_MAIN", "DRAFT_START_HALL" }, b.Entrances.Select(e => e.Id).ToArray());
@@ -147,7 +148,7 @@ namespace Atria.Core.Tests
                 RouteResult r = finder.FindRoute("ENT_1", room);
                 Assert.IsTrue(r.Success, room);
                 Assert.AreEqual("CORR_BEND", r.Nodes[0].Id);
-                Assert.AreEqual("L1_S270", r.Nodes[1].Id, room + ": enters L1 from the corridor west of it");
+                Assert.AreEqual("L1_C300", r.Nodes[1].Id, room + ": enters L1 at its upper-left corner, via the angled approach");
             }
             Assert.IsTrue(finder.FindRoute("ENT_1", "G23").Success); // and up the corridor to L2
         }
@@ -173,7 +174,7 @@ namespace Atria.Core.Tests
             Assert.IsTrue(o.Approximate);
             Assert.IsNull(o.StrideMetres, "no stride has been calibrated, so no metric distance may be derived");
             Assert.AreEqual("CORR_BEND", o.FromNodeId);
-            Assert.AreEqual("L1_S270", o.ToNodeId);
+            Assert.AreEqual("L1_C300", o.ToNodeId);
             ValidationReport report = BuildingValidator.Validate(b);
             Assert.IsTrue(report.MissingMeasurements.Any(m => m.Contains("OBS_ENT1_TO_L1") && m.Contains("stride not calibrated")));
             Assert.IsFalse(report.Warnings.Any(w => w.Contains("OBS_ENT1_TO_L1")));
@@ -267,17 +268,36 @@ namespace Atria.Core.Tests
         }
 
         [Test]
-        public void LeftWing_IsUnchangedByTheRightWing()
+        public void LeftWing_IsTheMirrorImageOfTheRightWing()
         {
             BuildingData b = Load();
-            Assert.AreEqual(new System.Numerics.Vector3(-34.6f, 0f, 2f), b.FindNode("CORR_BEND").Position);
-            Assert.AreEqual(new System.Numerics.Vector3(-9f, 0f, 2f), b.FindNode("HALL_W").Position);
+            // Geometry mirrors across the hall's centre line (x -> -x).
+            foreach ((string left, string right) in new[] { ("L1", "R1"), ("L2", "R2") })
+            {
+                VoidData l = b.Voids.Single(v => v.Id == left + "#void"), r = b.Voids.Single(v => v.Id == right + "#void");
+                Vector2 lc = l.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / l.Polygon.Count;
+                Vector2 rc = r.Polygon.Aggregate(Vector2.Zero, (a, p) => a + p) / r.Polygon.Count;
+                Assert.AreEqual(-rc.X, lc.X, 1e-3f, left); Assert.AreEqual(rc.Y, lc.Y, 1e-3f, left);
+                Assert.AreEqual(r.Polygon.Count, l.Polygon.Count, left);
+                Assert.AreEqual(Math.Abs(Polygon2D.SignedArea(r.Polygon)), Math.Abs(Polygon2D.SignedArea(l.Polygon)), 1e-2f, left);
+            }
+            foreach ((string left, string right) in new[] { ("HALL_W", "HALL_E"), ("CORR_LB1", "RCORR_B1"), ("CORR_BEND", "RCORR_B2"), ("L2_UP_END", "R2_UP_END") })
+            {
+                NodeData l = b.FindNode(left), r = b.FindNode(right);
+                Assert.AreEqual(-r.Position.X, l.Position.X, 1e-3f, left); Assert.AreEqual(r.Position.Z, l.Position.Z, 1e-3f, left);
+            }
+            foreach ((string left, string right) in new[] { ("CORR_HALL_L1", "RCORR_HALL_B1"), ("CORR_LB1_L1", "RCORR_B1_R1"), ("CORR_L1_BEND", "RCORR_R1_B2"), ("CORR_BEND_L2", "RCORR_B2_R2"), ("CORR_L2_UP", "RCORR_R2_UP") })
+                Assert.AreEqual(Math.Abs(Polygon2D.SignedArea(b.FindSpace(right).Polygon)), Math.Abs(Polygon2D.SignedArea(b.FindSpace(left).Polygon)), 1e-2f, left);
+
+            // Left-wing rooms keep their observed sides, labels and door counts.
             CollectionAssert.AreEquivalent(new[] { "G16", "G17", "G18", "G21", "G23", "G25", "G26", "PHYSICS-LAB-II" },
                 b.Rooms.Select(r => r.Id).Except(RightWingRooms).ToArray());
+            foreach (string id in new[] { "G18", "G21", "G23", "G25", "G26" }) Assert.AreEqual(2, b.FindRoom(id).Doors.Count, id);
             var finder = new RouteFinder(b);
             RouteResult g23 = finder.FindRoute("ENT_1", "G23");
             Assert.IsTrue(g23.Success);
             Assert.IsFalse(g23.Nodes.Any(n => n.Id.StartsWith("R1") || n.Id.StartsWith("R2") || n.Id == "HALL_E"), "left-wing routes do not detour through the right wing");
+            CollectionAssert.Contains(g23.Nodes.Select(n => n.Id).ToList(), "CORR_G17", "the route to L2 passes G17's corridor");
         }
 
         // ------------------------------------------------------------------ main entrance
@@ -336,10 +356,11 @@ namespace Atria.Core.Tests
             BuildingData b = Load();
             Assert.AreEqual("ENT_1", b.Entrances[0].Id, "Entrance 1 stays the default start");
             Assert.AreEqual("CORR_BEND", b.FindEntrance("ENT_1").NodeId);
-            Assert.AreEqual(new Vector2(-35.8f, 2f), b.FindEntrance("ENT_1").Opening.Center);
+            NodeData bend = b.FindNode("CORR_BEND");
+            Assert.AreEqual(bend.Position.X - 1.2f, b.FindEntrance("ENT_1").Opening.Center.X, 1e-3f, "Entrance 1 is in the west wall at the bend");
             Assert.AreEqual("HALL_C", b.FindEntrance("DRAFT_START_HALL").NodeId);
             var finder = new RouteFinder(b);
-            CollectionAssert.AreEqual(new[] { "CORR_BEND", "L1_S270" }, finder.FindRoute("ENT_1", "G21").Nodes.Take(2).Select(n => n.Id).ToArray());
+            CollectionAssert.AreEqual(new[] { "CORR_BEND", "L1_C300" }, finder.FindRoute("ENT_1", "G21").Nodes.Take(2).Select(n => n.Id).ToArray());
             Assert.IsFalse(finder.FindRoute("ENT_1", "G23").Nodes.Any(n => n.Id == "HALL_MAIN_ENT"));
             Assert.IsFalse(finder.FindRoute("DRAFT_START_HALL", "G08").Nodes.Any(n => n.Id == "HALL_MAIN_ENT"));
         }

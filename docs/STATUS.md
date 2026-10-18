@@ -87,6 +87,20 @@ available here, and all three exist in Unity 6.
 * Details of what is estimated and what is unknown are in
   [mapping/prp-sketch-observations.md](mapping/prp-sketch-observations.md).
 
+## Left wing mirrored from the right wing (2026-10-18)
+* You confirmed the right wing's layout and asked for the left wing to be its mirror image. The
+  left wing's geometry is now regenerated as the right wing reflected across the hall
+  (x → −x):
+  * L1 = mirrored R1 (octagonal centre)
+  * L2 = mirrored R2 (sizes from the R2 foot-placement counts)
+  * the dog-leg hall corridor, the angled approach, the straight run up to L2, and the corridor
+    above L2
+* **Kept from your left-wing observations:** every room and its junction side (G18, G21, G23,
+  G25 and G26 ×2 each), G17 on the corridor up to L2, and Entrance 1 at the outer corner of the
+  bend.
+* The 15-step observation now ends at L1's upper-left corner (`L1_C300`).
+* **Unchanged:** the right wing, hall, G16, Main Entrance and hall start.
+
 ## R2 proportions from foot-placement counts (2026-10-18)
 * **Counts:** your heel-to-toe EU 44 Crocs counts are applied to R2 (upper-right junction) at
   about 0.30 m per placement. At that scale, the 8-placement width matches the existing 2.4 m
